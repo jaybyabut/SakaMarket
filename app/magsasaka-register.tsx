@@ -1,6 +1,6 @@
-import { Text, View, Button} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
+import { Text, View } from "react-native";
 
 
 
@@ -12,7 +12,6 @@ export default function Magsasakaregister() {
   }, [navigation]);
 
   return (
-
     <View
       style={{
         flex: 1,
