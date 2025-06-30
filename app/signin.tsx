@@ -1,7 +1,7 @@
-import { Text, View, Button} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {useLayoutEffect, useEffect } from "react";
 import { router } from "expo-router";
+import { useLayoutEffect } from "react";
+import { Button, Text, View } from "react-native";
 
 export default function Signin() {
   const navigation = useNavigation();
@@ -20,6 +20,7 @@ export default function Signin() {
         alignItems: "center",
       }}
     >
+      <Text>Sign In</Text>
       <Button
         title="Magsasaka"
         onPress={() => {
