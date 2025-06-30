@@ -12,6 +12,7 @@ export default function Magsasakaregister() {
   }, [navigation]);
 
   return (
+    
     <View
       style={{
         flex: 1,
