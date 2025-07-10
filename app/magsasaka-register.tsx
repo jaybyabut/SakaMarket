@@ -1,18 +1,21 @@
-import { useNavigation } from "@react-navigation/native";
+import React from 'react';
+import { useRouter } from 'expo-router';
 import { useLayoutEffect } from "react";
-import { Text, View } from "react-native";
-
-
+import { Text, View, Button } from "react-native";
 
 export default function Magsasakaregister() {
-  const navigation = useNavigation();
+  const router = useRouter();
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: "Magsasaka Register Page" });
-  }, [navigation]);
+  
+  }, []);
+
+  const handleRegister = () => {
+    // Registration logic here...
+    router.replace('/home-magsasaka');
+  };
 
   return (
-    
     <View
       style={{
         flex: 1,
@@ -21,6 +24,7 @@ export default function Magsasakaregister() {
       }}
     >
       <Text>Gumawa ng Account</Text>
+      <Button title="Register" onPress={handleRegister} />
     </View>
   );
-}
+} 
