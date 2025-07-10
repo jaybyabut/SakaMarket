@@ -6,12 +6,15 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "allowJs": true,
+    "checkJs": false
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "components/ButtonWithBackground.js"  ]
 }
