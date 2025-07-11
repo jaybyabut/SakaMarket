@@ -15,6 +15,11 @@ export default function SignInScreen() {
 
   return (
     <View style={styles.page}>
+      <Image
+        style={styles.backIcon}
+        source={require('../assets/STARTer/back-icon.png')}
+      />
+
       <View style={styles.container}>
         {/* Logo & Name */}
         <View style={styles.logoWrapper}>
@@ -75,6 +80,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
+  },
+  backIcon: {
+    position: 'absolute',
+    top: 60,
+    left: 24,
+    width: 30,
+    height: 30,
+    zIndex: 1,
   },
   container: {
     width: 364,
