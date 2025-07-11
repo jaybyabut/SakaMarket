@@ -1,6 +1,5 @@
-import React from 'react';
-import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
-import { useNavigation } from 'expo-router';
+import { useNavigation } from "expo-router";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function ConfirmationScreen() {
   const navigation = useNavigation();
@@ -9,7 +8,7 @@ export default function ConfirmationScreen() {
     <View style={styles.screen}>
       <View style={styles.container}>
         <Image
-          source={require('@/assets/STARTer/Confirmation Page/checkmark.png')}
+          source={require("@/assets/STARTer/Confirmation Page/checkmark.png")}
           style={styles.checkmark}
           resizeMode="contain"
         />
@@ -23,7 +22,7 @@ export default function ConfirmationScreen() {
 
       <Pressable
         style={styles.jumpToLogin}
-        onPress={() => navigation.navigate('signin')} // ⬅️ Replace with actual route name
+        onPress={() => navigation.navigate("signin")} // ⬅️ Replace with actual route name
       >
         <Text style={styles.loginText}>Pumunta sa Log-in Page</Text>
       </Pressable>
@@ -34,14 +33,14 @@ export default function ConfirmationScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   container: {
     width: 280,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   checkmark: {
     width: 216,
@@ -49,33 +48,33 @@ const styles = StyleSheet.create({
   },
   success: {
     fontSize: 48,
-    fontWeight: '700',
-    fontFamily: 'Roboto-Bold',
+    fontWeight: "700",
+    fontFamily: "Roboto-Bold",
     marginTop: 5,
     marginBottom: 5,
-    textAlign: 'center',
-    width: '100%',
+    textAlign: "center",
+    width: "100%",
   },
   message: {
     fontSize: 20,
-    fontWeight: '400',
-    fontFamily: 'Roboto',
-    textAlign: 'center',
+    fontWeight: "400",
+    fontFamily: "Roboto",
+    textAlign: "center",
     height: 138,
-    width: '100%',
-    position: 'relative',
+    width: "100%",
+    position: "relative",
   },
   jumpToLogin: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 40, // Instead of -183px from HTML
-    backgroundColor: '#FEF5A6',
+    backgroundColor: "#FEF5A6",
     width: 319,
     height: 55,
     borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
 
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -83,8 +82,8 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: 20,
-    fontWeight: '400',
-    fontFamily: 'Roboto',
-    textAlign: 'center',
+    fontWeight: "400",
+    fontFamily: "Roboto",
+    textAlign: "center",
   },
 });
