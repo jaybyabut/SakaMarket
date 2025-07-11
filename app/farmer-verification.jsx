@@ -26,10 +26,15 @@ export default function FarmerVerificationScreen() {
 
   return (
     <View style={styles.screen}>
-      <Image
-        source={require('../assets/STARTer/back-icon.png')}
-        style={styles.backIcon}
-      />
+      <Pressable
+        style={styles.backButton}
+        onPress={() => router.push("/signUp")}
+      >
+        <Image
+          style={styles.backIcon}
+          source={require("../assets/STARTer/back-icon.png")}
+        />
+      </Pressable>
 
       <View style={styles.upperText}>
         <Text style={styles.header}>I-verify ang Account</Text>
@@ -98,13 +103,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: 60,
   },
-  backIcon: {
-    position: 'absolute',
+  backButton: {
+    position: "absolute",
     top: 60,
     left: 24,
+  },
+  backIcon: {
     width: 30,
     height: 30,
-    resizeMode: 'contain',
     zIndex: 1,
   },
   upperText: {
