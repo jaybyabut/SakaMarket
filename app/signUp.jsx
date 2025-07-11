@@ -11,7 +11,7 @@ export default function SignupScreen() {
     <View style={styles.page}>
       <Image
         style={styles.backIcon}
-        source={require('../assets/STARTer/Images/Sign Up/back-icon.png')}
+        source={require('../assets/STARTer/back-icon.png')}
       />
 
       <View style={styles.container}>
@@ -29,10 +29,10 @@ export default function SignupScreen() {
             end={{ x: 1, y: 1 }}
             style={styles.button}
           >
-            <Pressable style={styles.buttonContent} onPress={() => router.push('/signup/farmer')}>
+            <Pressable style={styles.buttonContent} onPress={() => router.push('/magsasaka-register')}>
               <Image
                 style={styles.buttonIcon}
-                source={require('@/assets/STARTer/Images/Sign Up/magsasaka-icon.png')}
+                source={require('@/assets/STARTer/Sign Up/magsasaka-icon.png')}
                 resizeMode="contain"
               />
               <Text style={styles.buttonText}>Magsasaka</Text>
@@ -45,10 +45,10 @@ export default function SignupScreen() {
             end={{ x: 1, y: 1 }}
             style={styles.button}
           >
-            <Pressable style={styles.buttonContent} onPress={() => router.push('/signup/buyer')}>
+            <Pressable style={styles.buttonContent} onPress={() => router.push('/mamimili-register')}>
               <Image
                 style={styles.buttonIcon}
-                source={require('@/assets/STARTer/Images/Sign Up/cart-icon.png')}
+                source={require('@/assets/STARTer/Sign Up/cart-icon.png')}
                 resizeMode="contain"
               />
               <Text style={styles.buttonText}>Mamimili</Text>

@@ -19,7 +19,7 @@ export default function SignInScreen() {
         {/* Logo & Name */}
         <View style={styles.logoWrapper}>
           <Image
-            source={require('../assets/STARTer/Images/Landing Page/logo.png')}
+            source={require('../assets/STARTer/logo.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />
@@ -60,7 +60,7 @@ export default function SignInScreen() {
             </Pressable>
           </LinearGradient>
 
-          <Pressable onPress={() => router.push('/signup')}>
+          <Pressable onPress={() => router.push('/signUp')}>
             <Text style={styles.noAccText}>Wala pa akong Account</Text>
           </Pressable>
         </View>
