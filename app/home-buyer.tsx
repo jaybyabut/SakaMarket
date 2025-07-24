@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ImageSourcePropType } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import React from 'react';
+import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 const logoImg: ImageSourcePropType = require('../../Assets/Images/Logo-Home.png');
 const homeTextImg: ImageSourcePropType = require('../../Assets/Images/Mamili ng Gawain.png');
@@ -17,7 +17,6 @@ type RootStackParamList = {
   HomeBuyer: undefined;
   BuyPage: undefined;
   StatsPage: undefined;
-  // ...other screens
 };
 
 export default function HomeBuyer() {
@@ -25,16 +24,13 @@ export default function HomeBuyer() {
 
   return (
     <View style={styles.container}>
-      {/* Logo at top left */}
       <View style={styles.logoContainer}>
         <Image source={logoImg} style={styles.logoImage} />
         <Text style={styles.logoText}>SAKA MARKET</Text>
       </View>
 
-      {/* Home text banner */}
       <Image source={homeTextImg} style={styles.homeTextImage} />
 
-      {/* Button grid */}
       <View style={styles.gridContainer}>
         <View style={styles.row}>
           <TouchableOpacity
@@ -84,7 +80,6 @@ export default function HomeBuyer() {
         </View>
       </View>
 
-      {/* Language row */}
       <View style={styles.languageRow}>
         <Image source={languageImg} style={styles.languageIcon} />
         <Text style={styles.languageLabel}>Language:</Text>
@@ -93,7 +88,6 @@ export default function HomeBuyer() {
         </TouchableOpacity>
       </View>
 
-      {/* Log Out button at bottom left */}
       <TouchableOpacity style={styles.logoutButton}>
         <Image source={logoutImg} style={styles.logoutImage} />
         <Text style={styles.logoutButtonText}>Log Out</Text>
@@ -131,7 +125,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   logoText: {
-    fontFamily: 'Secular One', // Make sure to link this font in your project
+    fontFamily: 'Secular One', 
     fontWeight: '400',
     fontSize: 25,
     lineHeight: 31,
@@ -181,7 +175,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   buttonText: {
-    fontFamily: 'Roboto', // Make sure to link this font in your project
+    fontFamily: 'Roboto', 
     fontWeight: '700',
     fontSize: 30,
     lineHeight: 35,
@@ -196,7 +190,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     height: 55,
     paddingVertical: 2,
-    // gap: 10, // If not supported, use marginRight on children
   },
   languageIcon: {
     width: 32,
@@ -260,5 +253,3 @@ const styles = StyleSheet.create({
   },
 });
 
-// Note: For gradients, install react-native-linear-gradient and link it properly.
-// For custom fonts (Roboto, Secular One), make sure to add and link them in your project.

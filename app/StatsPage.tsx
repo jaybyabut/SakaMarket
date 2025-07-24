@@ -1,24 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import React, { useState } from 'react';
+import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
-// Image assets (update paths as needed)
 const backImg = require('../../Assets/Images/back.png');
-const filter1Img = require('../../Assets/Images/filter-1.png'); // The filter pop-up button
+const filter1Img = require('../../Assets/Images/filter-1.png'); 
 const palayImg = require('../../Assets/Images/palay.png');
 const sibuyasImg = require('../../Assets/Images/sibuyas.png');
 const kamatisImg = require('../../Assets/Images/kamatis.png');
 const searchImg = require('../../Assets/Images/search.png');
 const siliImg = require('../../Assets/Images/sili.png');
 const talongImg = require('../../Assets/Images/talong.png');
-const polygon2Img = require('../../Assets/Images/polygon-2.png'); // For the pop-up arrow
+const polygon2Img = require('../../Assets/Images/polygon-2.png'); 
 
 type RootStackParamList = {
   StatsPage: undefined;
   SalesData: undefined;
-  // ...other screens
 };
 
 const StatsPage: React.FC = () => {
@@ -27,21 +25,18 @@ const StatsPage: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
+
       <TouchableOpacity style={styles.backButton}>
         <Image source={backImg} style={styles.backImage} />
       </TouchableOpacity>
 
-      {/* Title */}
       <Text style={styles.title}>Market Transactions</Text>
 
-      {/* Search Bar Group */}
       <View style={styles.searchGroup}>
         <View style={styles.searchBar} />
         <Image source={searchImg} style={styles.searchIcon} />
       </View>
 
-      {/* Filter Group */}
       <View style={styles.filterGroup}>
         <TouchableOpacity style={styles.filterButton} onPress={() => setFilterVisible(true)}>
           <Image source={filter1Img} style={styles.filterIcon} />
@@ -49,7 +44,6 @@ const StatsPage: React.FC = () => {
         <Image source={polygon2Img} style={styles.polygon} />
       </View>
 
-      {/* Palay Card (Touchable) */}
       <View style={styles.cardGroup1}>
         <TouchableOpacity style={{flex: 1}} activeOpacity={0.8} onPress={() => navigation.navigate('SalesData')}>
           <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]} style={styles.card}>
@@ -58,28 +52,28 @@ const StatsPage: React.FC = () => {
           </LinearGradient>
         </TouchableOpacity>
       </View>
-      {/* Sibuyas Card */}
+
       <View style={styles.cardGroup2}>
         <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]} style={styles.card}>
           <Image source={sibuyasImg} style={styles.cardIcon2} />
           <Text style={styles.cardLabel2}>Sibuyas</Text>
         </LinearGradient>
       </View>
-      {/* Kamatis Card */}
+
       <View style={styles.cardGroup3}>
         <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]} style={styles.card}>
           <Image source={kamatisImg} style={styles.cardIcon3} />
           <Text style={styles.cardLabel3}>Kamatis</Text>
         </LinearGradient>
       </View>
-      {/* Sili Card */}
+
       <View style={styles.cardGroup4}>
         <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]} style={styles.card}>
           <Image source={siliImg} style={styles.cardIcon4} />
           <Text style={styles.cardLabel4}>Sili</Text>
         </LinearGradient>
       </View>
-      {/* Talong Card */}
+
       <View style={styles.cardGroup5}>
         <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]} style={styles.card}>
           <Image source={talongImg} style={styles.cardIcon5} />
@@ -87,7 +81,6 @@ const StatsPage: React.FC = () => {
         </LinearGradient>
       </View>
 
-      {/* Filter Pop-up Modal */}
       <Modal
         visible={filterVisible}
         transparent
@@ -194,7 +187,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     resizeMode: 'contain',
   },
-  // Card Groups
+
   cardGroup1: {
     position: 'absolute',
     left: 44,
@@ -243,7 +236,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  // Card icons and labels (positioned absolutely within the card group)
+
   cardIcon1: {
     position: 'absolute',
     left: 6,
@@ -334,7 +327,6 @@ const styles = StyleSheet.create({
     lineHeight: 59,
     color: '#FFFDEB',
   },
-  // Filter Pop-up Styles
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.2)',
