@@ -1,11 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import CheckBox from 'expo-checkbox';
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useLayoutEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import axios from 'axios';
+
 
 export default function Magsasakaregister() {
   const navigation = useNavigation();
+  const params = useLocalSearchParams();
   const [isChecked, setIsChecked] = useState(false);
   const navBack = () => {
     router.push("/sellpage2") 
@@ -13,6 +16,26 @@ export default function Magsasakaregister() {
   useLayoutEffect(() => {
     navigation.setOptions({ title: "Sell page 3" });
   }, [navigation]);
+
+  const handleConfirm = async () => {
+    if (!isChecked) {
+      Alert.alert('Paalala', 'Pakisigurado na lahat ng detalye ay tama.');
+      return;
+    }
+
+    try {
+      const response = await axios.post( 
+        "http://10.0.2.2/sakamarket/sellProduct.php",
+        params,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      Alert.alert("Tagumpay", response.data.message || "Product stored!");
+      router.push('sellpage4'); // or another page after success
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "Hindi na-save ang produkto.");
+    }
+  };
 
   return (
     <View style={styles.background}>
@@ -23,16 +46,16 @@ export default function Magsasakaregister() {
         {/* Foreground Content */}
         <View style={styles.top}>
           <Text style={styles.header}>Magbenta ng Tanim</Text>
-          <Text style={styles.subtitle}>Pakikumpirma ang mga detalye</Text>
+          <Text style={styles.subtitle}>Kumpirmahin ang mga detalye</Text>
         </View>
 
         <View style={styles.content}>
           <Text style={styles.text}>Ikaw ay magbebenta ng:</Text>
 
           <View style={styles.box}>
-            <Text style={styles.boxText}>Pangalan ng Produkto: Bigas</Text>
-            <Text style={styles.boxText}>Presyo: ₱50/kilo</Text>
-            <Text style={styles.boxText}>Dami: 10 kilo</Text>
+            <Text style={styles.boxText}>Pangalan ng Produkto: {params.name}</Text>
+            <Text style={styles.boxText}>Presyo: ₱{params.price}</Text>
+            <Text style={styles.boxText}>Dami: {params.amount} kilo</Text>
           </View>
 
           {/* Checkbox row */}
@@ -50,14 +73,7 @@ export default function Magsasakaregister() {
           <TouchableOpacity
             style={styles.button}
             activeOpacity={0.7}
-            onPress={() => {
-              if (isChecked) {
-                // Navigate to the next page if checkbox is checked
-                router.push('/sellpage4') // Adjust the route name as needed
-              } else {
-                alert('Pakisigurado na lahat ng detalye ay tama.');
-              }
-            }}
+            onPress={handleConfirm}
             >
             <Text style={{ color: 'white', fontFamily: 'Roboto-Bold', fontSize: 30 }}>
               IBENTA
@@ -104,18 +120,18 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'white',
     fontFamily: 'Roboto-Bold',
-    top: 100,
+    top: 50,
     left: 40,
   },
   subtitle: {
     fontSize: 15,
     color: 'white',
     fontFamily: 'Roboto-Regular',
-    top: 99,
+    top: 49,
     left: 40,
   },
   content: {
-    flex: 5,
+    flex: 7,
     padding: 20,
     marginTop: 40,
     zIndex: 2,

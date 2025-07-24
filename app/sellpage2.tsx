@@ -5,20 +5,27 @@ import { useLayoutEffect, useState } from "react";
 import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 
+
 export default function Magsasakaregister() {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [amount, setAmount] = useState('');
-  const [desc, setDesc] = useState('');
+  const [description, setDescription] = useState('');
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
+
+const handleNext = () => {
+    const data = { name, price, description, amount, image };
+    // go to confirm page with params
+    router.push({ pathname: "/sellpage3", params: data });
+  };
 
   const navBack = () => {
     router.push("/sellpage1") 
   };
-  const navNext = () => {
+  /*const navNext = () => {
     router.push("/sellpage3") 
-  };
+  };*/
 
   const pickImage = async () => {
     // Ask for permission
@@ -82,13 +89,12 @@ export default function Magsasakaregister() {
           <Text style={styles.uploadButtonText}>Pindutin Upang Makapili</Text>
         </TouchableOpacity>
 
-        {image && <Image source={{ uri: image }} style={styles.imagePreview} />}
         <Text style={styles.label}>Deskripsyon ng Produkto (Kilo)</Text>
         <TextInput
           style={styles.inputDesc}
           placeholder="Ilagay ang detalyadong impormasyon tungkol sa produkto"
-          value={desc}
-          onChangeText={setDesc}
+          value={description}
+          onChangeText={setDescription}
           multiline
         />
         <View style={styles.nav}>
@@ -100,7 +106,7 @@ export default function Magsasakaregister() {
           </TouchableOpacity>
           <Text style={styles.navText2}>BUMALIK</Text>
           <Text style={styles.navText}>SUNOD</Text>
-          <TouchableOpacity onPress={navNext} activeOpacity={0.7}>
+          <TouchableOpacity onPress={handleNext} activeOpacity={0.7}>
             <Image
               source={require("../assets/images/Next Page.png")}
               style={styles.imageButton}
@@ -135,18 +141,18 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'black',
     fontFamily: 'Roboto-Bold',
-    top: 100,
+    top: 60,
     left: 40
   },
   subtitle: {
     fontSize: 15,
     color: 'black',
     fontFamily: 'Roboto-Regular',
-    top: 99,
+    top: 59,
     left: 40
   },
   content: {
-    flex: 5,
+    flex: 7,
     padding: 20,
     marginTop: 40,
   },

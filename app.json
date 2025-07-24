@@ -1,5 +1,9 @@
 {
   "expo": {
+    "splash": {
+      "backgroundColor": "#ffffff"
+    },
+    "backgroundColor": "#ffffff",
     "name": "sakamarket",
     "slug": "sakamarket",
     "version": "1.0.0",
