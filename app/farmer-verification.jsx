@@ -107,8 +107,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: -30,
-    left: 0,
+    top: -40,
+    left: -5,
   },
   backIcon: {
     width: 30,
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   dropArea: {
     width: '100%',
     height: 112,
-    backgroundColor: 'white',
+    backgroundColor: '#FFFDEB',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
