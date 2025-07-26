@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 32,
-    fontWeight: 700,
     fontFamily: 'Roboto-Bold',
   },
   instruction: {
@@ -201,9 +200,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   buttonText: {
-    fontWeight: 700,
     fontSize: 20,
-    fontWeight: 700,
     fontFamily: 'Roboto-Bold',
     color: 'white',
   },

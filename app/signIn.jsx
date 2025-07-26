@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   signInTitle: {
     fontSize: 60,
     width: 198,
-    height: 75,
+    height: 'fit-content',
     marginBottom: 31,
     textAlign: 'center',
     fontFamily: 'Roboto-SemiBold',

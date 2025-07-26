@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
   logoText: {
     fontFamily: 'Secular One',
     fontSize: 32,
-    fontWeight: '400',
   },
   saka: {
     color: '#FFCA43',
@@ -123,8 +122,7 @@ const styles = StyleSheet.create({
   createText: {
     color: '#10AF7C',
     fontSize: 20,
-    fontWeight: '500',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto-Medium',
   },
 });
 

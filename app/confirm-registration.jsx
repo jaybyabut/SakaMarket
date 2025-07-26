@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   },
   success: {
     fontSize: 48,
-    fontWeight: '700',
     fontFamily: 'Roboto-Bold',
     marginTop: 5,
     marginBottom: 5,
@@ -60,7 +59,6 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 20,
-    fontWeight: '400',
     fontFamily: 'Roboto',
     marginBottom: 40,
     textAlign: 'center',
@@ -83,7 +81,6 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: 20,
-    fontWeight: '400',
     fontFamily: 'Roboto',
     textAlign: 'center',
   },
