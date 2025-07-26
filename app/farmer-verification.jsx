@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 32,
+    fontWeight: 700,
     fontFamily: 'Roboto-Bold',
   },
   instruction: {
