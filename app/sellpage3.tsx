@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
 import CheckBox from 'expo-checkbox';
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useLayoutEffect, useState } from 'react';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import axios from 'axios';
 
 
 export default function Magsasakaregister() {
