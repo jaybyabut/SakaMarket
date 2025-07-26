@@ -62,7 +62,7 @@ export default function payment() {
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => router.push('buy-confirmation')}>
+                <TouchableOpacity style={styles.button} onPress={() => router.push('/buy-confirmation')}>
                         <LinearGradient
                         colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "#86C778"]}
                         dither={true}
