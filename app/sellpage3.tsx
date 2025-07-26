@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
 import CheckBox from 'expo-checkbox';
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useLayoutEffect, useState } from 'react';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import axios from 'axios';
 
 
 export default function Magsasakaregister() {
@@ -30,7 +30,7 @@ export default function Magsasakaregister() {
         { headers: { "Content-Type": "application/json" } }
       );
       Alert.alert("Tagumpay", response.data.message || "Product stored!");
-      router.push('sellpage4'); // or another page after success
+      router.push('/sellpage4'); // or another page after success
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Hindi na-save ang produkto.");
