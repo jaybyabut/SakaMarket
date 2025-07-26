@@ -28,7 +28,7 @@ export default function Magsasakaregister() {
             <Text style={styles.content}>Presyo: P20 /kilo</Text>
             <Text style={styles.content}>Dami: 50kg</Text>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 170, marginLeft: 0 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 150, marginLeft: 0 }}>
             <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
                 <Image
                     source={require("../assets/images/backtoblack.png")}
