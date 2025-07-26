@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
-import * as ImagePicker from 'expo-image-picker';
 import { router } from "expo-router";
 import { useLayoutEffect, useState } from "react";
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default function Magsasakaregister() {
@@ -17,7 +17,6 @@ export default function Magsasakaregister() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-   const [image, setImage] = useState('');
 
   const handleSubmit = () => {
     if (password === '' || confirmPassword === '') {
@@ -35,25 +34,7 @@ export default function Magsasakaregister() {
   };
 
 
-  const pickImage = async () => {
-    // Ask for permission
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission denied', 'We need access to your photos!');
-      return;
-    }
-    
-    // Launch picker
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      allowsEditing: true,
-    });
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri); // Store image URI
-    }
-  };
   useLayoutEffect(() => {
     navigation.setOptions({ title: "Magsasaka Register Page" });
   }, [navigation]);
@@ -61,7 +42,12 @@ export default function Magsasakaregister() {
   return (
     <View style={styles.container}>
       {/* Background Shape */}
-      <View style={styles.backgroundShape} />
+      <LinearGradient
+      colors={['#10AF7C', '#86C778']} // your gradient colors
+      start={{ x: 0, y: 0 }}  // optional: control direction
+      end={{ x: 1, y: 1 }}
+      style={styles.backgroundShape}
+      />
       {/* Foreground Content */}
       <View style={styles.top}>
         <Text style={styles.header}>Gumawa ng Account</Text>
@@ -137,8 +123,8 @@ export default function Magsasakaregister() {
                 style={styles.imageButton2}
             />
             </TouchableOpacity>
-            <Text style={styles.navText2}>BUMALIK</Text>
-            <Text style={styles.navText}>SUNOD</Text>
+            <Text style={styles.navText2} onPress={navBack}>BUMALIK</Text>
+            <Text style={styles.navText} onPress={handleSubmit}>SUNOD</Text>
             <TouchableOpacity onPress={handleSubmit} activeOpacity={0.7}>
             <Image
                 source={require("../assets/images/Next Page.png")}
@@ -159,7 +145,7 @@ const styles = StyleSheet.create({
   backgroundShape: {
     position: 'absolute',
     width: 450,
-    height: 830,
+    height: 790,
     backgroundColor: '#10AF7C',
     borderRadius: 70, // circle
     bottom: -100,
@@ -174,14 +160,15 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'black',
     fontFamily: 'Roboto-Bold',
-    top: 80,
-    left: 40
+    top: 70,
+    left: 40,
+    fontWeight: 'bold',
   },
   subtitle: {
     fontSize: 15,
     color: 'black',
     fontFamily: 'Roboto-Regular',
-    top: 84,
+    top: 74,
     left: 40,
     maxWidth: '85%',
   },
@@ -194,9 +181,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
     color: 'white',
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Roboto-Bold',
     left: 20,
     marginTop: 15,
+    fontWeight: 'bold',
   },
   input: {
     height: 40,
@@ -209,6 +197,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     fontSize: 14,
     marginBottom: 8,
+    elevation: 5,
   },
   imagePreview: {
     width: '100%',

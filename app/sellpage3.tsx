@@ -30,7 +30,7 @@ export default function Magsasakaregister() {
         { headers: { "Content-Type": "application/json" } }
       );
       Alert.alert("Tagumpay", response.data.message || "Product stored!");
-      router.push('sellpage4'); // or another page after success
+      router.push('/sellpage4'); // or another page after success
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Hindi na-save ang produkto.");
