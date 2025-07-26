@@ -1,41 +1,40 @@
-import { useNavigation } from '@react-navigation/native';
-import type { StackNavigationProp } from '@react-navigation/stack';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
-const logoImg: ImageSourcePropType = require('../../Assets/Images/Logo-Home.png');
-const homeTextImg: ImageSourcePropType = require('../../Assets/Images/Mamili ng Gawain.png');
-const magbentaImg: ImageSourcePropType = require('../SakaMarket/Assets/Images/magbenta.png');
-const marketImg: ImageSourcePropType = require('../SakaMarket/Assets/Images/market.png');
-const settingsImg: ImageSourcePropType = require('../SakaMarket/Assets/Images/settings.png');
-const accountImg: ImageSourcePropType = require('../SakaMarket/Assets/Images/account.png');
-const languageImg: ImageSourcePropType = require('../../Assets/Images/Language.png');
-const logoutImg: ImageSourcePropType = require('../../Assets/Images/LogOut.png');
+// Update these imports/paths as needed for your project structure
+const logoImg: ImageSourcePropType = require('../assets/images/Logo-Home.png');
+const homeTextImg: ImageSourcePropType = require('../assets/images/mamili-ng-gagawin.png');
+const magbentaImg: ImageSourcePropType = require('../assets/images/Magbenta.png');
+const marketImg: ImageSourcePropType = require('../assets/images/Market.png');
+const settingsImg: ImageSourcePropType = require('../assets/images/Settings.png');
+const accountImg: ImageSourcePropType = require('../assets/images/Account.png');
+const languageImg: ImageSourcePropType = require('../assets/images/Language.png');
+const logoutImg: ImageSourcePropType = require('../assets/images/LogOut.png');
 
-type RootStackParamList = {
-  HomeMagsasaka: undefined;
-  Magbenta: undefined;
-  StatsPage: undefined;
-};
+// If you have a type for your navigation stack, use it here
+
 
 export default function HomeMagsasaka() {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
     <View style={styles.container}>
+      {/* Logo at top left */}
       <View style={styles.logoContainer}>
         <Image source={logoImg} style={styles.logoImage} />
         <Text style={styles.logoText}>SAKA MARKET</Text>
       </View>
 
+      {/* Home text banner */}
       <Image source={homeTextImg} style={styles.homeTextImage} />
 
+      {/* Button grid */}
       <View style={styles.gridContainer}>
         <View style={styles.row}>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => navigation.navigate('Magbenta')}
+            onPress={() => router.push('/sellpage1')}
           >
             <LinearGradient
               colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]}
@@ -48,7 +47,7 @@ export default function HomeMagsasaka() {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => navigation.navigate('StatsPage')}
+            onPress={() => router.push('/StatsPage')}
           >
             <LinearGradient
               colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]}
@@ -80,6 +79,7 @@ export default function HomeMagsasaka() {
         </View>
       </View>
 
+      {/* Language row */}
       <View style={styles.languageRow}>
         <Image source={languageImg} style={styles.languageIcon} />
         <Text style={styles.languageLabel}>Language:</Text>
@@ -88,7 +88,8 @@ export default function HomeMagsasaka() {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.logoutButton}>
+      {/* Log Out button at bottom left */}
+      <TouchableOpacity style={styles.logoutButton} onPress={() => router.replace('/signIn')}>
         <Image source={logoutImg} style={styles.logoutImage} />
         <Text style={styles.logoutButtonText}>Log Out</Text>
       </TouchableOpacity>
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   logoText: {
-    fontFamily: 'Secular One', 
+    fontFamily: 'Secular One', // Make sure to link this font in your project
     fontWeight: '400',
     fontSize: 25,
     lineHeight: 31,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   buttonText: {
-    fontFamily: 'Roboto', 
+    fontFamily: 'Roboto', // Make sure to link this font in your project
     fontWeight: '700',
     fontSize: 30,
     lineHeight: 35,
@@ -190,6 +191,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     height: 55,
     paddingVertical: 2,
+    // gap: 10, // If not supported, use marginRight on children
   },
   languageIcon: {
     width: 32,
@@ -252,3 +254,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
 });
+
+// Note: For gradients, install react-native-linear-gradient and link it properly.
+// For custom fonts (Roboto, Secular One), make sure to add and link them in your project.

@@ -1,22 +1,25 @@
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
-const backImg = require('../../Assets/Images/back.png');
-const filter1Img = require('../../Assets/Images/filter-1.png'); 
-const palayImg = require('../../Assets/Images/palay.png');
-const sibuyasImg = require('../../Assets/Images/sibuyas.png');
-const kamatisImg = require('../../Assets/Images/kamatis.png');
-const searchImg = require('../../Assets/Images/search.png');
-const siliImg = require('../../Assets/Images/sili.png');
-const talongImg = require('../../Assets/Images/talong.png');
-const polygon2Img = require('../../Assets/Images/polygon-2.png'); 
+// Image assets (update paths as needed)
+const backImg = require('../assets/images/Back.png');
+const filter1Img = require('../assets/images/Filter-1.png'); // The filter pop-up button
+const palayImg = require('../assets/images/Palay.png');
+const sibuyasImg = require('../assets/images/Sibuyas.png');
+const kamatisImg = require('../assets/images/Kamatis.png');
+const searchImg = require('../assets/images/Search.png');
+const siliImg = require('../assets/images/Sili.png');
+const talongImg = require('../assets/images/Talong.png');
+// For the pop-up arrow
 
 type RootStackParamList = {
   StatsPage: undefined;
   SalesData: undefined;
+  // ...other screens
 };
 
 const StatsPage: React.FC = () => {
@@ -25,55 +28,58 @@ const StatsPage: React.FC = () => {
 
   return (
     <View style={styles.container}>
-
-      <TouchableOpacity style={styles.backButton}>
+      {/* Back Button */}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Image source={backImg} style={styles.backImage} />
       </TouchableOpacity>
 
+      {/* Title */}
       <Text style={styles.title}>Market Transactions</Text>
 
+      {/* Search Bar Group */}
       <View style={styles.searchGroup}>
         <View style={styles.searchBar} />
         <Image source={searchImg} style={styles.searchIcon} />
       </View>
 
+      {/* Filter Group */}
       <View style={styles.filterGroup}>
         <TouchableOpacity style={styles.filterButton} onPress={() => setFilterVisible(true)}>
           <Image source={filter1Img} style={styles.filterIcon} />
         </TouchableOpacity>
-        <Image source={polygon2Img} style={styles.polygon} />
       </View>
 
+      {/* Palay Card (Touchable) */}
       <View style={styles.cardGroup1}>
-        <TouchableOpacity style={{flex: 1}} activeOpacity={0.8} onPress={() => navigation.navigate('SalesData')}>
+        <TouchableOpacity style={{flex: 1}} activeOpacity={0.8} onPress={() => router.push('/SalesData')}>
           <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]} style={styles.card}>
             <Image source={palayImg} style={styles.cardIcon1} />
             <Text style={styles.cardLabel1}>Palay</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
-
+      {/* Sibuyas Card */}
       <View style={styles.cardGroup2}>
         <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]} style={styles.card}>
           <Image source={sibuyasImg} style={styles.cardIcon2} />
           <Text style={styles.cardLabel2}>Sibuyas</Text>
         </LinearGradient>
       </View>
-
+      {/* Kamatis Card */}
       <View style={styles.cardGroup3}>
         <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]} style={styles.card}>
           <Image source={kamatisImg} style={styles.cardIcon3} />
           <Text style={styles.cardLabel3}>Kamatis</Text>
         </LinearGradient>
       </View>
-
+      {/* Sili Card */}
       <View style={styles.cardGroup4}>
         <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]} style={styles.card}>
           <Image source={siliImg} style={styles.cardIcon4} />
           <Text style={styles.cardLabel4}>Sili</Text>
         </LinearGradient>
       </View>
-
+      {/* Talong Card */}
       <View style={styles.cardGroup5}>
         <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]} style={styles.card}>
           <Image source={talongImg} style={styles.cardIcon5} />
@@ -81,6 +87,7 @@ const StatsPage: React.FC = () => {
         </LinearGradient>
       </View>
 
+      {/* Filter Pop-up Modal */}
       <Modal
         visible={filterVisible}
         transparent
@@ -98,7 +105,6 @@ const StatsPage: React.FC = () => {
               <Text style={styles.filterPopupOption}>Least Sold</Text>
               <Text style={styles.filterPopupOption}>Highest Price</Text>
               <Text style={styles.filterPopupOption}>Lowest Price</Text>
-              <Image source={polygon2Img} style={styles.filterPopupPolygon} />
             </LinearGradient>
           </View>
           <TouchableOpacity style={styles.modalBackground} onPress={() => setFilterVisible(false)} />
@@ -187,7 +193,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     resizeMode: 'contain',
   },
-
+  // Card Groups
   cardGroup1: {
     position: 'absolute',
     left: 44,
@@ -236,7 +242,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-
+  // Card icons and labels (positioned absolutely within the card group)
   cardIcon1: {
     position: 'absolute',
     left: 6,
@@ -327,6 +333,7 @@ const styles = StyleSheet.create({
     lineHeight: 59,
     color: '#FFFDEB',
   },
+  // Filter Pop-up Styles
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.2)',

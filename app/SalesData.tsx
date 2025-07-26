@@ -1,14 +1,14 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const backImg = require('../../Assets/Images/back.png');
-const salesStatsImg = require('../../Assets/Images/salesstats.png');
-const order1Img = require('../../Assets/Images/order1.png');
-const order2Img = require('../../Assets/Images/order2.png');
-const order3Img = require('../../Assets/Images/order3.png');
-const order4Img = require('../../Assets/Images/order4.png');
-const order5Img = require('../../Assets/Images/order5.png');
+const backImg = require('../assets/images/Back.png');
+const salesStatsImg = require('../assets/images/SalesStats.png');
+const order1Img = require('../assets/images/Order1.png');
+const order2Img = require('../assets/images/Order2.png');
+const order3Img = require('../assets/images/Order3.png');
+const order4Img = require('../assets/images/Order4.png');
+const order5Img = require('../assets/images/Order5.png');
 
 const SalesData: React.FC = () => {
   const navigation = useNavigation();
