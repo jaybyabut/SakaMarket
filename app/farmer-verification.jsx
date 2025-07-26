@@ -201,8 +201,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   buttonText: {
-    fontSize: 20,
     fontWeight: 700,
+    fontSize: 20,
     fontFamily: 'Roboto-Bold',
     color: 'white',
   },
