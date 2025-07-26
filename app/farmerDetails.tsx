@@ -123,8 +123,8 @@ export default function Magsasakaregister() {
                 style={styles.imageButton2}
             />
             </TouchableOpacity>
-            <Text style={styles.navText2}>BUMALIK</Text>
-            <Text style={styles.navText}>SUNOD</Text>
+            <Text style={styles.navText2} onPress={navBack}>BUMALIK</Text>
+            <Text style={styles.navText} onPress={handleSubmit}>SUNOD</Text>
             <TouchableOpacity onPress={handleSubmit} activeOpacity={0.7}>
             <Image
                 source={require("../assets/images/Next Page.png")}
