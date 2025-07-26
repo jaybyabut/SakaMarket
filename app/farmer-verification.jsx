@@ -26,21 +26,23 @@ export default function FarmerVerificationScreen() {
 
   return (
     <View style={styles.screen}>
-      <Pressable
-        style={styles.backButton}
-        onPress={() => router.push("/signUp")}
-      >
-        <Image
-          style={styles.backIcon}
-          source={require("../assets/STARTer/back-icon.png")}
-        />
-      </Pressable>
+      <View style={styles.backIconWithHeader}>
+        <Pressable
+          style={styles.backButton}
+          onPress={() => router.push("/signUp")}
+        >
+          <Image
+            style={styles.backIcon}
+            source={require("../assets/STARTer/back-icon.png")}
+          />
+        </Pressable>
 
-      <View style={styles.upperText}>
-        <Text style={styles.header}>I-verify ang Account</Text>
-        <Text style={styles.instruction}>
-          Ipasa ang mga sumusunod na dokumento upang makagawa ng iyong account
-        </Text>
+        <View style={styles.upperText}>
+          <Text style={styles.header}>I-verify ang Account</Text>
+          <Text style={styles.instruction}>
+            Ipasa ang mga sumusunod na dokumento upang makagawa ng iyong account
+          </Text>
+        </View>
       </View>
 
       <LinearGradient
@@ -105,13 +107,16 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 60,
-    left: 24,
+    top: -40,
+    left: -5,
   },
   backIcon: {
     width: 30,
     height: 30,
     zIndex: 1,
+  },
+  backIconWithHeader: {
+    position: "relative",
   },
   upperText: {
     width: 366,
@@ -121,6 +126,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 32,
+    fontWeight: 700,
     fontFamily: 'Roboto-Bold',
   },
   instruction: {
@@ -155,7 +161,7 @@ const styles = StyleSheet.create({
   dropArea: {
     width: '100%',
     height: 112,
-    backgroundColor: 'white',
+    backgroundColor: '#FFFDEB',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',

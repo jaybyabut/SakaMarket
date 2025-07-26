@@ -26,7 +26,7 @@ export default function Magsasakaregister() {
       setError('Passwords do not match.');
       setSuccess('');
     } else {
-      router.push('farmer-verification')
+      router.push('/farmer-verification')
     }
   };
   const navBack = () => {

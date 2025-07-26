@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     marginBottom: 40,
     textAlign: 'center',
-    height: 138,
+    height: 'fit-content',
     width: '100%',
   },
   jumpToLogin: {
