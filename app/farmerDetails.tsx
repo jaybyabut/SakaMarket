@@ -50,6 +50,12 @@ export default function Magsasakaregister() {
       />
       {/* Foreground Content */}
       <View style={styles.top}>
+        <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
+          <Image
+              source={require("../assets/images/Back.png")}
+              style={styles.imageButton}
+          />
+        </TouchableOpacity>
         <Text style={styles.header}>Gumawa ng Account</Text>
         <Text style={styles.subtitle}>Punan ang mga detalye sa ibaba upang makagawa ng iyong account.</Text>
       </View>
@@ -117,18 +123,11 @@ export default function Magsasakaregister() {
         {error ? <Text style={styles.error}>{error}</Text> : null}
         {success ? <Text style={styles.success}>{success}</Text> : null}
         <View style={styles.nav}>
-            <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
-            <Image
-                source={require("../assets/images/Back To.png")}
-                style={styles.imageButton2}
-            />
-            </TouchableOpacity>
-            <Text style={styles.navText2} onPress={navBack}>BUMALIK</Text>
             <Text style={styles.navText} onPress={handleSubmit}>SUNOD</Text>
             <TouchableOpacity onPress={handleSubmit} activeOpacity={0.7}>
             <Image
                 source={require("../assets/images/Next Page.png")}
-                style={styles.imageButton}
+                style={styles.imageButton2}
             />
             </TouchableOpacity>
         </View>
@@ -160,15 +159,16 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'black',
     fontFamily: 'Roboto-Bold',
-    top: 70,
+    top: 55,
     left: 40,
     fontWeight: 'bold',
+    marginTop: 0,
   },
   subtitle: {
     fontSize: 15,
     color: 'black',
     fontFamily: 'Roboto-Regular',
-    top: 74,
+    top: 55,
     left: 40,
     maxWidth: '85%',
   },
@@ -243,7 +243,8 @@ const styles = StyleSheet.create({
   imageButton: {
     width: 30,
     height: 30,
-    marginRight: 5,
+    marginLeft: 30,
+    top: 30,
   },
   imageButton2: {
     width: 30,
