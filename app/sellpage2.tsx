@@ -53,11 +53,12 @@ const handleNext = () => {
   return (
     <View style={styles.container}>
       {/* Background Shape */}
+      <View style={styles.whiteBackground} />
       <View style={styles.backgroundShape} />
       {/* Foreground Content */}
       <View style={styles.top}>
         <Text style={styles.header}>Magbenta ng Tanim</Text>
-        <Text style={styles.subtitle}>Pakilagay ang mga detalye</Text>
+        <Text style={styles.subtitle}>Punan ang mga sumusunod na detalye</Text>
       </View>
       <View style={styles.content}>
         <Text style={styles.label}>Pangalan ng Produkto</Text>
@@ -152,9 +153,8 @@ const styles = StyleSheet.create({
     left: 40
   },
   content: {
-    flex: 7,
+    flex: 5,
     padding: 20,
-    marginTop: 40,
   },
   label: {
     fontSize: 20,
@@ -237,5 +237,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Roboto-Bold',
     marginRight: 105,
-  }
+  },
+  whiteBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'white', // Solid white background
+    zIndex: -2, // Behind everything
+  },
 });

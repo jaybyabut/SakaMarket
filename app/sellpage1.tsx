@@ -12,45 +12,46 @@ export default function SellPage1() {
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
         alignItems: "center",
         padding: 20,
         gap: 40,
-        marginTop: 100,
+        backgroundColor: 'white',
       }}
     >
-      <ButtonWithBackground
-        text="Bagong Transaksyon"
-        colors={["#10AF7C", "#5ABE7A", "#65C17A"]}
-        onPress={() => {
-          router.push("/sellpage2");
-        }}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        locations={[0, 0.9, 1]}
-        image={require("../assets/images/Peso Symbol.png")}
-      />
+      <View style={styles.top}>
+        <ButtonWithBackground
+          text="Bagong Transaksyon"
+          colors={["#10AF7C", "#5ABE7A", "#65C17A"]}
+          onPress={() => {
+            router.push("/sellpage2");
+          }}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          locations={[0, 0.9, 1]}
+          image={require("../assets/images/Peso Symbol.png")}
+        />
 
-      <ButtonWithBackground
-        text="Palitan ang Detalye ng Transaksyon"
-        colors={["#10AF7C", "#5ABE7A", "#65C17A"]}
-        onPress={() => {
-          console.log('palitan');
-        }}
-        start={{ x: 0, y: 1 }}
-        end={{ x: 0, y: 0 }}
-        locations={[0, 0.9, 1]}
-        image={require("../assets/images/Edit.png")}
-      />
+        <ButtonWithBackground
+          text="Palitan ang Detalye ng Transaksyon"
+          colors={["#10AF7C", "#5ABE7A", "#65C17A"]}
+          onPress={() => {
+            console.log('palitan');
+          }}
+          start={{ x: 0, y: 1 }}
+          end={{ x: 0, y: 0 }}
+          locations={[0, 0.9, 1]}
+          image={require("../assets/images/Edit.png")}
+        />
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, left: -85 }}>
-        <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
-          <Image
-            source={require("../assets/images/backtoblack.png")}
-            style={styles.imageButton}
-          />
-        </TouchableOpacity>
-        <Text style={styles.navText}>HOME PAGE</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, left: -85 }}>
+          <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
+            <Image
+              source={require("../assets/images/backtoblack.png")}
+              style={styles.imageButton}
+            />
+          </TouchableOpacity>
+          <Text style={styles.navText}>HOME PAGE</Text>
+        </View>
       </View>
     </View>
   );
@@ -67,4 +68,12 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Roboto-Bold',
   },
+  top: {
+    marginTop: 50,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 50,
+    width: '100%',
+  }
 });

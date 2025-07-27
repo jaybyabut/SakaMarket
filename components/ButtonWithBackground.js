@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 8,
     backgroundColor: '#fff',
+
   },
   text:{
     color: 'white',
