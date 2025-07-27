@@ -19,20 +19,31 @@ export default function FarmerVerificationScreen() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const isButtonDisabled =
+    !nameFirst ||
+    !nameLast ||
+    !address ||
+    !number ||
+    !verify ||
+    !password ||
+    !confirmPassword ||
+    password !== confirmPassword;
+
   const handleSubmit = () => {
-      if (password === '' || confirmPassword === '') {
-        setError('Both fields are required.');
-        setSuccess('');
-      } else if (password !== confirmPassword) {
-        setError('Passwords do not match.');
-        setSuccess('');
-      } else {
-        router.push('/farmer-verification')
-      }
-    };
-    const navBack = () => {
-      router.back() 
-    };
+    if (isButtonDisabled) return;
+
+    if (password === '' || confirmPassword === '') {
+      setError('Both fields are required.');
+      setSuccess('');
+    } else if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      setSuccess('');
+    } else {
+      setError('');
+      setSuccess('Success!');
+      router.push('/farmer-verification');
+    }
+  };
 
   const pickImage = async (setImage) => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -51,14 +62,8 @@ export default function FarmerVerificationScreen() {
   return (
     <View style={styles.screen}>
       <View style={styles.backIconWithHeader}>
-        <Pressable
-          style={styles.backButton}
-          onPress={() => router.push("/signUp")}
-        >
-          <Image
-            style={styles.backIcon}
-            source={require("../assets/STARTer/back-icon.png")}
-          />
+        <Pressable style={styles.backButton} onPress={() => router.push("/signUp")}>
+          <Image style={styles.backIcon} source={require("../assets/STARTer/back-icon.png")} />
         </Pressable>
 
         <View style={styles.upperText}>
@@ -97,7 +102,7 @@ export default function FarmerVerificationScreen() {
             multiline
           />
         </View>
-        
+
         <View style={styles.inputAndLabel}>
           <Text style={styles.uploadLabel}>Address ng Sakahan</Text>
           <TextInput
@@ -108,7 +113,7 @@ export default function FarmerVerificationScreen() {
             multiline
           />
         </View>
-        
+
         <View style={styles.inputAndLabel}>
           <Text style={styles.uploadLabel}>Contact Details</Text>
           <TextInput
@@ -126,7 +131,7 @@ export default function FarmerVerificationScreen() {
             multiline
           />
         </View>
-        
+
         <View style={styles.inputAndLabel}>
           <Text style={styles.uploadLabel}>Personal Identification Number (PIN)</Text>
           <TextInput
@@ -146,12 +151,13 @@ export default function FarmerVerificationScreen() {
           {error ? <Text style={styles.error}>{error}</Text> : null}
           {success ? <Text style={styles.success}>{success}</Text> : null}
         </View>
-        
+
         <View style={styles.buttons}>
           <ButtonWithText
             icon={require('../assets/STARTer/Farmer Verification/next-page.png')}
             label="NEXT"
-            onPress={() => router.push('/farmer-verification')}
+            onPress={handleSubmit}
+            disabled={isButtonDisabled}
           />
         </View>
       </LinearGradient>
@@ -159,11 +165,15 @@ export default function FarmerVerificationScreen() {
   );
 }
 
-function ButtonWithText({ icon, label, reverse, onPress }) {
+function ButtonWithText({ icon, label, reverse, onPress, disabled }) {
   return (
-    <Pressable style={styles.buttonWithText} onPress={onPress}>
+    <Pressable
+      style={[styles.buttonWithText, disabled && styles.buttonDisabled]}
+      onPress={onPress}
+      disabled={disabled}
+    >
       {reverse && <Image source={icon} style={styles.buttonIcon} />}
-      <Text style={styles.buttonText}>{label}</Text>
+      <Text style={[styles.buttonText, disabled && styles.textDisabled]}>{label}</Text>
       {!reverse && <Image source={icon} style={styles.buttonIcon} />}
     </Pressable>
   );
@@ -211,13 +221,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 80,
     borderTopRightRadius: 80,
     paddingHorizontal: 44,
-    paddingTop: 25 ,
+    paddingTop: 25,
     paddingBottom: 28,
     shadowColor: '#000',
     shadowOpacity: 0.51,
     shadowRadius: 8.7,
     shadowOffset: { width: 17, height: 4 },
-    elevation: 4, //for android
+    elevation: 4,
   },
   inputAndLabel: {
     display: 'flex',
@@ -247,7 +257,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 8.7,
     shadowOffset: { width: 0, height: 4 },
-    elevation: 4, //for android
+    elevation: 4,
   },
   buttons: {
     position: 'absolute',
@@ -255,7 +265,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     width: 346,
     height: 47,
-    marginTop: 20, 
+    marginTop: 20,
     alignSelf: 'center',
     bottom: 25,
   },
@@ -273,5 +283,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Roboto-Bold',
     color: 'white',
+  },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
+  textDisabled: {
+    color: '#ccc',
+  },
+  error: {
+    color: 'red',
+    marginTop: 5,
+  },
+  success: {
+    color: 'green',
+    marginTop: 5,
   },
 });
