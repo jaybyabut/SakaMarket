@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
   backIcon: {
     width: 30,
     height: 30,
-    zIndex: 1,
   },
   backIconWithHeader: {
     position: "relative",
@@ -189,12 +188,14 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   buttons: {
+    position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: 346,
     height: 47,
     marginTop: 20,
     alignSelf: 'center', 
+    bottom: 25,
   },
   buttonWithText: {
     flexDirection: 'row',
