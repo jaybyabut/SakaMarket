@@ -107,13 +107,12 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: -40,
+    top: -45,
     left: -5,
   },
   backIcon: {
     width: 30,
     height: 30,
-    zIndex: 1,
   },
   backIconWithHeader: {
     position: "relative",
@@ -126,22 +125,28 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 32,
-    fontWeight: 700,
     fontFamily: 'Roboto-Bold',
+    marginBottom: 6.5,
   },
   instruction: {
     fontSize: 16,
     fontFamily: 'Roboto',
   },
   greenContainer: {
+    marginTop: 3,
     width: 464,
     flex: 1,
     borderTopLeftRadius: 80,
     borderTopRightRadius: 80,
     paddingHorizontal: 44,
-    paddingTop: 20,
+    paddingTop: 25 ,
     paddingBottom: 28,
     justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOpacity: 0.51,
+    shadowRadius: 8.7,
+    shadowOffset: { width: 17, height: 4 },
+    elevation: 4, //for android
   },
   uploadSection: {
     gap: 16,
@@ -167,9 +172,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.25,
-    shadowRadius: 4,
+    shadowRadius: 8.7,
     shadowOffset: { width: 0, height: 4 },
-    elevation: 3,
+    elevation: 4, //for android
   },
   uploadText: {
     fontSize: 14,
@@ -183,17 +188,19 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   buttons: {
+    position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: 346,
     height: 47,
     marginTop: 20,
     alignSelf: 'center', 
+    bottom: 25,
   },
   buttonWithText: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 5,
   },
   buttonIcon: {
     width: 29,
@@ -202,7 +209,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 20,
-    fontWeight: 700,
     fontFamily: 'Roboto-Bold',
     color: 'white',
   },

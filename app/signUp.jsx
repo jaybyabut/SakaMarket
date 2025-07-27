@@ -8,13 +8,14 @@ export default function SignupScreen() {
 
   return (
     <View style={styles.page}>
-      <Pressable style={styles.backIcon} onPress={() => router.back()}>
-      <Image
-        source={require('../assets/STARTer/Images/Sign Up/back-icon.png')}
-      />
-      </Pressable>
-
       <View style={styles.container}>
+        <Pressable style={styles.backIcon} onPress={() => router.push('/App')}>
+          <Image
+            style={styles.backIcon}
+            source={require('../assets/STARTer/Images/Sign Up/back-icon.png')}
+          />
+        </Pressable>
+
         {/* Text Section */}
         <View style={styles.textSection}>
           <Text style={styles.signupText}>Sign Up</Text>
@@ -32,7 +33,7 @@ export default function SignupScreen() {
             <Pressable style={styles.buttonContent} onPress={() => router.push('/farmerDetails')}>
               <Image
                 style={styles.buttonIcon}
-                source={require('@/assets/STARTer/Images/Sign Up/magsasaka-icon.png')}
+                source={require('../assets/STARTer/Images/Sign Up/magsasaka-icon.png')}
                 resizeMode="contain"
               />
               <Text style={styles.buttonText}>Magsasaka</Text>
@@ -69,8 +70,8 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     position: 'absolute',
-    top: 60,
-    left: 24,
+    top: -20,
+    left: -5,
     width: 30,
     height: 30,
     zIndex: 1,

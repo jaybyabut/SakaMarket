@@ -13,10 +13,10 @@ const LandingPage = ({ navigation = { navigate: () => {} } }) => {
           resizeMode="contain"
         />
         <View style={styles.nameContainer}>
-          <Text style={styles.logoText}>
-            <Text style={styles.saka}>SAKA</Text>
-            <Text style={styles.market}>MARKET</Text>
-          </Text>
+          <Image
+            source={require('../assets/STARTer/Images/Landing Page/logo-name.png')}
+            resizeMode="contain"
+          />
         </View>
       </View>
 

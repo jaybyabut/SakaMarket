@@ -39,10 +39,10 @@ export default function SignInScreen() {
             resizeMode="contain"
           />
           <View style={styles.nameDiv}>
-            <Text style={styles.logoName}>
-              <Text style={styles.saka}>SAKA</Text>
-              <Text style={styles.market}>MARKET</Text>
-            </Text>
+            <Image
+              source={require('../assets/STARTer/Images/Landing Page/logo-name.png')}
+              resizeMode="contain"
+            />
           </View>
         </View>
 
@@ -115,10 +115,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
   },
-  logoName: {
-    fontFamily: 'Secular One',
-    fontSize: 32,
-  },
   saka: {
     color: '#FFCA43',
   },
@@ -131,7 +127,7 @@ const styles = StyleSheet.create({
   signInTitle: {
     fontSize: 60,
     width: 198,
-    height: 75,
+    height: 'fit-content',
     marginBottom: 31,
     textAlign: 'center',
     fontFamily: 'Roboto-SemiBold',
