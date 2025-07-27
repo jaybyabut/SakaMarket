@@ -9,7 +9,7 @@ export default function SignupScreen() {
   return (
     <View style={styles.page}>
       <View style={styles.container}>
-        <Pressable style={styles.backIcon} onPress={() => router.push('/app')}>
+        <Pressable style={styles.backIcon} onPress={() => router.push('/App')}>
           <Image
             style={styles.backIcon}
             source={require('../assets/STARTer/Images/Sign Up/back-icon.png')}
