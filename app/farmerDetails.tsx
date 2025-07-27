@@ -42,6 +42,7 @@ export default function Magsasakaregister() {
   return (
     <View style={styles.container}>
       {/* Background Shape */}
+      <View style={styles.whiteBackground} />
       <LinearGradient
       colors={['#10AF7C', '#86C778']} // your gradient colors
       start={{ x: 0, y: 0 }}  // optional: control direction
@@ -154,6 +155,15 @@ const styles = StyleSheet.create({
   top: {
     flex: 1
     ,
+  },
+  whiteBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'white', // Solid white background
+    zIndex: -2, // Behind everything
   },
   header: {
     fontSize: 30,
