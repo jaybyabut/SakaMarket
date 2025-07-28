@@ -35,17 +35,17 @@ export default function Productpage() {
         <View style = {styles.infoContainer}>
         <View style = {styles.titleLine}>
             <View style = {styles.titleBox}>
-            <Text style = {styles.titleText}>{item.title}</Text>
+            <Text style = {styles.titleText}>{item.name}</Text>
             </View>
             <View style= {styles.priceBox}>
             <Text style={[styles.priceText, {color: '#48BA7A'}]}>₱{item.price}</Text>
             </View>
         </View>
         
-        <Text style={styles.additionalText}>Magsasaka: {item.name}</Text>
-        <Text style={styles.additionalText}>Address: {item.address}</Text>
+        <Text style={styles.additionalText}>Magsasaka: Jaren Javerto</Text>
+        <Text style={styles.additionalText}>Address: Malolos Bulacan</Text>
         
-        <Text style={styles.additionalText}>Description: ioasjdio asjdioas jdasiodjasiodjas iodjasoidj asiojdai osj daiosdj aiosj daios djaio sdjaios djasi odja</Text>
+        <Text style={styles.additionalText}>Description: {item.description}</Text>
 
         
         </View>

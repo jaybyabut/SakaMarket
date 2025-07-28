@@ -1,7 +1,8 @@
+import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,8 +13,37 @@ const { width, height } = Dimensions.get('window');
 
 export default function payment() {
     const item = useLocalSearchParams();
-
+    console.log("Received item:", item);
     const [value, setValue] = React.useState('option1');
+
+    const API_URL = "http://10.0.2.2/database/buyProduct.php";
+
+    const handlePayment = async () => {
+        console.log("Sending to backend:", { product_id: item.id });
+        if (!item.id) {
+            Alert.alert("Error", "No product selected.");
+            return;
+        }
+        try {
+            const response = await axios.post(API_URL, {
+                product_id: item.id,
+                amount: item.amount
+            });
+
+            console.log("API Response:", response.data);
+
+            if (response.data.success) {
+                Alert.alert("Success", "Transaction completed successfully.", [
+                    { text: "OK", onPress: () => router.push('/buy-confirmation') }
+                ]);
+            } else {
+                Alert.alert("Failed", response.data.message || "No message returned");
+            }
+        } catch (error) {
+            console.error(error);
+            Alert.alert("Error", "Could not connect to the server.");
+        }
+    };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -62,7 +92,7 @@ export default function payment() {
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => router.push('/buy-confirmation')}>
+                <TouchableOpacity style={styles.button} onPress={handlePayment}>
                         <LinearGradient
                         colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "#86C778"]}
                         dither={true}

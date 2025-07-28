@@ -25,7 +25,7 @@ export default function Magsasakaregister() {
 
     try {
       const response = await axios.post( 
-        "http://10.0.2.2/sakamarket/sellProduct.php",
+        "http://10.0.2.2/database/sellProduct.php",
         params,
         { headers: { "Content-Type": "application/json" } }
       );

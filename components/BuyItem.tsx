@@ -8,12 +8,9 @@ type itemCardProps = {
         id: number,
         image?: string;
         date: number;
-        orderno: number;
-        title: string;
-        price: number;
         name: string;
-        address: string;
-        mass: number;
+        price: number;
+        amount: number;
 
     };
 };
@@ -32,16 +29,16 @@ export default function BuyItem({item}: itemCardProps) {
 
 
         <View style = {styles.dataContainer}>
-            <Text style={styles.dayPosted}>{item.date} {item.date > 1 ? "days" : "day"} ago</Text>
-            <Text style={styles.orderNumber}>ORDER # {item.orderno} </Text>
+            <Text style={styles.dayPosted}>10 days ago</Text>
+            <Text style={styles.orderNumber}>ORDER ID # {item.id} </Text>
             <View style={{ flexDirection: "row", alignItems: 'center'}}>
-            <Text style={styles.mainText}>{item.title}</Text>
+            <Text style={styles.mainText}>{item.name}</Text>
             <Text style={styles.price}>₱{item.price}</Text>
             </View>
-            <Text style={styles.massText}>{item.mass}kg</Text>
-            <Text style={styles.farmerName}>{item.name}</Text>
+            <Text style={styles.massText}>{item.amount}kg</Text>
+            <Text style={styles.farmerName}>Jaren Javerto</Text>
             <View style={{ flexDirection: "row", alignItems: 'flex-start'}}>
-            <Text style={styles.address}>{item.address}</Text>
+            <Text style={styles.address}>Malolos Bulacan</Text>
 
 
 
@@ -49,7 +46,9 @@ export default function BuyItem({item}: itemCardProps) {
         pathname: '/product-page',
         params: { ...item }}), router.push({
         pathname: '/payment',
-        params: {  ...item }})}}>
+        params: { id: item.id, price: item.price }
+            })}
+        }>
                 <LinearGradient
                 colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "#86C778"]}
                 dither={true}

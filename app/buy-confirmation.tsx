@@ -7,12 +7,14 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Magsasakaregister() {
   const navigation = useNavigation();
+
   const navBack = () => {
     router.push("/buy-page") 
   };
   useLayoutEffect(() => {
     navigation.setOptions({ title: "Mamimili Register Page" });
   }, [navigation]);
+
 
   return (
 

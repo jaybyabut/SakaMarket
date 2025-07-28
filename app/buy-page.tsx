@@ -1,10 +1,10 @@
+import axios from 'axios';
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from 'expo-router';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dimensions, FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { data } from "../assets/data/itemData";
 import BuyItem from "../components/BuyItem";
 import GradientBtn from "../components/GradientBtn";
  
@@ -14,7 +14,16 @@ const { width, height } = Dimensions.get('window');
 export default function Signin() {
   const [searchLeft, setSearchLeft] = useState(0);
   const [searchText, onChangeSearchText] = useState("");
+  const [products, setProducts] = useState([]);
 
+  useEffect(() => {
+    axios.get('http://10.0.2.2/database/fetchproducts.php')
+      .then(response => {
+        console.log('Products:', response.data);
+        setProducts(response.data);
+      })
+      .catch(error => console.log('Error:', error));
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -25,7 +34,7 @@ export default function Signin() {
       >
         
         <SafeAreaView style={styles.header}>
-          <Pressable onPress={() => router.back()}>
+          <Pressable onPress={() => router.push("/home-buyer")}>
             <Image source={require("../assets/images/Back-w.png")} style={styles.back}></Image>
           </Pressable>
           <View style={[styles.logoMiddle]}>
@@ -54,9 +63,10 @@ export default function Signin() {
 
       <View style={styles.bodySection}>
         <FlatList
-         data={data}
-         keyExtractor={(item) => item.id.toString()}
-         renderItem={({item}) => <BuyItem item={item}/>}
+         data={products}
+         keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+         renderItem={({ item }) => <BuyItem item={item} />}
+         ListEmptyComponent={<Text>No products available</Text>}
          showsVerticalScrollIndicator={false}
          />
          

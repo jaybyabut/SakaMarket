@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from "expo-router";
 import { useLayoutEffect, useState } from "react";
-import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 
 export default function Magsasakaregister() {
@@ -121,8 +121,10 @@ export default function Magsasakaregister() {
           value={confirmPassword}
           onChangeText={setConfirmPassword}
         />
-        {error ? <Text style={styles.error}>{error}</Text> : null}
-        {success ? <Text style={styles.success}>{success}</Text> : null}
+        <View style={styles.alertContainer}>
+          {error ? <Text style={styles.error}>{error}</Text> : null}
+          {success ? <Text style={styles.success}>{success}</Text> : null}
+        </View>
         <View style={styles.nav}>
             <Text style={styles.navText} onPress={handleSubmit}>SUNOD</Text>
             <TouchableOpacity onPress={handleSubmit} activeOpacity={0.7}>
@@ -276,9 +278,16 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     fontSize: 14,
+    marginLeft: 20,
   },
   success: {
     color: 'green',
     fontSize: 14,
+  },
+  alertContainer: {
+    position: 'absolute',
+    zIndex: 1,
+    bottom: 80,
+    marginLeft: 20,
   },
 });
