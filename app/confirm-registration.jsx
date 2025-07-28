@@ -1,6 +1,5 @@
-import React from 'react';
-import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
 import { useNavigation } from 'expo-router';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function ConfirmationScreen() {
   const navigation = useNavigation();
@@ -9,7 +8,7 @@ export default function ConfirmationScreen() {
     <View style={styles.screen}>
       <View style={styles.contentContainer}>
         <Image
-          source={require('../assets/STARTer/Confirmation Page/checkmark.png')}
+          source={require("../assets/images/Checkmark.png")}
           style={styles.checkmark}
           resizeMode="contain"
         />
