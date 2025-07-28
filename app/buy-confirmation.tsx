@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
@@ -18,7 +19,7 @@ export default function Magsasakaregister() {
 
   return (
 
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
         <Image
             source={require("../assets/images/Checkmark.png")}
             style={styles.logo} 
@@ -30,16 +31,17 @@ export default function Magsasakaregister() {
             <Text style={styles.content}>Presyo: P20 /kilo</Text>
             <Text style={styles.content}>Dami: 50kg</Text>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 170, marginLeft: 0 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 130, marginLeft: 0}}>
             <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
                 <Image
                     source={require("../assets/images/backtoblack.png")}
                     style={styles.imageButton} 
                 />
+                
                 </TouchableOpacity>
             <Text style={styles.navText}>BUMALIK SA MAIN PAGE</Text>
         </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
