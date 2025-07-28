@@ -20,7 +20,6 @@ export default function HomeBuyer() {
       {/* Logo at top left */}
       <View style={styles.logoContainer}>
         <Image source={logoImg} style={styles.logoImage} />
-        <Text style={styles.logoText}>SAKA MARKET</Text>
       </View>
 
       {/* Home text banner */}
@@ -29,54 +28,23 @@ export default function HomeBuyer() {
       {/* Button grid */}
       <View style={styles.gridContainer}>
         <View style={styles.row}>
-
-
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => router.push('/buy-page')}
           >
-            <LinearGradient
-              colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]}
-              start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-              style={styles.squareButton}
-            >
-              <Image source={bumiliImg} style={styles.buttonImage} />
-              <Text style={styles.buttonText}>Bumili</Text>
-            </LinearGradient>
+              <Image source={bumiliImg}/>
           </TouchableOpacity>
-
 
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => router.push('/StatsPage')}
           >
-            <LinearGradient
-              colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]}
-              start={{ x: 1, y: 0 }} end={{ x: 0, y: 1 }}
-              style={styles.squareButton}
-            >
-              <Image source={marketImg} style={styles.buttonImage} />
-              <Text style={styles.buttonText}>Market</Text>
-            </LinearGradient>
+              <Image source={marketImg}/>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
-          <LinearGradient
-            colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]}
-            start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }}
-            style={styles.squareButton}
-          >
-            <Image source={settingsImg} style={styles.buttonImage} />
-            <Text style={styles.buttonText}>Settings</Text>
-          </LinearGradient>
-          <LinearGradient
-            colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]}
-            start={{ x: 1, y: 1 }} end={{ x: 0, y: 0 }}
-            style={styles.squareButton}
-          >
-            <Image source={accountImg} style={styles.buttonImage} />
-            <Text style={styles.buttonText}>Account</Text>
-          </LinearGradient>
+            <Image source={settingsImg}/>
+            <Image source={accountImg}/>
         </View>
       </View>
 
@@ -122,8 +90,6 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   logoImage: {
-    width: 61.87,
-    height: 77,
     resizeMode: 'contain',
   },
   logoText: {
@@ -139,7 +105,7 @@ const styles = StyleSheet.create({
     width: 258,
     height: 35,
     alignSelf: 'center',
-    marginTop: 90,
+    marginTop: 10,
     marginBottom: 10,
     resizeMode: 'contain',
   },
@@ -153,36 +119,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginBottom: 10,
-  },
-  squareButton: {
-    width: 176,
-    height: 181,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 5,
-    marginVertical: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 4,
-    paddingVertical: 5,
-    paddingHorizontal: 19,
-  },
-  buttonImage: {
-    width: 124,
-    height: 124,
-    resizeMode: 'contain',
-    marginBottom: 8,
-  },
-  buttonText: {
-    fontFamily: 'Roboto', // Make sure to link this font in your project
-    fontWeight: '700',
-    fontSize: 30,
-    lineHeight: 35,
-    color: '#FFFDEB',
-    textAlign: 'center',
   },
   languageRow: {
     flexDirection: 'row',
