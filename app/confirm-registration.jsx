@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   jumpToLogin: {
-    backgroundColor: '#FEF5A6',
+    backgroundColor: '#10AF7C',
     width: 319,
     height: 55,
     borderRadius: 8,
@@ -82,5 +82,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Roboto',
     textAlign: 'center',
+    color: 'rgb(255,255,255)'
   },
 });

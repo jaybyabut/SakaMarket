@@ -1,6 +1,5 @@
-import React from 'react';
-import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
 import { useNavigation } from 'expo-router';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function ConfirmationScreen() {
   const navigation = useNavigation();
@@ -86,5 +85,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontFamily: 'Roboto',
     textAlign: 'center',
+    fontColor: 'rgb(255,255,255)'
   },
 });

@@ -29,13 +29,13 @@ const LandingPage = ({ navigation = { navigate: () => {} } }) => {
           end={{ x: 1, y: 0 }}
           style={styles.signInButton}
         >
-          <Pressable style={styles.fullSize} onPress={() => router.push('/buy-confirmation')}>
+          <Pressable style={styles.fullSize} onPress={() => router.push('/signIn')}>
             <Text style={styles.signInText}>Mag-sign in sa Account</Text>
           </Pressable>
         </LinearGradient>
 
         {/* Create Account Button */}
-        <Pressable style={styles.createButton} onPress={() => router.push('/confirm-registration')}>
+        <Pressable style={styles.createButton} onPress={() => router.push('/signUp')}>
           <Text style={styles.createText}>Gumawa ng Account</Text>
         </Pressable>
       </View>
