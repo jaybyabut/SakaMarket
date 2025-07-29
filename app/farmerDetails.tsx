@@ -1,39 +1,95 @@
 import { useNavigation } from "@react-navigation/native";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useLayoutEffect, useState } from "react";
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import axios from "axios";               // ← NEW
 
 export default function Magsasakaregister() {
-  const [nameFirst, setNameFirst] = useState('');
-  const [nameMiddle, setNameMiddle] = useState('');
-  const [nameLast, setNameLast] = useState('');
-  const [address, setAddress] = useState('');
-  const [number, setNumber] = useState('');
-  const [verify, setVerify] = useState('');
-  const navigation = useNavigation();
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [nameFirst, setNameFirst]           = useState("");
+  const [nameMiddle, setNameMiddle]         = useState("");
+  const [nameLast, setNameLast]             = useState("");
+  const [address, setAddress]               = useState("");
+  const [number, setNumber]                 = useState("");
+  const [verify, setVerify]                 = useState("");
+  const [password, setPassword]             = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError]                   = useState("");
+  const [success, setSuccess]               = useState("");
 
-  const handleSubmit = () => {
-    if (password === '' || confirmPassword === '') {
-      setError('Both fields are required.');
-      setSuccess('');
-    } else if (password !== confirmPassword) {
-      setError('Passwords do not match.');
-      setSuccess('');
-    } else {
-      router.push('/farmer-verification')
+  const navigation = useNavigation();
+  const API_URL = "http://10.0.2.2/backend/api/register.php";  // android emulator
+
+  const validate = () => {
+    if (
+      !nameFirst.trim() ||
+      !nameLast.trim() ||
+      !address.trim() ||
+      !number.trim() ||
+      !password ||
+      !confirmPassword
+    ) {
+      return "Paki‑punan lahat ng required fields.";
+    }
+    if (password !== confirmPassword) {
+      return "Hindi tugma ang PIN at kumpirmasyon.";
+    }
+    if (!/^[0-9]{11}$/.test(number)) {
+      return "Mali ang format ng numero ng telepono (dapat 11 digits).";
+    }
+    if (password.length < 4 || password.length > 6) {
+      return "Ang PIN ay dapat 4–6 digits.";
+    }
+    return "";
+  };
+
+  const handleSubmit = async () => {
+    const msg = validate();
+    if (msg) {
+      setError(msg);
+      setSuccess("");
+      return;
+    }
+
+    const payload = {
+      first_name:   nameFirst.trim(),
+      middle_name:  nameMiddle.trim(),
+      last_name:    nameLast.trim(),
+      address:      address.trim(),
+      phone:        number.trim(),
+      verification: verify.trim(),
+      pin:          password.trim(),
+    };
+
+    try {
+      const { data } = await axios.post(API_URL, payload, {
+        headers: { "Content-Type": "application/json" },
+        timeout: 8000,
+      });
+
+      if (data.success) {
+        setError("");
+        setSuccess("Matagumpay na rehistro!");
+        router.push("/farmer-verification");
+      } else {
+        setError(data.message || "May nangyaring mali.");
+        setSuccess("");
+      }
+    } catch (err) {
+      console.error("Axios error:", err);
+      setError("Hindi makakonekta sa server.");
+      setSuccess("");
     }
   };
-  const navBack = () => {
-    router.back() 
-  };
 
-
+  const navBack = () => router.back();
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: "Magsasaka Register Page" });
@@ -44,22 +100,25 @@ export default function Magsasakaregister() {
       {/* Background Shape */}
       <View style={styles.whiteBackground} />
       <LinearGradient
-      colors={['#10AF7C', '#86C778']} // your gradient colors
-      start={{ x: 0, y: 0 }}  // optional: control direction
-      end={{ x: 1, y: 1 }}
-      style={styles.backgroundShape}
+        colors={["#10AF7C", "#86C778"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.backgroundShape}
       />
       {/* Foreground Content */}
       <View style={styles.top}>
         <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
           <Image
-              source={require("../assets/images/Back.png")}
-              style={styles.imageButton}
+            source={require("../assets/images/Back.png")}
+            style={styles.imageButton}
           />
         </TouchableOpacity>
         <Text style={styles.header}>Gumawa ng Account</Text>
-        <Text style={styles.subtitle}>Punan ang mga detalye sa ibaba upang makagawa ng iyong account.</Text>
+        <Text style={styles.subtitle}>
+          Punan ang mga detalye sa ibaba upang makagawa ng iyong account.
+        </Text>
       </View>
+
       <View style={styles.content}>
         <Text style={styles.label}>Personal na Detalye</Text>
         <TextInput
@@ -96,7 +155,8 @@ export default function Magsasakaregister() {
           style={styles.input}
           placeholder="Numero ng Telepono"
           value={number}
-          onChangeText={setNumber}
+          onChangeText={(txt) => setNumber(txt.replace(/\D/g, ""))}
+          keyboardType="phone-pad"
           multiline
         />
         <TextInput
@@ -113,6 +173,8 @@ export default function Magsasakaregister() {
           secureTextEntry
           value={password}
           onChangeText={setPassword}
+          keyboardType="number-pad"
+          maxLength={6}
         />
         <TextInput
           style={styles.input}
@@ -120,19 +182,25 @@ export default function Magsasakaregister() {
           secureTextEntry
           value={confirmPassword}
           onChangeText={setConfirmPassword}
+          keyboardType="number-pad"
+          maxLength={6}
         />
+
         <View style={styles.alertContainer}>
           {error ? <Text style={styles.error}>{error}</Text> : null}
           {success ? <Text style={styles.success}>{success}</Text> : null}
         </View>
+
         <View style={styles.nav}>
-            <Text style={styles.navText} onPress={handleSubmit}>SUNOD</Text>
-            <TouchableOpacity onPress={handleSubmit} activeOpacity={0.7}>
+          <Text style={styles.navText} onPress={handleSubmit}>
+            SUNOD
+          </Text>
+          <TouchableOpacity onPress={handleSubmit} activeOpacity={0.7}>
             <Image
-                source={require("../assets/images/Next Page.png")}
-                style={styles.imageButton2}
+              source={require("../assets/images/Next Page.png")}
+              style={styles.imageButton2}
             />
-            </TouchableOpacity>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
