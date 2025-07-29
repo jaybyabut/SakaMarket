@@ -1,6 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import axios from 'axios';
 import {
   Image,
   Pressable,
@@ -10,8 +11,6 @@ import {
   View,
 } from 'react-native';
 
-
-
 export default function SignInScreen() {
   const router = useRouter();
   const [form, setForm] = useState({
@@ -19,14 +18,53 @@ export default function SignInScreen() {
     Password: ''
   });
 
-  const handleSubmit = () => {
-    if (form['Email/Phone Number'].trim().toLowerCase() === 'magsasaka') {
-      router.push('/home-magsasaka')
-    } else {
-      router.push('/home-buyer')
+  const [error, setError] = useState('');
+  const [inputErrors, setInputErrors] = useState({
+    'Email/Phone Number': false,
+    Password: false
+  });
+
+  const handleSubmit = async () => {
+    const { 'Email/Phone Number': emailOrPhone, Password } = form;
+
+    let newInputErrors = {
+      'Email/Phone Number': emailOrPhone.trim() === '',
+      Password: Password.trim() === ''
+    };
+
+    setInputErrors(newInputErrors);
+
+    if (newInputErrors['Email/Phone Number'] || newInputErrors.Password) {
+      setError('Pakitapos ang lahat ng fields.');
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        'http://10.0.2.2/api/login.php',
+        {
+          identifier: emailOrPhone,
+          password: Password
+        }
+      );
+
+      const data = response.data;
+
+      if (data.error) {
+        setError(data.error);
+      } else if (data.role === 'farmer') {
+        router.push('/home-magsasaka');
+      } else if (data.role === 'buyer') {
+        router.push('/home-buyer');
+      } else {
+        setError('Hindi matukoy ang user role.');
+      }
+
+    } catch (e) {
+      console.error(e);
+      setError('May problema sa server. Subukan muli.');
     }
   };
-
 
   return (
     <View style={styles.page}>
@@ -50,19 +88,28 @@ export default function SignInScreen() {
         <View style={styles.signInSection}>
           <Text style={styles.signInTitle}>Sign In</Text>
 
-          {['Email/Phone Number', 'Password'].map((label, index) => (
+          {['Email/Phone Number', 'Password'].map((label) => (
             <View key={label} style={styles.labelAndInput}>
               <Text style={styles.label}>{label}</Text>
               <TextInput
-                style={styles.inputBar}
+                style={[
+                  styles.inputBar,
+                  inputErrors[label] && { borderColor: 'red' }
+                ]}
                 placeholder=""
                 secureTextEntry={label === 'Password'}
                 onChangeText={(text) =>
-                setForm((prev) => ({ ...prev, [label]: text }))}
+                  setForm((prev) => ({ ...prev, [label]: text }))
+                }
               />
             </View>
           ))}
         </View>
+
+        {/* Error Text */}
+        {error ? (
+          <Text style={{ color: 'red', textAlign: 'center', marginTop: 10 }}>{error}</Text>
+        ) : null}
 
         {/* Buttons */}
         <View style={styles.buttons}>
@@ -115,19 +162,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
   },
-  saka: {
-    color: '#FFCA43',
-  },
-  market: {
-    color: '#088423',
-  },
   signInSection: {
     alignItems: 'center',
   },
   signInTitle: {
     fontSize: 60,
     width: 198,
-    height: 'fit-content',
     marginBottom: 31,
     textAlign: 'center',
     fontFamily: 'Roboto-SemiBold',

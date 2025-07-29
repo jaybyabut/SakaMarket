@@ -2,13 +2,24 @@ import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+} from 'react-native';
 
 export default function FarmerVerificationScreen() {
   const router = useRouter();
   const [selfie, setSelfie] = useState(null);
   const [govID, setGovID] = useState(null);
   const [farmDoc, setFarmDoc] = useState(null);
+  const [invalidFields, setInvalidFields] = useState([]);
+
+  const allValid = selfie && govID && farmDoc;
 
   const pickImage = async (setImage) => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -24,17 +35,57 @@ export default function FarmerVerificationScreen() {
     }
   };
 
+  const handleSubmit = async () => {
+    const missing = [];
+    if (!selfie) missing.push('selfie');
+    if (!govID) missing.push('govID');
+    if (!farmDoc) missing.push('farmDoc');
+    setInvalidFields(missing);
+
+    if (missing.length > 0) return;
+
+    const formData = new FormData();
+    formData.append('selfie', {
+      uri: selfie,
+      name: 'selfie.jpg',
+      type: 'image/jpeg',
+    });
+    formData.append('gov_id', {
+      uri: govID,
+      name: 'gov_id.jpg',
+      type: 'image/jpeg',
+    });
+    formData.append('farm_doc', {
+      uri: farmDoc,
+      name: 'farm_doc.jpg',
+      type: 'image/jpeg',
+    });
+
+    try {
+      const response = await fetch('http://your-ip-address/backend/farmer_verification.php', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const result = await response.text();
+      if (result.includes('success')) {
+        router.push('/confirm-registration');
+      } else {
+        Alert.alert('Error', 'Verification failed. Try again.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong.');
+    }
+  };
+
   return (
     <View style={styles.screen}>
       <View style={styles.backIconWithHeader}>
-        <Pressable
-          style={styles.backButton}
-          onPress={() => router.push("/signUp")}
-        >
-          <Image
-            style={styles.backIcon}
-            source={require("../assets/STARTer/back-icon.png")}
-          />
+        <Pressable style={styles.backButton} onPress={() => router.push("/signUp")}>
+          <Image style={styles.backIcon} source={require("../assets/STARTer/back-icon.png")} />
         </Pressable>
 
         <View style={styles.upperText}>
@@ -50,9 +101,24 @@ export default function FarmerVerificationScreen() {
         style={styles.greenContainer}
       >
         <View style={styles.uploadSection}>
-          <UploadField label="Selfie with Valid ID" image={selfie} onPick={() => pickImage(setSelfie)} />
-          <UploadField label="Government-Issued ID" image={govID} onPick={() => pickImage(setGovID)} />
-          <UploadField label="Farm Registration Document" image={farmDoc} onPick={() => pickImage(setFarmDoc)} />
+          <UploadField
+            label="Selfie with Valid ID"
+            image={selfie}
+            onPick={() => pickImage(setSelfie)}
+            invalid={invalidFields.includes('selfie')}
+          />
+          <UploadField
+            label="Government-Issued ID"
+            image={govID}
+            onPick={() => pickImage(setGovID)}
+            invalid={invalidFields.includes('govID')}
+          />
+          <UploadField
+            label="Farm Registration Document"
+            image={farmDoc}
+            onPick={() => pickImage(setFarmDoc)}
+            invalid={invalidFields.includes('farmDoc')}
+          />
         </View>
 
         <View style={styles.buttons}>
@@ -65,7 +131,8 @@ export default function FarmerVerificationScreen() {
           <ButtonWithText
             icon={require('../assets/STARTer/Farmer Verification/next-page.png')}
             label="SUBMIT"
-            onPress={() => router.push('/confirm-registration')}
+            onPress={handleSubmit}
+            disabled={!allValid}
           />
         </View>
       </LinearGradient>
@@ -73,11 +140,14 @@ export default function FarmerVerificationScreen() {
   );
 }
 
-function UploadField({ label, image, onPick }) {
+function UploadField({ label, image, onPick, invalid }) {
   return (
     <View style={styles.labelAndUpload}>
       <Text style={styles.uploadLabel}>{label}</Text>
-      <TouchableOpacity style={styles.dropArea} onPress={onPick}>
+      <TouchableOpacity
+        style={[styles.dropArea, invalid && { borderColor: 'red', borderWidth: 2 }]}
+        onPress={onPick}
+      >
         {image ? (
           <Image source={{ uri: image }} style={styles.uploadedImage} />
         ) : (
@@ -88,9 +158,12 @@ function UploadField({ label, image, onPick }) {
   );
 }
 
-function ButtonWithText({ icon, label, reverse, onPress }) {
+function ButtonWithText({ icon, label, reverse, onPress, disabled }) {
   return (
-    <Pressable style={styles.buttonWithText} onPress={onPress}>
+    <Pressable
+      style={[styles.buttonWithText, { opacity: disabled ? 0.5 : 1 }]}
+      onPress={!disabled ? onPress : null}
+    >
       {reverse && <Image source={icon} style={styles.buttonIcon} />}
       <Text style={styles.buttonText}>{label}</Text>
       {!reverse && <Image source={icon} style={styles.buttonIcon} />}
@@ -139,7 +212,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 80,
     borderTopRightRadius: 80,
     paddingHorizontal: 44,
-    paddingTop: 25 ,
+    paddingTop: 25,
     paddingBottom: 28,
     justifyContent: 'space-between',
     shadowColor: '#000',
