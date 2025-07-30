@@ -3,8 +3,23 @@ import { useRouter } from 'expo-router';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import Colors from '../constants/Colors';
 
+
 export default function SignupScreen() {
   const router = useRouter();
+  const goToFarmer = () => {
+    router.push({
+      pathname: '/farmerDetails',
+      params: { role: 'farmer' }
+    });
+  };
+
+  const goToBuyer = () => {
+    router.push({
+      pathname: '/buyerDetails',
+      params: { role: 'buyer' }
+    });
+  };
+
 
   return (
     <View style={styles.page}>
@@ -30,7 +45,7 @@ export default function SignupScreen() {
             end={{ x: 1, y: 1 }}
             style={styles.button}
           >
-            <Pressable style={styles.buttonContent} onPress={() => router.push('/farmerDetails')}>
+            <Pressable style={styles.buttonContent} onPress={goToFarmer}>
               <Image
                 style={styles.buttonIcon}
                 source={require('../assets/STARTer/Images/Sign Up/magsasaka-icon.png')}
@@ -46,7 +61,7 @@ export default function SignupScreen() {
             end={{ x: 1, y: 1 }}
             style={styles.button}
           >
-            <Pressable style={styles.buttonContent} onPress={() => router.push('/signup/buyer')}>
+            <Pressable style={styles.buttonContent} onPress={goToBuyer}>
               <Image
                 style={styles.buttonIcon}
                 source={require('@/assets/STARTer/Images/Sign Up/cart-icon.png')}

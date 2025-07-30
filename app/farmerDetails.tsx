@@ -1,19 +1,11 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { TextStyle } from 'react-native';
 import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  Image,
-  ScrollView,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableOpacity,
-  KeyboardTypeOptions,
+  Image, KeyboardAvoidingView,
+  Platform, Pressable, ScrollView,
+  StyleSheet, Text,
+  TextInput, TextStyle, View
 } from 'react-native';
 
 export default function Magsasakaregister() {
@@ -91,44 +83,22 @@ export default function Magsasakaregister() {
   });
 
 
-  const handleSubmit = async () => {
-    setSuccess('');
-    setError('');
-    setErrorMessages([]);
-    setInvalidFields([]);
+const handleSubmit = () => {
+  if (!validateFields()) return;
 
-    if (!validateFields()) {
-      return;
-    }
-
-    try {
-      const response = await fetch('https://10.0.2.2/api/register.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          first_name: nameFirst,
-          middle_name: nameMiddle,
-          last_name: nameLast,
-          address,
-          phone: number,
-          code: verify,
-          pin: password,
-          role,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed.');
-      }
-
-      setSuccess('Matagumpay ang pagrehistro!');
-      router.push('/farmer-verification');
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
+  router.push({
+    pathname: '/farmer-verification',
+    params: {
+      first_name: nameFirst,
+      middle_name: nameMiddle,
+      last_name: nameLast,
+      address,
+      phone: number,
+      code: verify,
+      pin: password,
+    },
+  });
+};
 
 
   return (

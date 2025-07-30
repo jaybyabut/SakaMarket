@@ -1,25 +1,25 @@
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
+  Alert,
   Image,
   Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Alert,
 } from 'react-native';
 
 export default function FarmerVerificationScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams();
+
   const [selfie, setSelfie] = useState(null);
   const [govID, setGovID] = useState(null);
   const [farmDoc, setFarmDoc] = useState(null);
   const [invalidFields, setInvalidFields] = useState([]);
-
-  const allValid = selfie && govID && farmDoc;
 
   const pickImage = async (setImage) => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -41,10 +41,18 @@ export default function FarmerVerificationScreen() {
     if (!govID) missing.push('govID');
     if (!farmDoc) missing.push('farmDoc');
     setInvalidFields(missing);
-
     if (missing.length > 0) return;
 
     const formData = new FormData();
+    formData.append('first_name', params.first_name);
+    formData.append('middle_name', params.middle_name);
+    formData.append('last_name', params.last_name);
+    formData.append('address', params.address);
+    formData.append('phone', params.phone);
+    formData.append('code', params.code);
+    formData.append('pin', params.pin);
+    formData.append('role', 'farmer');
+
     formData.append('selfie', {
       uri: selfie,
       name: 'selfie.jpg',
@@ -61,37 +69,45 @@ export default function FarmerVerificationScreen() {
       type: 'image/jpeg',
     });
 
-    try {
-      const response = await fetch('http://your-ip-address/backend/farmer_verification.php', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+try {
+  const response = await fetch('http://10.0.2.2/database/farmerRegister.php', {
+    method: 'POST',
+    body: formData,
+  });
 
-      const result = await response.text();
-      if (result.includes('success')) {
-        router.push('/confirm-registration');
-      } else {
-        Alert.alert('Error', 'Verification failed. Try again.');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Something went wrong.');
-    }
+  const text = await response.text();
+  console.log('Server Response:', text);
+
+  let json;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    Alert.alert('Error', 'Server did not return JSON. Check PHP logs.');
+    return;
+  }
+
+  if (json.success) {
+    router.push('/confirm-registration');
+  } else {
+    Alert.alert('Error', json.error || 'Verification failed. Try again.');
+  }
+} catch (error) {
+  console.error(error);
+  Alert.alert('Error', 'Network or server issue.');
+}
   };
 
   return (
     <View style={styles.screen}>
       <View style={styles.backIconWithHeader}>
-        <Pressable style={styles.backButton} onPress={() => router.push("/signUp")}>
-          <Image style={styles.backIcon} source={require("../assets/STARTer/back-icon.png")} />
+        <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Image style={styles.backIcon} source={require('../assets/STARTer/back-icon.png')} />
         </Pressable>
 
         <View style={styles.upperText}>
           <Text style={styles.header}>I-verify ang Account</Text>
           <Text style={styles.instruction}>
-            Ipasa ang mga sumusunod na dokumento upang makagawa ng iyong account
+            Ipasa ang mga sumusunod na dokumento upang makumpleto ang iyong account
           </Text>
         </View>
       </View>
@@ -124,15 +140,15 @@ export default function FarmerVerificationScreen() {
         <View style={styles.buttons}>
           <ButtonWithText
             icon={require('../assets/STARTer/Farmer Verification/back-page.png')}
-            label="PREVIOUS"
+            label="NAKARAAN"
             reverse
             onPress={() => router.back()}
           />
           <ButtonWithText
             icon={require('../assets/STARTer/Farmer Verification/next-page.png')}
-            label="SUBMIT"
+            label="IPASA"
             onPress={handleSubmit}
-            disabled={!allValid}
+            disabled={!selfie || !govID || !farmDoc}
           />
         </View>
       </LinearGradient>
@@ -172,39 +188,13 @@ function ButtonWithText({ icon, label, reverse, onPress, disabled }) {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    paddingTop: 60,
-  },
-  backButton: {
-    position: "absolute",
-    top: -45,
-    left: -5,
-  },
-  backIcon: {
-    width: 30,
-    height: 30,
-  },
-  backIconWithHeader: {
-    position: "relative",
-  },
-  upperText: {
-    width: 366,
-    height: 86,
-    marginBottom: 20,
-    justifyContent: 'space-between',
-  },
-  header: {
-    fontSize: 32,
-    fontFamily: 'Roboto-Bold',
-    marginBottom: 6.5,
-  },
-  instruction: {
-    fontSize: 16,
-    fontFamily: 'Roboto',
-  },
+  screen: { flex: 1, alignItems: 'center', backgroundColor: '#fff', paddingTop: 60 },
+  backButton: { position: 'absolute', top: -45, left: -5 },
+  backIcon: { width: 30, height: 30 },
+  backIconWithHeader: { position: 'relative' },
+  upperText: { width: 366, height: 86, marginBottom: 20, justifyContent: 'space-between' },
+  header: { fontSize: 32, fontFamily: 'Roboto-Bold', marginBottom: 6.5 },
+  instruction: { fontSize: 16, fontFamily: 'Roboto' },
   greenContainer: {
     marginTop: 3,
     width: 464,
@@ -219,23 +209,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.51,
     shadowRadius: 8.7,
     shadowOffset: { width: 17, height: 4 },
-    elevation: 4, //for android
+    elevation: 4,
   },
-  uploadSection: {
-    gap: 16,
-    alignItems: 'center',
-  },
-  labelAndUpload: {
-    width: 338,
-    height: 139,
-    justifyContent: 'space-between',
-  },
-  uploadLabel: {
-    fontSize: 16,
-    color: 'white',
-    fontFamily: 'Roboto-Medium',
-    textAlign: 'left',
-  },
+  uploadSection: { gap: 16, alignItems: 'center' },
+  labelAndUpload: { width: 338, height: 139, justifyContent: 'space-between' },
+  uploadLabel: { fontSize: 16, color: 'white', fontFamily: 'Roboto-Medium', textAlign: 'left' },
   dropArea: {
     width: '100%',
     height: 112,
@@ -247,42 +225,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 8.7,
     shadowOffset: { width: 0, height: 4 },
-    elevation: 4, //for android
+    elevation: 4,
   },
-  uploadText: {
-    fontSize: 14,
-    color: '#8F8E8E',
-    fontFamily: 'Roboto',
-  },
-  uploadedImage: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 8,
-    resizeMode: 'cover',
-  },
+  uploadText: { fontSize: 14, color: '#8F8E8E', fontFamily: 'Roboto' },
+  uploadedImage: { width: '100%', height: '100%', borderRadius: 8, resizeMode: 'cover' },
   buttons: {
     position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: 346,
     height: 47,
-    marginTop: 20,
-    alignSelf: 'center', 
     bottom: 25,
+    alignSelf: 'center',
   },
-  buttonWithText: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
-  buttonIcon: {
-    width: 29,
-    height: 29,
-    resizeMode: 'contain',
-  },
-  buttonText: {
-    fontSize: 20,
-    fontFamily: 'Roboto-Bold',
-    color: 'white',
-  },
+  buttonWithText: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  buttonIcon: { width: 29, height: 29, resizeMode: 'contain' },
+  buttonText: { fontSize: 20, fontFamily: 'Roboto-Bold', color: 'white' },
 });

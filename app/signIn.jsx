@@ -1,8 +1,9 @@
+import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import axios from 'axios';
 import {
+  ActivityIndicator,
   Image,
   Pressable,
   StyleSheet,
@@ -13,40 +14,32 @@ import {
 
 export default function SignInScreen() {
   const router = useRouter();
-  const [form, setForm] = useState({
-    'Email/Phone Number': '',
-    Password: ''
-  });
-
+  const [form, setForm] = useState({ phone: '', pin: '' });
   const [error, setError] = useState('');
-  const [inputErrors, setInputErrors] = useState({
-    'Email/Phone Number': false,
-    Password: false
-  });
+  const [inputErrors, setInputErrors] = useState({ phone: false, pin: false });
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    const { 'Email/Phone Number': emailOrPhone, Password } = form;
-
-    let newInputErrors = {
-      'Email/Phone Number': emailOrPhone.trim() === '',
-      Password: Password.trim() === ''
+    const { phone, pin } = form;
+    const newInputErrors = {
+      phone: phone.trim() === '',
+      pin: pin.trim() === '',
     };
-
     setInputErrors(newInputErrors);
 
-    if (newInputErrors['Email/Phone Number'] || newInputErrors.Password) {
+    if (newInputErrors.phone || newInputErrors.pin) {
       setError('Pakitapos ang lahat ng fields.');
       return;
     }
 
+    setLoading(true);
+    setError('');
+
     try {
-      const response = await axios.post(
-      'http://10.0.2.2/api/login.php',
-      {
-        phone: emailOrPhone,
-        pin: Password
-      }
-    );
+      const response = await axios.post('http://10.0.2.2/database/login.php', {
+        phone,
+        pin,
+      });
 
       const data = response.data;
 
@@ -59,10 +52,11 @@ export default function SignInScreen() {
       } else {
         setError('Hindi matukoy ang user role.');
       }
-
     } catch (e) {
       console.error(e);
       setError('May problema sa server. Subukan muli.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,22 +82,24 @@ export default function SignInScreen() {
         <View style={styles.signInSection}>
           <Text style={styles.signInTitle}>Sign In</Text>
 
-          {['Email/Phone Number', 'Password'].map((label) => (
-            <View key={label} style={styles.labelAndInput}>
-              <Text style={styles.label}>{label}</Text>
-              <TextInput
-                style={[
-                  styles.inputBar,
-                  inputErrors[label] && { borderColor: 'red' }
-                ]}
-                placeholder=""
-                secureTextEntry={label === 'Password'}
-                onChangeText={(text) =>
-                  setForm((prev) => ({ ...prev, [label]: text }))
-                }
-              />
-            </View>
-          ))}
+          <View style={styles.labelAndInput}>
+            <Text style={styles.label}>Phone Number</Text>
+            <TextInput
+              style={[styles.inputBar, inputErrors.phone && { borderColor: 'red' }]}
+              keyboardType="phone-pad"
+              onChangeText={(text) => setForm((prev) => ({ ...prev, phone: text }))}
+            />
+          </View>
+
+          <View style={styles.labelAndInput}>
+            <Text style={styles.label}>PIN</Text>
+            <TextInput
+              style={[styles.inputBar, inputErrors.pin && { borderColor: 'red' }]}
+              secureTextEntry
+              keyboardType="numeric"
+              onChangeText={(text) => setForm((prev) => ({ ...prev, pin: text }))}
+            />
+          </View>
         </View>
 
         {/* Error Text */}
@@ -119,8 +115,12 @@ export default function SignInScreen() {
             end={{ x: 1, y: 0 }}
             style={styles.signInGradient}
           >
-            <Pressable style={styles.fullButton} onPress={handleSubmit}>
-              <Text style={styles.signInText}>Mag-sign in sa Account</Text>
+            <Pressable style={styles.fullButton} onPress={handleSubmit} disabled={loading}>
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.signInText}>Mag-sign in sa Account</Text>
+              )}
             </Pressable>
           </LinearGradient>
 
