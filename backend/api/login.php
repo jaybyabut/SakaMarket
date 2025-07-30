@@ -3,23 +3,39 @@
 
     header("Access-Control-Allow-Origin: *");
     header("Content-Type: application/json");
+    header("Access-Control-Allow-Headers: Content-Type");
+    header("Access-Control-Allow-Methods: POST");
 
     $input = json_decode(file_get_contents("php://input"), true);
 
     $phone = preg_replace('/[^0-9]/', '', $input['phone'] ?? '');
     $pin = trim($input['pin'] ?? '');
+    $role = trim($input['role'] ?? ''); // Expected: 'farmer' or 'buyer'
 
-    // Check for empty inputs
-    if (!$phone || !$pin) {
+    // Check for missing fields
+    if (!$phone || !$pin || !$role) {
         http_response_code(400);
         echo json_encode([
             'success' => false,
-            'error' => 'Phone and PIN are required.'
+            'error' => 'Phone, PIN, and role are required.'
         ]);
         exit;
     }
 
-    $stmt = $pdo->prepare("SELECT * FROM farmers WHERE phone = ?");
+    // Choose the correct table based on role
+    $table = $role === 'farmer' ? 'farmers' : ($role === 'buyer' ? 'buyers' : null);
+
+    if (!$table) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Invalid role specified.'
+        ]);
+        exit;
+    }
+
+    // Check credentials in the chosen table
+    $stmt = $pdo->prepare("SELECT * FROM {$table} WHERE phone = ?");
     $stmt->execute([$phone]);
     $user = $stmt->fetch();
 
@@ -27,7 +43,8 @@
         echo json_encode([
             'success' => true,
             'message' => 'Login success',
-            'user_id' => $user['id']
+            'user_id' => $user['id'],
+            'role' => $role
         ]);
     } else {
         http_response_code(401);

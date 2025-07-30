@@ -41,12 +41,12 @@ export default function SignInScreen() {
 
     try {
       const response = await axios.post(
-        'http://10.0.2.2/api/login.php',
-        {
-          identifier: emailOrPhone,
-          password: Password
-        }
-      );
+      'http://10.0.2.2/api/login.php',
+      {
+        phone: emailOrPhone,
+        pin: Password
+      }
+    );
 
       const data = response.data;
 
