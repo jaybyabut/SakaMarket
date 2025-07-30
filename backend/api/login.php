@@ -22,9 +22,8 @@
         exit;
     }
 
-    // Choose the correct table based on role
+    // Determine table
     $table = $role === 'farmer' ? 'farmers' : ($role === 'buyer' ? 'buyers' : null);
-
     if (!$table) {
         http_response_code(400);
         echo json_encode([
@@ -34,7 +33,7 @@
         exit;
     }
 
-    // Check credentials in the chosen table
+    // Fetch user
     $stmt = $pdo->prepare("SELECT * FROM {$table} WHERE phone = ?");
     $stmt->execute([$phone]);
     $user = $stmt->fetch();
@@ -44,7 +43,7 @@
             'success' => true,
             'message' => 'Login success',
             'user_id' => $user['id'],
-            'role' => $role
+            'role' => $role 
         ]);
     } else {
         http_response_code(401);

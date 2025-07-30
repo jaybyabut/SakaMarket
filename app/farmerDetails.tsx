@@ -30,6 +30,7 @@ export default function Magsasakaregister() {
   const [error, setError] = useState('');
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [success, setSuccess] = useState('');
+  const role = 'farmer';
 
   const isFormComplete =
     nameFirst &&
@@ -105,13 +106,14 @@ export default function Magsasakaregister() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          firstName: nameFirst,
-          middleName: nameMiddle,
-          lastName: nameLast,
+          first_name: nameFirst,
+          middle_name: nameMiddle,
+          last_name: nameLast,
           address,
           phone: number,
           code: verify,
           pin: password,
+          role,
         }),
       });
 

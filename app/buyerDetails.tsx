@@ -22,7 +22,6 @@ export default function Magsasakaregister() {
   const [nameFirst, setNameFirst] = useState('');
   const [nameMiddle, setNameMiddle] = useState('');
   const [nameLast, setNameLast] = useState('');
-  const [address, setAddress] = useState('');
   const [number, setNumber] = useState('');
   const [verify, setVerify] = useState('');
   const [password, setPassword] = useState('');
@@ -30,12 +29,12 @@ export default function Magsasakaregister() {
   const [error, setError] = useState('');
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [success, setSuccess] = useState('');
+  const role = 'buyer';
 
   const isFormComplete =
     nameFirst &&
     nameMiddle &&
     nameLast &&
-    address &&
     number &&
     verify &&
     password &&
@@ -48,10 +47,6 @@ export default function Magsasakaregister() {
 
     if (!nameFirst || !nameMiddle || !nameLast) {
       errors.push('Pakilagay ang buong pangalan.');
-    }
-
-    if (!address) {
-      errors.push('Pakilagay ang address.');
     }
 
     if (!number || number.length < 11) {
@@ -105,13 +100,13 @@ export default function Magsasakaregister() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          firstName: nameFirst,
-          middleName: nameMiddle,
-          lastName: nameLast,
-          address,
-          phone: number,
-          code: verify,
-          pin: password,
+            first_name: nameFirst,
+            middle_name: nameMiddle,
+            last_name: nameLast,
+            phone: number,
+            code: verify,
+            pin: password,
+            role,
         }),
       });
 
