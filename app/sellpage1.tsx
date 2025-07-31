@@ -28,7 +28,7 @@ export default function SellPage1() {
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           locations={[0, 0.9, 1]}
-          image={require("../assets/images/Peso Symbol.png")}
+          image={require("../assets/images/peso-symbol.png")}
         />
 
         <ButtonWithBackground
