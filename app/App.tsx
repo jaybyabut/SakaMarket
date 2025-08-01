@@ -8,13 +8,13 @@ const LandingPage = ({ navigation = { navigate: () => {} } }) => {
       {/* Logo and App Name */}
       <View style={styles.logoContainer}>
         <Image
-          source={require('../assets/STARTer/Images/Landing Page/logo.png')}
+          source={require('../assets/STARTer/Landing Page/logo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
         <View style={styles.nameContainer}>
           <Image
-            source={require('../assets/STARTer/Images/Landing Page/logo-name.png')}
+            source={require('../assets/STARTer/Landing Page/logo-name.png')}
             resizeMode="contain"
           />
         </View>
