@@ -33,11 +33,14 @@ export default function payment() {
             console.log("API Response:", response.data);
 
             if (response.data.success) {
-                Alert.alert("Success", "Transaction completed successfully.", [
-                    { text: "OK", onPress: () => router.push('/buy-confirmation') }
-                ]);
+                Alert.alert(
+                    "Success",
+                    response.data.message || "Transaction completed successfully.",
+                    [{ text: "OK", onPress: () => router.push('/buy-confirmation') }]
+                );
             } else {
-                Alert.alert("Failed", response.data.message || "No message returned");
+                // This now shows ledger validation or any failure messages
+                Alert.alert("Ledger Warning", response.data.message || "Transaction failed due to ledger issue.");
             }
         } catch (error) {
             console.error(error);
