@@ -1,4 +1,3 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -9,8 +8,8 @@ const bumiliImg: ImageSourcePropType = require('../assets/images/Bumili.png');
 const marketImg: ImageSourcePropType = require('../assets/images/Market.png');
 const settingsImg: ImageSourcePropType = require('../assets/images/Settings.png');
 const accountImg: ImageSourcePropType = require('../assets/images/Account.png');
-const languageImg: ImageSourcePropType = require('../assets/images/Language.png');
-const logoutImg: ImageSourcePropType = require('../assets/images/LogOut.png');
+const languageImg: ImageSourcePropType = require('../assets/images/language.png');
+const logoutImg: ImageSourcePropType = require('../assets/images/open-pane.png');
 
 
 export default function HomeBuyer() {
@@ -50,7 +49,6 @@ export default function HomeBuyer() {
 
       {/* Language row */}
       <View style={styles.languageRow}>
-        <Image source={languageImg} style={styles.languageIcon} />
         <Text style={styles.languageLabel}>Language:</Text>
         <TouchableOpacity style={styles.languageButton}>
           <Text style={styles.languageButtonText}>Tagalog</Text>
@@ -129,12 +127,6 @@ const styles = StyleSheet.create({
     height: 55,
     paddingVertical: 2,
     // gap: 10, // If not supported, use marginRight on children
-  },
-  languageIcon: {
-    width: 32,
-    height: 32,
-    resizeMode: 'contain',
-    marginRight: 10,
   },
   languageLabel: {
     fontFamily: 'Roboto',
