@@ -1,10 +1,22 @@
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 
 const API_URL = "http://10.0.2.2/database/getTransaction.php";
+const filterIcon = require('../assets/images/Filter-1.png');
 
 const SalesData: React.FC = () => {
   const navigation = useNavigation();
@@ -16,8 +28,17 @@ const SalesData: React.FC = () => {
   const [averagePrice, setAveragePrice] = useState<number>(0);
   const [recentPrice, setRecentPrice] = useState<number>(0);
 
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filter, setFilter] = useState("week");
+
+  const handleFilter = (range: string) => {
+    setFilter(range);
+    setFilterVisible(false);
+  };
+
   useEffect(() => {
-    axios.get(API_URL)
+    setLoading(true);
+    axios.get(`${API_URL}?filter=${filter}`)
       .then((response) => {
         const json = response.data;
 
@@ -25,9 +46,9 @@ const SalesData: React.FC = () => {
           const data = json.data;
 
           const labels = data.map((item: any) => {
-            if (!item.created_at) return '--';
-            const parts = item.created_at.split(' ');
-            return parts.length > 1 ? parts[1].slice(0, 5) : '--'; // HH:MM
+            if (!item.transaction_time) return '--';
+            const parts = item.transaction_time.split(' ');
+            return parts.length > 1 ? parts[1].slice(0, 5) : '--';
           });
 
           const prices = data.map((item: any) => {
@@ -35,12 +56,10 @@ const SalesData: React.FC = () => {
             return isNaN(val) ? 0 : val;
           });
 
-          // Ensure equal lengths
           const minLength = Math.min(labels.length, prices.length);
           setChartLabels(minLength > 0 ? labels.slice(0, minLength) : ['--']);
           setChartPrices(minLength > 0 ? prices.slice(0, minLength) : [0]);
 
-          // Average and recent price
           const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
           const recent = prices[prices.length - 1];
           setAveragePrice(avg);
@@ -48,7 +67,6 @@ const SalesData: React.FC = () => {
 
           setTransactions(data);
         } else {
-          // Fallback when no data
           setChartLabels(['--']);
           setChartPrices([0]);
           setAveragePrice(0);
@@ -59,7 +77,6 @@ const SalesData: React.FC = () => {
       })
       .catch((error) => {
         console.error(error);
-        // Fallback on API failure
         setChartLabels(['--']);
         setChartPrices([0]);
         setAveragePrice(0);
@@ -67,28 +84,25 @@ const SalesData: React.FC = () => {
         setTransactions([]);
         setLoading(false);
       });
-  }, []);
+  }, [filter]);
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Text style={styles.backText}>←</Text>
       </TouchableOpacity>
 
-      {/* Titles */}
       <Text style={styles.title}>Palay Market Overview</Text>
       <Text style={styles.subtitle}>Today's Price Trends</Text>
 
-      {/* Chart */}
       <View style={styles.chartCard}>
         {loading ? (
           <ActivityIndicator size="large" color="#2e7d32" />
         ) : (
           <LineChart
             data={{
-              labels: chartLabels.map((l) => (typeof l === 'string' ? l : '--')),
-              datasets: [{ data: chartPrices.map((p) => (isNaN(p) ? 0 : p)) }],
+              labels: chartLabels,
+              datasets: [{ data: chartPrices }],
             }}
             width={Dimensions.get('window').width - 60}
             height={240}
@@ -109,7 +123,6 @@ const SalesData: React.FC = () => {
         )}
       </View>
 
-      {/* Prices Section */}
       <View style={styles.priceCard}>
         <Text style={styles.priceText}>
           Average Price: <Text style={styles.bold}>₱{averagePrice.toFixed(2)} /kg</Text>
@@ -117,9 +130,45 @@ const SalesData: React.FC = () => {
         <Text style={styles.priceText}>
           Recent Price: <Text style={styles.bold}>₱{recentPrice.toFixed(2)} /kg</Text>
         </Text>
+
+        <View style={styles.filterButtonWrapper}>
+          <TouchableOpacity onPress={() => setFilterVisible(true)}>
+            <Image source={filterIcon} style={styles.filterIcon} />
+          </TouchableOpacity>
+        </View>
       </View>
 
-      {/* Transaction History */}
+      <Modal
+        visible={filterVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setFilterVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.filterPopupContainer}>
+            <LinearGradient
+              colors={['#10AF7C', '#28B47B', '#5ABE7A', '#86C778']}
+              style={styles.filterPopupGradient}
+            >
+              <Text style={styles.filterPopupTitle}>Filter</Text>
+              <TouchableOpacity onPress={() => handleFilter('week')}>
+                <Text style={styles.filterPopupOption}>Last Week</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleFilter('month')}>
+                <Text style={styles.filterPopupOption}>Last Month</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleFilter('6months')}>
+                <Text style={styles.filterPopupOption}>Last 6 Months</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleFilter('lifetime')}>
+                <Text style={styles.filterPopupOption}>Lifetime</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </View>
+          <TouchableOpacity style={styles.modalBackground} onPress={() => setFilterVisible(false)} />
+        </View>
+      </Modal>
+
       <Text style={styles.activeLabel}>Mga aktibong transaksyon ng palay:</Text>
       {loading ? (
         <ActivityIndicator size="large" color="#2e7d32" />
@@ -155,19 +204,97 @@ const styles = StyleSheet.create({
   priceCard: {
     backgroundColor: '#fff', borderRadius: 12, padding: 20,
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15,
-    shadowRadius: 4, elevation: 3, marginBottom: 20,
+    shadowRadius: 4, elevation: 3, marginBottom: 20, position: 'relative',
   },
-  priceText: { fontSize: 18, color: '#333', marginBottom: 5 },
-  bold: { fontWeight: 'bold', color: '#1b5e20' },
-  activeLabel: { fontSize: 16, fontWeight: '700', color: '#000', marginBottom: 10 },
-  scrollView: { maxHeight: 300 },
+  priceText: {
+    fontSize: 18,
+    color: '#333',
+    marginBottom: 5,
+  },
+  bold: {
+    fontWeight: 'bold',
+    color: '#1b5e20',
+  },
+  filterButtonWrapper: {
+    position: 'absolute',
+    left: 10,
+    bottom: 10,
+  },
+  filterIcon: {
+    width: 45,
+    height: 23,
+    resizeMode: 'contain',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  filterPopupContainer: {
+    width: 160,
+    height: 180,
+    backgroundColor: '#fff',
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  filterPopupGradient: {
+    width: 120,
+    height: 140,
+    borderRadius: 32,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    paddingTop: 15,
+    paddingLeft: 15,
+  },
+  filterPopupTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#fff',
+    marginBottom: 10,
+  },
+  filterPopupOption: {
+    fontSize: 16,
+    color: '#fff',
+    marginBottom: 6,
+  },
+  modalBackground: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  activeLabel: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#000',
+    marginBottom: 10,
+  },
+  scrollView: {
+    maxHeight: 300,
+  },
   transactionCard: {
-    backgroundColor: '#81c784', padding: 15, borderRadius: 8, marginBottom: 10,
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    backgroundColor: '#81c784',
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  orderText: { fontSize: 14, color: '#fff', fontWeight: 'bold' },
-  quantityText: { fontSize: 14, color: '#fdd835', fontWeight: '600' },
-  priceTag: { fontSize: 18, fontWeight: 'bold', color: '#fff' },
+  orderText: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  quantityText: {
+    fontSize: 14,
+    color: '#fdd835',
+    fontWeight: '600',
+  },
+  priceTag: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
 });
 
 export default SalesData;

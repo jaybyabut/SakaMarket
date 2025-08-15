@@ -6,7 +6,8 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST");
 
-$uploadDir = __DIR__ . "/uploads/";
+$uploadDir = __DIR__ . "/../database/uploads/";
+
 if (!file_exists($uploadDir)) {
     mkdir($uploadDir, 0777, true);
 }
