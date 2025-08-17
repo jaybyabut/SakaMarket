@@ -29,7 +29,7 @@ const LandingPage = ({ navigation = { navigate: () => {} } }) => {
           end={{ x: 1, y: 0 }}
           style={styles.signInButton}
         >
-          <Pressable style={styles.fullSize} onPress={() => router.push('/sellpage1')}>
+          <Pressable style={styles.fullSize} onPress={() => router.push('/signIn')}>
             <Text style={styles.signInText}>Mag-sign in sa Account</Text>
           </Pressable>
         </LinearGradient>
