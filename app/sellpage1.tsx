@@ -5,7 +5,7 @@ import ButtonWithBackground from "../components/ButtonWithBackground";
 
 export default function SellPage1() {
   const navBack = () => {
-    router.push('home-magsasaka') // Go to the main page
+    router.back() // Go to the main page
   };
 
   return (
@@ -21,7 +21,7 @@ export default function SellPage1() {
       <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, marginLeft: 20, }}>
           <TouchableOpacity onPress={navBack} activeOpacity={0.8}>
           <Image
-              source={require("../assets/images/backtoblack.png")}
+              source={require("../assets/images/Back.png")}
               style={styles.imageButton}
             />
             </TouchableOpacity>
@@ -45,27 +45,15 @@ export default function SellPage1() {
         />
 
         <ButtonWithBackground
-          text="Palitan ang Detalye ng Transaksyon"
+          text="Ipakita ang Sariling Benta"
           colors={["#10AF7C", "#5ABE7A", "#65C17A"]}
           onPress={() => {
-            console.log('palitan');
+            router.push("/seller-listings")
           }}
           start={{ x: 0, y: 1 }}
           end={{ x: 0, y: 0 }}
           locations={[0, 0.9, 1]}
           image={require("../assets/images/Edit.png")}
-        />
-
-        <ButtonWithBackground
-          text="Ipakita ang Sariling Benta"
-          colors={["#10AF7C", "#5ABE7A", "#65C17A"]}
-          onPress={() => {
-            console.log('sariling benta');
-          }}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 0, y: 0 }}
-          locations={[0, 0.9, 1]}
-          image={require("../assets/images/Eye.png")}
         />
 
         
