@@ -146,7 +146,7 @@ try {
           />
           <ButtonWithText
             icon={require('../assets/STARTer/Farmer Verification/next-page.png')}
-            label="IPASA"
+            label="ISUBMITE"
             onPress={handleSubmit}
             disabled={!selfie || !govID || !farmDoc}
           />
