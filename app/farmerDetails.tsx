@@ -181,10 +181,6 @@ const handleSubmit = () => {
         </KeyboardAvoidingView>
 
         <View style={styles.buttons}>
-          <Pressable style={styles.buttonWithText} onPress={() => router.back()}>
-            <Image source={require('../assets/STARTer/Farmer Verification/back-page.png')} style={styles.buttonIcon} />
-            <Text style={styles.buttonText}>NAKARAAN</Text>
-          </Pressable>
           <Pressable style={styles.buttonWithText} onPress={handleSubmit} disabled={!isFormComplete}>
             <Text style={[styles.buttonText, { opacity: isFormComplete ? 1 : 0.5 }]}>SUNOD</Text>
             <Image source={require('../assets/STARTer/Farmer Verification/next-page.png')} style={styles.buttonIcon} />
@@ -265,7 +261,7 @@ const styles = StyleSheet.create({
   buttons: {
     position: 'absolute',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     width: 346,
     height: 47,
     bottom: 25,
