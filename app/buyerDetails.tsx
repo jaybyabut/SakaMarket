@@ -188,7 +188,7 @@ const handleSubmit = async () => {
 
         <View style={styles.buttons}>
           <Pressable style={styles.buttonWithText} onPress={handleSubmit} disabled={!isFormComplete}>
-            <Text style={[styles.buttonText, { opacity: isFormComplete ? 1 : 0.5 }]}>SUNOD</Text>
+            <Text style={[styles.buttonText, { opacity: isFormComplete ? 1 : 0.5 }]}>ISUMITE</Text>
             <Image source={require('../assets/STARTer/Farmer Verification/next-page.png')} style={styles.buttonIcon} />
           </Pressable>
         </View>

@@ -1,47 +1,44 @@
 {
   "expo": {
-    "splash": {
-      "backgroundColor": "#ffffff"
-    },
-    "backgroundColor": "#ffffff",
     "name": "sakamarket",
     "slug": "sakamarket",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/Saka-Logo.png",
-    "scheme": "sakamarket",
+    "backgroundColor": "#ffffff",
+    "icon": "./assets/STARTer/Landing Page/logo-with-name.png",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/Saka-Logo.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+    "scheme": "sakamarket",
+    "assetBundlePatterns": ["**/*"],
+    "splash": {
+      "image": "./assets/STARTer/Landing Page/logo-with-name.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/Saka-Logo.png",
-          "imageWidth": 200,
+          "image": "./assets/STARTer/Landing Page/logo-with-name.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
       ]
     ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/STARTer/Landing Page/logo-with-name.png",
+      "bundler": "metro",
+      "output": "static"
+    },
+    "newArchEnabled": true,
     "experiments": {
       "typedRoutes": true
-    },
-    "assetBundlePatterns": ["**/*"]
+    }
   }
 }

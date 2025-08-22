@@ -5,19 +5,32 @@ import ButtonWithBackground from "../components/ButtonWithBackground";
 
 export default function SellPage1() {
   const navBack = () => {
-    router.push('home-magsasaka') // Go to the main page
+    router.back() // Go to the main page
   };
 
   return (
     <View
       style={{
         flex: 1,
-        alignItems: "center",
+        alignItems: "flex-start",
         padding: 20,
-        gap: 40,
+        gap: 20,
         backgroundColor: 'white',
       }}
     >
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, marginLeft: 20, }}>
+          <TouchableOpacity onPress={navBack} activeOpacity={0.8}>
+          <Image
+              source={require("../assets/images/Back.png")}
+              style={styles.imageButton}
+            />
+            </TouchableOpacity>
+          <TouchableOpacity onPress={navBack} activeOpacity={0.8}>
+            <Text style={styles.navText}>HOME PAGE</Text>
+          </TouchableOpacity>
+          
+        </View>
+
       <View style={styles.top}>
         <ButtonWithBackground
           text="Bagong Transaksyon"
@@ -32,10 +45,10 @@ export default function SellPage1() {
         />
 
         <ButtonWithBackground
-          text="Palitan ang Detalye ng Transaksyon"
+          text="Ipakita ang Sariling Benta"
           colors={["#10AF7C", "#5ABE7A", "#65C17A"]}
           onPress={() => {
-            console.log('palitan');
+            router.push("/seller-listings")
           }}
           start={{ x: 0, y: 1 }}
           end={{ x: 0, y: 0 }}
@@ -43,15 +56,7 @@ export default function SellPage1() {
           image={require("../assets/images/Edit.png")}
         />
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, left: -85 }}>
-          <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
-            <Image
-              source={require("../assets/images/backtoblack.png")}
-              style={styles.imageButton}
-            />
-          </TouchableOpacity>
-          <Text style={styles.navText}>HOME PAGE</Text>
-        </View>
+        
       </View>
     </View>
   );
@@ -69,11 +74,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Bold',
   },
   top: {
-    marginTop: 50,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 50,
+    gap: 20,
     width: '100%',
+    transform: 'scale(0.8)',
   }
 });

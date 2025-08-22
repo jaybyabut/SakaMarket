@@ -2,7 +2,27 @@
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 
-include 'database.php';  
+include 'database.php';
+
+$filter = $_GET['filter'] ?? 'lifetime'; // Default to lifetime
+
+// Build WHERE clause based on filter
+$whereClause = "";
+switch ($filter) {
+    case 'week':
+        $whereClause = "WHERE transaction_time >= NOW() - INTERVAL '7 days'";
+        break;
+    case 'month':
+        $whereClause = "WHERE transaction_time >= NOW() - INTERVAL '1 month'";
+        break;
+    case '6months':
+        $whereClause = "WHERE transaction_time >= NOW() - INTERVAL '6 months'";
+        break;
+    case 'lifetime':
+    default:
+        $whereClause = ""; // No filter
+        break;
+}
 
 try {
     $query = "
@@ -11,10 +31,12 @@ try {
             price, 
             amount, 
             to_char(transaction_time, 'YYYY-MM-DD HH24:MI:SS') as transaction_time
-        FROM ledger 
-        ORDER BY transaction_time ASC 
+        FROM ledger
+        $whereClause
+        ORDER BY transaction_time ASC
         LIMIT 20
     ";
+
     $result = pg_query($conn, $query);
 
     if (!$result) {

@@ -8,7 +8,8 @@ export const data = [
     'price': 4000, 
     'name': 'Juan Dela Cruz', 
     'address': 'Malolos, Bulacan', 
-    'mass': 100,
+    'amount': 100,
+    'description': 'asdadasdsadsadsa',
   },
   {
     'id': 2,
@@ -19,7 +20,8 @@ export const data = [
     'price': 2004, 
     'name': 'Juan Dela Cruz', 
     'address': 'Malolos, Bulacan', 
-    'mass': 89,
+    'amount': 89,
+    'description': 'asdadasdsadsadsa',
   },
   {
     'id': 3,
@@ -30,7 +32,8 @@ export const data = [
     'price': 4002, 
     'name': 'Juan Dela Cruz', 
     'address': 'Malolos, Bulacan', 
-    'mass': 49,
+    'amount': 49,
+    'description': 'asdadasdsadsadsa',
   },
   {
     'id': 4,
@@ -41,7 +44,8 @@ export const data = [
     'price': 3123, 
     'name': 'Juan Dela Cruz', 
     'address': 'Malolos, Bulacan', 
-    'mass': 43,
+    'amount': 43,
+    'description': 'asdadasdsadsadsa',
   },
   {
     'id': 5,
@@ -52,6 +56,7 @@ export const data = [
     'price': 2312, 
     'name': 'Juan Dela Cruz', 
     'address': 'Malolos, Bulacan', 
-    'mass': 53,
+    'amount': 53,
+    'description': 'asdadasdsadsadsa',
   },
 ]
