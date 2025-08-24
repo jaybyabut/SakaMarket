@@ -1,3 +1,4 @@
+// SalesData.tsx
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -115,12 +116,24 @@ const SalesData: React.FC = () => {
               decimalPlaces: 2,
               color: (opacity = 1) => `rgba(34, 139, 34, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              propsForDots: { r: '6', strokeWidth: '2', stroke: '#2e7d32', fill: '#66bb6a' },
+              propsForDots: {
+                r: '6',
+                strokeWidth: '2',
+                stroke: '#2e7d32',
+                fill: '#66bb6a',
+              },
             }}
             bezier
             style={styles.chartStyle}
           />
         )}
+      </View>
+
+      {/* 👇 Filter button repositioned and resized */}
+      <View style={styles.filterButtonStandalone}>
+        <TouchableOpacity onPress={() => setFilterVisible(true)}>
+          <Image source={filterIcon} style={styles.filterIconLarge} />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.priceCard}>
@@ -130,12 +143,6 @@ const SalesData: React.FC = () => {
         <Text style={styles.priceText}>
           Recent Price: <Text style={styles.bold}>₱{recentPrice.toFixed(2)} /kg</Text>
         </Text>
-
-        <View style={styles.filterButtonWrapper}>
-          <TouchableOpacity onPress={() => setFilterVisible(true)}>
-            <Image source={filterIcon} style={styles.filterIcon} />
-          </TouchableOpacity>
-        </View>
       </View>
 
       <Modal
@@ -198,13 +205,29 @@ const styles = StyleSheet.create({
   chartCard: {
     backgroundColor: '#fff', borderRadius: 16, paddingVertical: 10, alignItems: 'center',
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2,
-    shadowRadius: 6, elevation: 5, marginBottom: 20,
+    shadowRadius: 6, elevation: 5, marginBottom: 10,
   },
   chartStyle: { borderRadius: 16 },
-  priceCard: {
-    backgroundColor: '#fff', borderRadius: 12, padding: 20,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15,
-    shadowRadius: 4, elevation: 3, marginBottom: 20, position: 'relative',
+  filterButtonStandalone: {
+    alignSelf: 'flex-start',
+    marginLeft: 10,
+    marginBottom: 20,
+  },
+  filterIconLarge: {
+    width: 60,
+    height: 30,
+    resizeMode: 'contain',
+  },
+    priceCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
+    marginBottom: 20,
   },
   priceText: {
     fontSize: 18,
@@ -214,16 +237,6 @@ const styles = StyleSheet.create({
   bold: {
     fontWeight: 'bold',
     color: '#1b5e20',
-  },
-  filterButtonWrapper: {
-    position: 'absolute',
-    left: 10,
-    bottom: 10,
-  },
-  filterIcon: {
-    width: 45,
-    height: 23,
-    resizeMode: 'contain',
   },
   modalOverlay: {
     flex: 1,
