@@ -5,7 +5,7 @@ import ButtonWithBackground from "../components/ButtonWithBackground";
 
 export default function SellPage1() {
   const navBack = () => {
-    router.push("/home-magsasaka") // Go to the main page
+    router.push('/home-magsasaka') // Go to the main page
   };
 
   return (
