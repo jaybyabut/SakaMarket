@@ -1,9 +1,11 @@
+import { useFocusEffect } from "@react-navigation/native";
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  BackHandler,
   Dimensions,
   Image,
   KeyboardAvoidingView,
@@ -14,7 +16,7 @@ import {
   View
 } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 const { width, height } = Dimensions.get('window');
 
 export default function SignInScreen() {
@@ -24,6 +26,18 @@ export default function SignInScreen() {
   const [error, setError] = useState('');
   const [inputErrors, setInputErrors] = useState({ phone: false, pin: false });
   const [loading, setLoading] = useState(false);
+
+  const lastBackPress = useRef(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        router.push('/App');
+        return true; // handled
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);}
+    ),)
 
   const handleSubmit = async () => {
     const { phone, pin } = form;
@@ -67,7 +81,7 @@ export default function SignInScreen() {
   };
 
   return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Logo & Name */}
         <View style={styles.logoWrapper}>
           <Image
@@ -141,7 +155,7 @@ export default function SignInScreen() {
             <Text style={styles.noAccText}>Wala pa akong Account</Text>
           </Pressable>
         </View>
-      </SafeAreaView>
+      </View>
   );
 }
 
@@ -149,9 +163,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: '#FFF'
   },
   logoWrapper: {
-    flex: 1,
+    flex: 0.5,
     flexDirection: 'row',
     backgroundColor: 'transparent',
     alignItems: 'center',
@@ -168,10 +183,9 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   signInSection: {
-    flex: 3,
     gap: height * 0.03,
     alignItems: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   signInTitle: {
     fontSize: RFValue(40),
@@ -188,7 +202,7 @@ const styles = StyleSheet.create({
   },
   inputBar: {
     width: width * 0.85,
-    height: height * 0.08,
+    height: height * 0.07,
     fontSize: RFValue(15),
     borderColor: '#6E6565',
     borderWidth: 2,

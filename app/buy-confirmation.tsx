@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useLayoutEffect } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { RFValue } from 'react-native-responsive-fontsize';
+const { width, height } = Dimensions.get('window');
 
 
 export default function Magsasakaregister() {
@@ -19,81 +19,110 @@ export default function Magsasakaregister() {
 
   return (
 
-    <SafeAreaView style={styles.container}>
-        <Image
-            source={require("../assets/images/Checkmark.png")}
-            style={styles.logo} 
-        />
-        <Text style={styles.header}>Success!</Text>
-        <View style={styles.box}>
-            <Text style={styles.contentHeader}>ORDER #1</Text>
-            <Text style={styles.content}>Pangalan: Palay</Text>
-            <Text style={styles.content}>Presyo: P20 /kilo</Text>
-            <Text style={styles.content}>Dami: 50kg</Text>
+    <View style={styles.container}>
+
+        <View style={styles.contentContainer}>
+            <Image
+                source={require("../assets/images/Checkmark.png")}
+                style={styles.logo} 
+            />
+            <Text style={styles.header}>Success!</Text>
+            <View style={styles.greenBox}>
+                <View style={styles.contentBox}>
+                <Text style={styles.contentHeader}>ORDER #1</Text>
+                <View style={styles.content}>
+                    <Text style={styles.contentText}>Pangalan: Palay</Text>
+                    <Text style={styles.contentText}>Presyo: P20 /kilo</Text>
+                    <Text style={styles.contentText}>Dami: 50kg</Text>
+                </View>
+                </View>
+            </View>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 130, marginLeft: 0}}>
-            <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
+
+
+
+
+
+        
+            <TouchableOpacity style={styles.navContainer} onPress={navBack} activeOpacity={0.7}>
                 <Image
                     source={require("../assets/images/backtoblack.png")}
-                    style={styles.imageButton} 
-                />
+                    style={styles.imageButton}/>
+                <Text style={styles.navText}> 
+                    
+                    
+                        BUMALIK
+                
+                </Text>
                 
                 </TouchableOpacity>
-            <Text style={styles.navText}>BUMALIK SA MAIN PAGE</Text>
-        </View>
-    </SafeAreaView>
+            
+        
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: "center",
+
+        backgroundColor: "#FFF",
+    },
+    contentContainer:{
+        flex: 1,                  
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: width * 0.8,
     },
     logo: {
-        width: 200,
-        height: 200,
-        marginTop: 200,
+        width: width * 0.5,
+        height: width * 0.5,
     },
     header: {
-        fontSize: 48,
+        fontSize: RFValue(48),
         color: 'black',
         fontFamily: 'Roboto-Bold',
-        marginTop: 0,
+        marginBottom: height * 0.04,
     },
-    box: {
-        width: '80%',
-        height: 200,
+    greenBox: {
         backgroundColor: '#10AF7C',
         borderRadius: 20,
-        padding: 20,
-        justifyContent: 'center',
-        marginTop: 10,
+        height: height * 0.25,
+        width: width * 0.8,
+        
+    },
+    contentBox:{
+        top: height * 0.02,
+        left: width * 0.05,
     },
     contentHeader: {
-        fontSize: 24,
         color: 'white',
-        fontFamily: 'Roboto-Bold',
-        marginBottom: 5,
-        top: -10,
+        fontSize: RFValue(24),
     },
     content: {
-        fontSize: 24,
+        
+    },
+    contentText: {
         color: 'white',
-        fontFamily: 'Roboto-Regular',
-        marginBottom: 5,
+        fontSize: RFValue(18),
+        marginTop: height * 0.01,
     },
     imageButton: {
-    width: 30,
-    height: 30,
-    left: -40,
-   
-  },
-  navText: {
-    fontSize: 20,
-    color: 'black',
-    fontFamily: 'Roboto-Bold',
-    left: -40,
-    marginLeft: 5,
-  }
+        width: width * 0.06,
+        height: width * 0.06,
+    },
+    navText: {
+        fontSize: RFValue(20),
+        color: 'black',
+        fontFamily: 'Roboto-Bold',
+    },
+    navContainer:{
+        position: 'absolute',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: width * 0.02,
+        bottom: height * 0.02,
+        left: width * 0.11,
+    }
 });

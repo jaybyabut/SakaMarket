@@ -1,8 +1,11 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React from 'react';
-import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RFValue } from "react-native-responsive-fontsize";
+const { width, height } = Dimensions.get('window');
 
-const logoImg: ImageSourcePropType = require('../assets/images/Logo-Home.png');
+const logoImg: ImageSourcePropType = require('../assets/images/home-title.png');
 const homeTextImg: ImageSourcePropType = require('../assets/images/mamili-ng-gagawin.png');
 const magbentaImg: ImageSourcePropType = require('../assets/images/Magbenta.png');
 const marketImg: ImageSourcePropType = require('../assets/images/Market.png');
@@ -17,33 +20,46 @@ export default function HomeBuyer() {
   return (
     <View style={styles.container}>
       {/* Logo at top left */}
-      <View style={styles.logoContainer}>
-        <Image source={logoImg} style={styles.logoImage} />
-      </View>
+        <LinearGradient
+                    colors={['#10AF7C', '#86C778']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1.2 }}
+                    style={styles.logoContainer}
+                  >
+          <Image source={logoImg} style={styles.logoImage} />
+        </LinearGradient>
 
-      {/* Home text banner */}
-      <Image source={homeTextImg} style={styles.homeTextImage} />
+        <View style={styles.mamiliContainer}>
+          {/* Home text banner */}
+          <Image source={homeTextImg} style={styles.homeTextImage} />
+        </View>
+      
+
+
+
+
+
 
       {/* Button grid */}
       <View style={styles.gridContainer}>
         <View style={styles.row}>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => router.push('/sellpage1')}
+            onPress={() => router.push('/buy-page')}
           >
-              <Image source={magbentaImg}/>
+              <Image source={magbentaImg} style={styles.buttonImg}/>
           </TouchableOpacity>
 
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => router.push('/StatsPage')}
           >
-              <Image source={marketImg}/>
+              <Image source={marketImg} style={styles.buttonImg}/>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
-            <Image source={settingsImg}/>
-            <Image source={accountImg}/>
+            <Image source={settingsImg} style={styles.buttonImg}/>
+            <Image source={accountImg} style={styles.buttonImg}/>
         </View>
       </View>
 
@@ -67,28 +83,19 @@ export default function HomeBuyer() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingTop: 63,
-    paddingRight: 24,
-    paddingBottom: 24,
-    paddingLeft: 24,
-    backgroundColor: '#FFFFFF',
-    position: 'relative',
+    backgroundColor: '#FFF',
+
   },
   logoContainer: {
-    flexDirection: 'row',
+    height: height * 0.13,
     alignItems: 'center',
-    position: 'absolute',
-    top: 30,
-    left: 20,
-    width: 222.87,
-    height: 77,
-    zIndex: 10,
+    justifyContent: 'center',
+    backgroundColor: 'red'
   },
   logoImage: {
     resizeMode: 'contain',
+    width: height * 0.3,
+    
   },
   logoText: {
     fontFamily: 'Secular One', // Make sure to link this font in your project
@@ -97,50 +104,55 @@ const styles = StyleSheet.create({
     lineHeight: 31,
     letterSpacing: 0.012,
     color: '#FFCA43',
-    marginLeft: 8,
+
+  },
+  mamiliContainer: {
+    height: height * 0.1, 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    marginBottom: height * 0.03,
   },
   homeTextImage: {
-    width: 258,
-    height: 35,
-    alignSelf: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-    resizeMode: 'contain',
+    transform: [{ scale: width * 0.0025 }],
   },
   gridContainer: {
-    alignSelf: 'center',
-    marginTop: 20,
-    marginBottom: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: height * 0.015,
+
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    marginBottom: 10,
+  },
+  buttonImg: {
+    width: width * 0.45,
+    height: width * 0.45,
+
   },
   languageRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'stretch',
-    marginTop: 10,
-    marginBottom: 10,
-    height: 55,
-    paddingVertical: 2,
-    // gap: 10, // If not supported, use marginRight on children
+    gap: width * 0.05,
+    paddingVertical: height * 0.01,
+    
   },
   languageLabel: {
+    left: width * 0.05,
     fontFamily: 'Roboto',
     fontWeight: '400',
-    fontSize: 20,
+    fontSize: RFValue(18),
     lineHeight: 23,
     color: '#000',
     marginRight: 10,
+    textAlignVertical: 'center',
+
   },
   languageButton: {
+    width: width * 0.25,
+    height: height * 0.04,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#10AF7C',
     borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
@@ -150,37 +162,30 @@ const styles = StyleSheet.create({
   languageButtonText: {
     fontFamily: 'Roboto',
     fontWeight: '400',
-    fontSize: 20,
+    fontSize: RFValue(17),
     lineHeight: 23,
     color: '#FFF',
   },
   logoutButton: {
     position: 'absolute',
-    left: 20,
-    bottom: 30,
-    backgroundColor: '#d32f2f',
-    paddingVertical: 12,
-    paddingHorizontal: 28,
-    borderRadius: 24,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.18,
-    shadowRadius: 2,
     flexDirection: 'row',
     alignItems: 'center',
+    gap: width * 0.02,
+    bottom: height * 0.02,
+    left: width * 0.05,
+    backgroundColor: '#d32f2f',
+    paddingHorizontal: width * 0.05,
+    paddingVertical: height * 0.01,
+    borderRadius: 24,
   },
   logoutImage: {
-    width: 22,
-    height: 22,
-    marginRight: 10,
-    resizeMode: 'contain',
+    width: height * 0.03,
+    height: height * 0.03,
   },
   logoutButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    letterSpacing: 1,
+    fontSize: RFValue(16),
+    color: 'white',
+    fontFamily: 'Roboto-Bold',
   },
 });
 

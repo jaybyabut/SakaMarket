@@ -2,12 +2,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { Dimensions, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 const { width, height } = Dimensions.get('window');
 
 const LandingPage = ({ navigation = { navigate: () => {} } }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* Logo and App Name */}
       <View style={styles.logoContainer}>
         <Image
@@ -30,18 +30,18 @@ const LandingPage = ({ navigation = { navigate: () => {} } }) => {
             end={{ x: 1, y: 0 }}
             style={styles.signInButton}
           >
-          <Pressable onPress={() => router.push('/signIn')}>
+          <Pressable onPress={() => router.push('/home-magsasaka')}>
                 <Text style={styles.signInText}>Mag-sign in sa Account</Text>
           </Pressable>
         </LinearGradient>
 
 
         {/* Create Account Button */}
-        <Pressable style={styles.createButton} onPress={() => router.push('/signUp')}>
+        <Pressable style={styles.createButton} onPress={() => router.push('/home-buyer')}>
           <Text style={styles.createText}>Gumawa ng Account</Text>
         </Pressable>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

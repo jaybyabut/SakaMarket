@@ -2,7 +2,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Dimensions, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Colors from '../constants/Colors';
 const { width, height } = Dimensions.get('window');
 
@@ -24,7 +23,7 @@ export default function SignupScreen() {
 
 
   return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         
 
         {/* Text Section */}
@@ -79,18 +78,18 @@ export default function SignupScreen() {
             </LinearGradient>
           </View>
         </View>
-      </SafeAreaView>
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
   backPosition: {
     position: 'absolute',
-    width: height * 0.045,
-    height: height * 0.045,
+    width: height * 0.03,
+    height: height * 0.03,
     zIndex: 1,
     left: width * 0.04,
-    top: height * 0.03
+    top: height * 0.04
   },
   backIcon: {
     height: '100%',
@@ -98,26 +97,30 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: '#FFF'
   },
   textSection: {
     flex: 1,
     justifyContent: 'center',
+
+
   },
   signupText: {
-    fontSize: RFValue(40),
+    fontSize: RFValue(25),
     fontFamily: 'Roboto-Bold',
     textAlign: 'center'
   },
   questionText: {
-    fontSize: RFValue(20),
+    fontSize: RFValue(17),
     fontFamily: 'Roboto',
     textAlign: 'center',
   },
   buttonsContainer: {
-    flex: 5,
+    flex: 6,
     alignItems: 'center',
     justifyContent: 'center',
     gap: height * 0.05,
+
   },
   button: {
     width: height * 0.3,
