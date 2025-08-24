@@ -1,0 +1,46 @@
+STEP 1:
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+STEP 2:
+CREATE OR REPLACE FUNCTION ledger_hash_trigger()
+RETURNS TRIGGER AS $$
+DECLARE
+    last_hash TEXT;
+BEGIN
+    -- Get the most recent hash from the row before this one
+    SELECT current_hash
+    INTO last_hash
+    FROM ledger
+    WHERE ledger_id < COALESCE(NEW.ledger_id, (SELECT COALESCE(MAX(ledger_id),0)+1 FROM ledger))
+    ORDER BY ledger_id DESC
+    LIMIT 1;
+
+    -- Store it as this row's previous_hash
+    NEW.previous_hash := last_hash;
+
+    -- Recalculate the current_hash
+    NEW.current_hash := encode(
+        digest(
+            NEW.product_id::text ||
+            NEW.name ||
+            NEW.price::text ||
+            NEW.amount::text ||
+            COALESCE(NEW.transaction_time::text, now()::text) ||
+            COALESCE(NEW.previous_hash, ''),
+            'sha256'
+        ),
+        'hex'
+    );
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+STEP 3:
+DROP TRIGGER IF EXISTS trg_ledger_hash ON ledger;
+
+CREATE TRIGGER trg_ledger_hash
+BEFORE INSERT OR UPDATE
+ON ledger
+FOR EACH ROW
+EXECUTE FUNCTION ledger_hash_trigger();
