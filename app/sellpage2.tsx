@@ -2,9 +2,10 @@ import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 import { router } from "expo-router";
 import { useLayoutEffect, useState } from "react";
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-
+import { Alert, Dimensions, Image, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { RFValue } from "react-native-responsive-fontsize";
+const { width, height } = Dimensions.get('window');
 
 export default function Magsasakaregister() {
   const [name, setName] = useState('');
@@ -52,15 +53,26 @@ const handleNext = () => {
 
   return (
     <View style={styles.container}>
-      {/* Background Shape */}
-      <View style={styles.whiteBackground} />
-      <View style={styles.backgroundShape} />
-      {/* Foreground Content */}
+      
+      
       <View style={styles.top}>
+        <Pressable style={styles.backPosition} onPress={() => router.back()}>
+                  <Image
+                    style={styles.backIcon}
+                    source={require('../assets/STARTer/back-icon.png')}
+                        />
+                </Pressable>
         <Text style={styles.header}>Magbenta ng Tanim</Text>
         <Text style={styles.subtitle}>Punan ang mga sumusunod na detalye</Text>
       </View>
+      
+      
+      {/* Background Shape */}
+      <View style={styles.backgroundShape}>
+      {/* Foreground Content */}
+      
       <View style={styles.content}>
+        <KeyboardAwareScrollView showsVerticalScrollIndicator={true} overScrollMode="never" contentContainerStyle={{ paddingBottom: 20 }}>
         <Text style={styles.label}>Pangalan ng Produkto</Text>
         <TextInput
           style={styles.input}
@@ -98,23 +110,18 @@ const handleNext = () => {
           onChangeText={setDescription}
           multiline
         />
-        <View style={styles.nav}>
-          <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
-            <Image
-              source={require("../assets/images/Back To.png")}
-              style={styles.imageButton2}
-            />
-          </TouchableOpacity>
-          <Text style={styles.navText2}>BUMALIK</Text>
-          <Text style={styles.navText}>SUNOD</Text>
-          <TouchableOpacity onPress={handleNext} activeOpacity={0.7}>
-            <Image
-              source={require("../assets/images/Next Page.png")}
-              style={styles.imageButton}
-            />
-          </TouchableOpacity>
-        </View>
+        </KeyboardAwareScrollView>
+        
       </View>
+      
+      <View style={styles.buttons}>
+                    <Pressable style={styles.buttonWithText} onPress={handleNext}>
+                      <Text style={styles.buttonText}>SUNOD</Text>
+                      <Image source={require('../assets/STARTer/Farmer Verification/next-page.png')} style={styles.buttonIcon} />
+                    </Pressable>
+                  </View>
+      </View>
+      
     </View>
   );
 }
@@ -122,129 +129,122 @@ const handleNext = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
-  },
-  backgroundShape: {
-    position: 'absolute',
-    width: 450,
-    height: 830,
-    backgroundColor: '#10AF7C',
-    borderRadius: 70, // circle
-    bottom: -100,
-    zIndex: -1, // Send behind other components
-    left: -20
   },
   top: {
-    flex: 1
-    ,
+    flex: 0.8,
+    alignItems: 'center',
+    verticalAlign: 'middle',
+    justifyContent: 'center',
   },
-  header: {
-    fontSize: 30,
-    color: 'black',
-    fontFamily: 'Roboto-Bold',
-    top: 60,
-    left: 40
-  },
-  subtitle: {
-    fontSize: 15,
-    color: 'black',
-    fontFamily: 'Roboto-Regular',
-    top: 59,
-    left: 40
+  backgroundShape: {
+    flex: 4,
+    backgroundColor: '#28B47B',
+    borderTopLeftRadius: 70,
+    borderTopRightRadius: 70,
+    width: width * 1.15,
+    alignSelf: 'center',
   },
   content: {
-    flex: 5,
-    padding: 20,
+    height: '87%',
+    alignSelf: 'center',
+    width: '80%',
+    marginTop: '5%',
+    paddingLeft: 10,
+
+  },
+  header: {
+    fontSize: RFValue(24),
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  subtitle: {
+    fontSize: RFValue(14),
+    color: 'black',
+
+  },
+  backPosition: {
+    position: 'absolute',
+    width: height * 0.03,
+    height: height * 0.03,
+    zIndex: 1,
+    left: width * 0.04,
+    top: height * 0.05
+  },
+  backIcon: {
+    height: '100%',
+    width: '100%'
   },
   label: {
-    fontSize: 20,
-    marginBottom: 8,
+    fontSize: RFValue(14),
     color: 'white',
-    fontFamily: 'Roboto-Regular',
-    left: 20,
+    fontWeight: 'bold',
+    marginTop: 16,
+    marginBottom: 6,
+    alignSelf: 'flex-start',
   },
   input: {
-    height: 50,
-    width: '85%',
-    padding: 10,
-    borderRadius: 10,
-    marginLeft: 20,
+    width: '95%',
+    height: 45,
     backgroundColor: '#FFFDEB',
-    textAlignVertical: 'top',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 14,
     fontFamily: 'Roboto-Regular',
-    fontSize: 20,
-    marginBottom: 20
-  },
-  imagePreview: {
-    width: '100%',
-    height: 200,
-    marginTop: 20,
-    borderRadius: 10,
-    resizeMode: 'cover',
-  },
-  uploadButton: {
-    backgroundColor: '#FFFDEB',
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 10,
-    alignItems: 'center',
-    width: '85%',
-    marginLeft: 20,
-    marginBottom: 20,
-  },
-  uploadButtonText: {
-    color: 'black',
-    fontSize: 20,
-    fontFamily: 'Roboto-Regular',
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    elevation: 4,
   },
   inputDesc: {
-    height: 150,
-    width: '85%',
-    padding: 10,
-    borderRadius: 10,
-    marginLeft: 20,
+    height: 80,
+    width: '95%',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
     backgroundColor: '#FFFDEB',
-    textAlignVertical: 'top',
-    fontFamily: 'Roboto-Regular',
-    fontSize: 20,
-    marginBottom: 20
+    textAlignVertical: 'top', // For Android to align text at the top
   },
-  nav: {
+  uploadButton: {
+    height: 80,
+    width: '95%',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    backgroundColor: '#FFFDEB',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  uploadButtonText: {
+    fontSize: RFValue(14),
+    color: 'gray',
+  },
+  buttons: {
+    position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    width: width * 0.80,
+    height: 47,
+    bottom: '0.3%',
+    alignSelf: 'center',
+
+  },
+  buttonWithText: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
-    marginRight: 20,
+    gap: 5,
   },
-  imageButton: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
+  buttonIcon: {
+    width: 29,
+    height: 29,
+    resizeMode: 'contain',
   },
-  imageButton2: {
-    width: 30,
-    height: 30,
-    marginRight: 5,
-  },
-  navText: {
+  buttonText: {
     fontSize: 20,
-    color: 'white',
     fontFamily: 'Roboto-Bold',
-    marginRight: 5,
-  },
-  navText2: {
-    fontSize: 20,
     color: 'white',
-    fontFamily: 'Roboto-Bold',
-    marginRight: 105,
   },
-  whiteBackground: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'white', // Solid white background
-    zIndex: -2, // Behind everything
-  },
+
+
 });
