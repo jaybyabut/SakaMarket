@@ -8,10 +8,7 @@ const bumiliImg: ImageSourcePropType = require('../assets/images/Bumili.png');
 const marketImg: ImageSourcePropType = require('../assets/images/Market.png');
 const settingsImg: ImageSourcePropType = require('../assets/images/Settings.png');
 const accountImg: ImageSourcePropType = require('../assets/images/Account.png');
-<<<<<<< HEAD
-=======
 const languageImg: ImageSourcePropType = require('../assets/images/Language.png');
->>>>>>> 7ef67dd8fc8f9f11cd5693fa0fd80afb81b8eb02
 const logoutImg: ImageSourcePropType = require('../assets/images/open-pane.png');
 
 
