@@ -4,13 +4,15 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Alert,
+  Dimensions,
   Image,
   Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
+  View
 } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+const { width, height } = Dimensions.get('window');
 
 export default function FarmerVerificationScreen() {
   const router = useRouter();
@@ -106,19 +108,20 @@ try {
   };
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.backIconWithHeader}>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Image style={styles.backIcon} source={require('../assets/STARTer/back-icon.png')} />
-        </Pressable>
-
-        <View style={styles.upperText}>
-          <Text style={styles.header}>I-verify ang Account</Text>
-          <Text style={styles.instruction}>
-            Ipasa ang mga sumusunod na dokumento upang makumpleto ang iyong account
-          </Text>
-        </View>
-      </View>
+    <View style={styles.container}>
+      <View style={styles.textSection}>
+                    
+            <Pressable style={styles.backPosition} onPress={() => router.back()}>
+              <Image
+                style={styles.backIcon}
+                source={require('../assets/STARTer/back-icon.png')}
+                    />
+            </Pressable>
+          
+            <Text style={styles.mainText}>I-verify ang Account</Text>
+            <Text style={styles.subText}>Ipasa ang mga sumusunod na dokumento upang makagawa ng iyong account</Text>
+          
+          </View>
 
       <LinearGradient
         colors={['#10AF7C', '#28B47B', '#5ABE7A', '#86C778', 'rgba(134,199,120,0.87)']}
@@ -146,18 +149,22 @@ try {
         </View>
 
         <View style={styles.buttons}>
+          <View style={styles.leftButton}>
           <ButtonWithText
             icon={require('../assets/STARTer/Farmer Verification/back-page.png')}
             label="NAKARAAN"
             reverse
             onPress={() => router.back()}
           />
+          </View>
+          <View style={styles.rightButton}>
           <ButtonWithText
             icon={require('../assets/STARTer/Farmer Verification/next-page.png')}
             label="ISUBMITE"
             onPress={handleSubmit}
             disabled={!selfie || !govID || !farmDoc}
           />
+          </View>
         </View>
       </LinearGradient>
     </View>
@@ -168,7 +175,7 @@ function UploadField({ label, image, onPick, invalid }) {
   return (
     <View style={styles.labelAndUpload}>
       <Text style={styles.uploadLabel}>{label}</Text>
-      <TouchableOpacity
+      <Pressable
         style={[styles.dropArea, invalid && { borderColor: 'red', borderWidth: 2 }]}
         onPress={onPick}
       >
@@ -177,7 +184,7 @@ function UploadField({ label, image, onPick, invalid }) {
         ) : (
           <Text style={styles.uploadText}>Upload Image</Text>
         )}
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }
@@ -196,57 +203,113 @@ function ButtonWithText({ icon, label, reverse, onPress, disabled }) {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, alignItems: 'center', backgroundColor: '#fff', paddingTop: 60 },
-  backButton: { position: 'absolute', top: -45, left: -5 },
-  backIcon: { width: 30, height: 30 },
-  backIconWithHeader: { position: 'relative' },
-  upperText: { width: 366, height: 86, marginBottom: 20, justifyContent: 'space-between' },
-  header: { fontSize: 32, fontFamily: 'Roboto-Bold', marginBottom: 6.5 },
-  instruction: { fontSize: 16, fontFamily: 'Roboto' },
-  greenContainer: {
-    marginTop: 3,
-    width: 464,
-    flex: 1,
-    borderTopLeftRadius: 80,
-    borderTopRightRadius: 80,
-    paddingHorizontal: 44,
-    paddingTop: 25,
-    paddingBottom: 28,
-    justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOpacity: 0.51,
-    shadowRadius: 8.7,
-    shadowOffset: { width: 17, height: 4 },
-    elevation: 4,
-  },
-  uploadSection: { gap: 16, alignItems: 'center' },
-  labelAndUpload: { width: 338, height: 139, justifyContent: 'space-between' },
-  uploadLabel: { fontSize: 16, color: 'white', fontFamily: 'Roboto-Medium', textAlign: 'left' },
-  dropArea: {
-    width: '100%',
-    height: 112,
-    backgroundColor: '#FFFDEB',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 8.7,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 4,
-  },
-  uploadText: { fontSize: 14, color: '#8F8E8E', fontFamily: 'Roboto' },
-  uploadedImage: { width: '100%', height: '100%', borderRadius: 8, resizeMode: 'cover' },
-  buttons: {
-    position: 'absolute',
+  container: {
+      flex: 1,
+      backgroundColor: '#FFF'
+    },
+    backPosition: {
+      position: 'absolute',
+      width: height * 0.03,
+      height: height * 0.03,
+      zIndex: 1,
+      left: width * 0.04,
+      top: height * 0.032
+    },
+    backIcon: {
+      height: '100%',
+      width: '100%'
+    },
+  
+    textSection: {
+      flex: 1,
+      justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center',
+  
+  
+    },
+    mainText: {
+      textAlign: 'center',
+      fontSize: RFValue(25),
+      fontFamily: 'Roboto-Bold'
+    },
+    subText: {
+      textAlign: 'center',
+      fontSize: RFValue(17),
+      width: width * 0.8,
+  
+    },
+    greenContainer: {
+      flex: 5,
+      width: width * 1.16,
+      borderTopLeftRadius: 80,
+      borderTopRightRadius: 80,
+      shadowColor: '#000',
+      shadowOpacity: 0.51,
+      shadowRadius: 8.7,
+      shadowOffset: { width: 17, height: 4 },
+      elevation: 4,
+      zIndex: 2,
+      alignSelf: 'center',
+    },
+    uploadSection: {
+      top: '5%',
+      height: height * 0.59,
+      width: width * 0.80,
+      alignSelf: 'center',
+    },
+    labelAndUpload: {
+      marginBottom: 10,
+
+    },
+    uploadLabel: {
+      fontSize: RFValue(16),
+      fontFamily: 'Roboto-Medium',
+      marginBottom: 10,
+      color: '#FFF'
+    },
+    dropArea: {
+      height: height * 0.12,
+      borderRadius: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#FFFDEB',
+      elevation: 4,
+    },
+    uploadText: {
+      color: '#8F8E8E',
+      fontSize: RFValue(12),
+      fontFamily: 'Roboto-Regular',
+    },
+    buttons: {
+      position: 'absolute',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      width: width * 0.80,
+      height: 47,
+      bottom: 25,
+      alignSelf: 'center',
+    },
+    buttonWithText: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 346,
-    height: 47,
-    bottom: 25,
-    alignSelf: 'center',
-  },
-  buttonWithText: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  buttonIcon: { width: 29, height: 29, resizeMode: 'contain' },
-  buttonText: { fontSize: 20, fontFamily: 'Roboto-Bold', color: 'white' },
+    alignItems: 'center',
+    gap: 5,
+    },
+    buttonIcon: {
+      width: 29,
+      height: 29,
+      resizeMode: 'contain',
+    },
+    buttonText: {
+      fontSize: 20,
+      fontFamily: 'Roboto-Bold',
+      color: 'white',
+    },
+    leftButton:{
+      flex: 1,
+      alignItems: 'flex-start',
+    },
+    rightButton:{
+      alignItems: 'flex-end',
+    },
 });

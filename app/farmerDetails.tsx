@@ -1,12 +1,17 @@
-import { LinearGradient } from 'expo-linear-gradient';  // Gradient background styling
+import { LinearGradient } from 'expo-linear-gradient'; // Gradient background styling
 import { useRouter } from 'expo-router'; // Navigation between screens
 import { useState } from 'react'; // React hook for state management
 import {
-  Image, KeyboardAvoidingView,
-  Platform, Pressable, ScrollView,
+  Dimensions,
+  Image,
+  Pressable,
   StyleSheet, Text,
   TextInput, TextStyle, View
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { RFValue } from 'react-native-responsive-fontsize';
+const { width, height } = Dimensions.get('window');
+
 
 //Farmer registration page
 export default function Magsasakaregister() {
@@ -89,11 +94,10 @@ export default function Magsasakaregister() {
   };
 
   const inputStyle = (
-    type: 'number' | 'verify' | 'password' | 'default' = 'default',
-    invalid = false
-  ): TextStyle => ({
-    width: '100%',
-    maxWidth: 338,
+  type: 'number' | 'verify' | 'password' | 'default' = 'default',
+  invalid = false
+): TextStyle => ({
+    width: '95%',
     height: 45,
     backgroundColor: '#FFFDEB',
     borderRadius: 8,
@@ -103,6 +107,7 @@ export default function Magsasakaregister() {
     marginBottom: 10,
     borderWidth: 1,
     borderColor: invalid ? 'red' : '#ccc',
+    elevation: 4,
   });
 
   // Request OTP
@@ -186,31 +191,27 @@ export default function Magsasakaregister() {
   };
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.backIconWithHeader}>
-        <Pressable style={styles.backButton} onPress={() => router.push('/signUp')}>
-          <Image style={styles.backIcon} source={require('../assets/STARTer/back-icon.png')} />
+    <View style={styles.container}>
+      <View style={styles.textSection}>
+                
+        <Pressable style={styles.backPosition} onPress={() => router.back()}>
+          <Image
+            style={styles.backIcon}
+            source={require('../assets/STARTer/back-icon.png')}
+                />
         </Pressable>
-
-        <View style={styles.upperText}>
-          <Text style={styles.header}>Gumawa ng Account</Text>
-          <Text style={styles.instruction}>
-            Ilagay ang iyong personal na impormasyon upang magpatuloy
-          </Text>
-        </View>
+      
+        <Text style={styles.mainText}>Gumawa ng Account</Text>
+        <Text style={styles.subText}>Ilagay ang iyong personal na impormasyon upang magpatuloy</Text>
+      
       </View>
 
       <LinearGradient
         colors={['#10AF7C', '#28B47B', '#5ABE7A', '#86C778', 'rgba(134,199,120,0.87)']}
         style={styles.greenContainer}
       >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          style={{ flex: 1 }}
-          keyboardVerticalOffset={80}
-        >
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <View style={styles.content}>
+          <View style={styles.scrollViewContainer}>
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={true}>
               <Text style={styles.label}>Personal na Detalye</Text>
               <TextInput
                 style={inputStyle('default', invalidFields.includes('nameFirst'))}
@@ -232,7 +233,7 @@ export default function Magsasakaregister() {
               />
               <TextInput
                 style={inputStyle('default', invalidFields.includes('address'))}
-                placeholder="Address ng Sakahan (Hal. Brgy. Masagana)"
+                placeholder="Address (Hal. Brgy. Masagana)"
                 value={address}
                 onChangeText={setAddress}
               />
@@ -310,9 +311,8 @@ export default function Magsasakaregister() {
                   </View>
                 )}
               </View>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
+          </View>
 
         <View style={styles.buttons}>
           <Pressable style={styles.buttonWithText} onPress={handleSubmit} disabled={!isFormComplete}>
@@ -322,69 +322,74 @@ export default function Magsasakaregister() {
         </View>
       </LinearGradient>
     </View>
+
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    paddingTop: 60,
+  scrollViewContainer: {
+    top: '4%',
+    height: height * 0.59,
+    width: width * 0.80,
+    alignSelf: 'center',
+
   },
-  backButton: {
-    position: "absolute",
-    top: -45,
-    left: -5,
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF'
+  },
+  backPosition: {
+    position: 'absolute',
+    width: height * 0.03,
+    height: height * 0.03,
+    zIndex: 1,
+    left: width * 0.04,
+    top: height * 0.032
   },
   backIcon: {
-    width: 30,
-    height: 30,
+    height: '100%',
+    width: '100%'
   },
-  backIconWithHeader: {
-    position: "relative",
+
+  textSection: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+
+
   },
-  upperText: {
-    width: 366,
-    height: 86,
-    marginBottom: 20,
-    justifyContent: 'space-between',
+  mainText: {
+    textAlign: 'center',
+    fontSize: RFValue(25),
+    fontFamily: 'Roboto-Bold'
   },
-  header: {
-    fontSize: 32,
-    fontFamily: 'Roboto-Bold',
-    marginBottom: 6.5,
-  },
-  instruction: {
-    fontSize: 16,
-    fontFamily: 'Roboto',
+  subText: {
+    textAlign: 'center',
+    fontSize: RFValue(17),
+    width: width * 0.8,
+
   },
   greenContainer: {
-    marginTop: 3,
-    width: 464,
-    flex: 1,
+    flex: 5,
+    width: width * 1.16,
     borderTopLeftRadius: 80,
     borderTopRightRadius: 80,
-    paddingHorizontal: 44,
-    paddingTop: 9,
-    paddingBottom: 28,
-    justifyContent: 'space-between',
     shadowColor: '#000',
     shadowOpacity: 0.51,
     shadowRadius: 8.7,
     shadowOffset: { width: 17, height: 4 },
     elevation: 4,
-  },
-  scrollContainer: {
-    alignItems: 'center',
-    paddingBottom: 80,
-    width: '100%',
-    gap: 16,
+    zIndex: 2,
+    alignSelf: 'center',
+    
+
   },
   content: {
     width: '100%',
     maxWidth: 338,
     alignSelf: 'center',
+    elevation: 10,
   },
   label: {
     fontSize: 16,
@@ -397,10 +402,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    width: 346,
+    width: width * 0.80,
     height: 47,
     bottom: 25,
     alignSelf: 'center',
+
   },
   buttonWithText: {
     flexDirection: 'row',
@@ -416,6 +422,43 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Roboto-Bold',
     color: 'white',
+  },
+  top: {
+    marginTop: 50,
+    paddingHorizontal: 30,
+  },
+  subtitle: {
+    fontSize: 15,
+    color: 'black',
+    fontFamily: 'Roboto-Regular',
+    marginTop: 5,
+    maxWidth: '85%',
+  },
+  imageButton: {
+    width: 30, height: 30,
+    marginBottom: 10,
+  },
+
+  label: {
+    fontSize: 16,
+    color: 'white',
+    fontFamily: 'Roboto-Bold',
+    marginBottom: 6,
+    marginTop: 16,
+  },
+  input: {
+    height: 42,
+    width: '90%',
+    backgroundColor: '#FFFDEB',
+    borderRadius: 7,
+    paddingHorizontal: 12,
+    fontFamily: 'Roboto-Regular',
+    fontSize: 14,
+    marginBottom: 10,
+    alignSelf: 'center',
+  },
+  imageButton2: {
+    width: 30, height: 30,
   },
   error: {
     color: 'red',

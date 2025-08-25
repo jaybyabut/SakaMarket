@@ -1,6 +1,7 @@
 import { useNavigation } from 'expo-router';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-
+import { Dimensions, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+const { width, height } = Dimensions.get('window');
 export default function ConfirmationScreen() {
   const navigation = useNavigation();
 
@@ -34,22 +35,21 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'space-between', 
-    paddingVertical: 40,             
+         
   },
   contentContainer: {
-    flexGrow: 1,                    
+    flex: 1,                  
     justifyContent: 'center',
     alignItems: 'center',
-    width: 280,
+    alignSelf: 'center',
+    width: width * 0.8,
   },
   checkmark: {
-    width: 216,
-    height: 216,
+    width: width * 0.5,
+    height: width * 0.5,
   },
   success: {
-    fontSize: 48,
+    fontSize: RFValue(48),
     fontFamily: 'Roboto-Bold',
     marginTop: 5,
     marginBottom: 5,
@@ -57,17 +57,19 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   message: {
-    fontSize: 20,
+    fontSize: RFValue(16),
     fontFamily: 'Roboto',
-    marginBottom: 40,
     textAlign: 'center',
     height: 'fit-content',
     width: '100%',
   },
   jumpToLogin: {
+    position: 'absolute',
+    bottom: height * 0.05,
+    alignSelf: 'center',
     backgroundColor: '#10AF7C',
-    width: 319,
-    height: 55,
+    width: width * 0.7,
+    height: height * 0.07,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   loginText: {
-    fontSize: 20,
+    fontSize: RFValue(15),
     fontFamily: 'Roboto',
     textAlign: 'center',
     color: 'rgb(255,255,255)'
