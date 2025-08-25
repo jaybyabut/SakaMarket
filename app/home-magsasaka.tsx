@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   // ---------- Main Containers ----------
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#E6F5EC",
   },
   gridContainer: {
     flexDirection: "row",
