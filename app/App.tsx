@@ -30,14 +30,14 @@ const LandingPage = ({ navigation = { navigate: () => {} } }) => {
             end={{ x: 1, y: 0 }}
             style={styles.signInButton}
           >
-          <Pressable onPress={() => router.push('/home-magsasaka')}>
+          <Pressable onPress={() => router.push('/signIn')}>
                 <Text style={styles.signInText}>Mag-sign in sa Account</Text>
           </Pressable>
         </LinearGradient>
 
 
         {/* Create Account Button */}
-        <Pressable style={styles.createButton} onPress={() => router.push('/home-buyer')}>
+        <Pressable style={styles.createButton} onPress={() => router.push('/signUp')}>
           <Text style={styles.createText}>Gumawa ng Account</Text>
         </Pressable>
       </View>
