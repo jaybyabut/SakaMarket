@@ -251,7 +251,8 @@ export default function Magsasakaregister() {
                   backgroundColor: "#10AF7C",
                   paddingVertical: 10,
                   borderRadius: 8,
-                  marginBottom: 10
+                  marginBottom: 10,
+                  width: '95%',
                 }}
                 onPress={requestOtp}
               >
@@ -479,6 +480,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
+    width: '95%',
   },
   verifyButton: {
     backgroundColor: '#10AF7C',
