@@ -1,23 +1,43 @@
+import { useFocusEffect } from "@react-navigation/native";
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  BackHandler,
+  Dimensions,
   Image,
+  KeyboardAvoidingView,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
-  View,
+  View
 } from 'react-native';
+import { RFValue } from "react-native-responsive-fontsize";
+
+const { width, height } = Dimensions.get('window');
 
 export default function SignInScreen() {
+
   const router = useRouter();
   const [form, setForm] = useState({ phone: '', pin: '' });
   const [error, setError] = useState('');
   const [inputErrors, setInputErrors] = useState({ phone: false, pin: false });
   const [loading, setLoading] = useState(false);
+
+  const lastBackPress = useRef(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        router.push('/App');
+        return true; // handled
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);}
+    ),)
 
   const handleSubmit = async () => {
     const { phone, pin } = form;
@@ -61,7 +81,6 @@ export default function SignInScreen() {
   };
 
   return (
-    <View style={styles.page}>
       <View style={styles.container}>
         {/* Logo & Name */}
         <View style={styles.logoWrapper}>
@@ -70,36 +89,53 @@ export default function SignInScreen() {
             style={styles.logoImage}
             resizeMode="contain"
           />
+<<<<<<< HEAD
           <View style={styles.nameDiv}>
             <Image
               source={require('../assets/STARTer/LandingPage/logo-name.png')}
               resizeMode="contain"
             />
           </View>
+=======
+          <Image
+            source={require('../assets/STARTer/Landing Page/logo-name.png')}
+            resizeMode="contain"
+          />
+>>>>>>> 58693b25bf00e41b18a8f0208a98386d84b5cd87
         </View>
 
         {/* Form */}
         <View style={styles.signInSection}>
           <Text style={styles.signInTitle}>Sign In</Text>
 
-          <View style={styles.labelAndInput}>
-            <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              style={[styles.inputBar, inputErrors.phone && { borderColor: 'red' }]}
-              keyboardType="phone-pad"
-              onChangeText={(text) => setForm((prev) => ({ ...prev, phone: text }))}
-            />
-          </View>
+          <KeyboardAvoidingView 
+          style={styles.labelAndInput}
+          behavior={"height"}>
 
-          <View style={styles.labelAndInput}>
-            <Text style={styles.label}>PIN</Text>
-            <TextInput
-              style={[styles.inputBar, inputErrors.pin && { borderColor: 'red' }]}
-              secureTextEntry
-              keyboardType="numeric"
-              onChangeText={(text) => setForm((prev) => ({ ...prev, pin: text }))}
-            />
-          </View>
+
+            <View style = {styles.textAndField}>
+              <Text style={styles.label}>Phone Number</Text>
+              <TextInput
+                style={[styles.inputBar, inputErrors.phone && { borderColor: 'red' }]}
+                keyboardType="phone-pad"
+                onChangeText={(text) => setForm((prev) => ({ ...prev, phone: text }))}
+              />
+            </View>
+
+            <View style = {styles.textAndField}>
+              <Text style={styles.label}>PIN</Text>
+              <TextInput
+                style={[styles.inputBar, inputErrors.pin && { borderColor: 'red' }]}
+                secureTextEntry
+                keyboardType="numeric"
+                onChangeText={(text) => setForm((prev) => ({ ...prev, pin: text }))}
+              />
+            </View>
+
+
+          </KeyboardAvoidingView>
+
+            
         </View>
 
         {/* Error Text */}
@@ -129,31 +165,24 @@ export default function SignInScreen() {
           </Pressable>
         </View>
       </View>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  page: {
+  container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  container: {
-    width: 364,
-    height: 723,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    backgroundColor: '#FFF'
   },
   logoWrapper: {
+    flex: 0.5,
     flexDirection: 'row',
-    width: 287,
-    height: 77,
+    backgroundColor: 'transparent',
     alignItems: 'center',
+    backgroundColor: 'transparent'
   },
   logoImage: {
-    width: 61.87,
+    width: '15%',
     height: '100%',
     marginRight: 10,
   },
@@ -163,30 +192,29 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   signInSection: {
+    gap: height * 0.03,
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   signInTitle: {
-    fontSize: 60,
-    width: 198,
-    marginBottom: 31,
+    fontSize: RFValue(40),
     textAlign: 'center',
     fontFamily: 'Roboto-SemiBold',
   },
   labelAndInput: {
-    marginBottom: 15,
-    width: 364,
-    height: 88,
+    backgroundColor: 'transparent',
+    gap: height * 0.03
   },
   label: {
-    fontSize: 16,
-    marginBottom: 10,
+    fontSize: RFValue(15),
     fontFamily: 'Roboto-Bold',
   },
   inputBar: {
-    width: 358,
-    height: 59,
+    width: width * 0.85,
+    height: height * 0.07,
+    fontSize: RFValue(15),
     borderColor: '#6E6565',
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 8,
     paddingHorizontal: 15,
     backgroundColor: 'white',
@@ -197,13 +225,15 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   buttons: {
-    height: 93,
-    justifyContent: 'space-between',
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent',
+    gap: '6%'
   },
   signInGradient: {
-    width: 279,
-    height: 63,
+    height: height * 0.08,
+    paddingHorizontal: '10%',
     borderRadius: 12,
     overflow: 'hidden',
   },
@@ -215,13 +245,14 @@ const styles = StyleSheet.create({
   },
   signInText: {
     color: 'white',
-    fontSize: 20,
+    fontSize: RFValue(17),
     fontFamily: 'Roboto-Medium',
   },
   noAccText: {
-    marginTop: 10,
-    fontSize: 17,
-    fontFamily: 'Roboto-Medium',
-    color: '#000',
+     fontSize: RFValue(15),
+     fontFamily: 'Roboto-Medium',
   },
+  textAndField: {
+    gap: height * 0.01,
+  }
 });

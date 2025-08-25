@@ -21,7 +21,7 @@ export default function removeConfirmation(item: itemCardProps["item"]) {
     [
       {
         text: 'Hindi',
-        onPress: () => null,
+        onPress: () => console.log("hindi"),
         style: 'cancel',
       },
 
