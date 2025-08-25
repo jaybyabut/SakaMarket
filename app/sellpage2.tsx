@@ -1,250 +1,366 @@
+import * as ImagePicker from "expo-image-picker";
+import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import * as ImagePicker from 'expo-image-picker';
 import { router } from "expo-router";
 import { useLayoutEffect, useState } from "react";
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { RFValue } from "react-native-responsive-fontsize";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {
+  Alert,
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
+const { width, height } = Dimensions.get("window");
 
+// ----- ButtonWithText Component -----
+function ButtonWithText({ icon, label, reverse, onPress, disabled = false }) {
+  return (
+    <Pressable
+      style={[styles.buttonWithText, { opacity: disabled ? 0.5 : 1 }]}
+      onPress={!disabled ? onPress : null}
+    >
+      {reverse && <Image source={icon} style={styles.buttonIcon} />}
+      <Text style={styles.buttonText}>{label}</Text>
+      {!reverse && <Image source={icon} style={styles.buttonIcon} />}
+    </Pressable>
+  );
+}
 
+// ----- UploadField Component -----
+function UploadField({ label = "", image, onPick, invalid }) {
+  return (
+    <View style={{ marginBottom: 15 }}>
+      <Text style={[styles.label, invalid && { color: "red" }]}>{label}</Text>
+      <Pressable
+        style={[
+          styles.dropArea,
+          invalid && { borderColor: "red", borderWidth: 2 },
+        ]}
+        onPress={onPick}
+      >
+        {image ? (
+          <Image
+            source={{ uri: image }}
+            style={{ width: "100%", height: "100%", borderRadius: 10 }}
+          />
+        ) : (
+          <Text style={styles.uploadText}>Pindutin Upang Makapili</Text>
+        )}
+      </Pressable>
+    </View>
+  );
+}
+
+// ----- Main Component -----
 export default function Magsasakaregister() {
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
-  const navigation = useNavigation();
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [touched, setTouched] = useState(false);
 
-const handleNext = () => {
-    const data = { name, price, description, amount, image };
-    // go to confirm page with params
-    router.push({ pathname: "/sellpage3", params: data });
-  };
+  const navigation = useNavigation();
 
-  const navBack = () => {
-    router.push("/sellpage1") 
-  };
-  /*const navNext = () => {
-    router.push("/sellpage3") 
-  };*/
+  useLayoutEffect(() => {
+    navigation.setOptions({ title: "Magsasaka Register Page" });
+  }, [navigation]);
 
   const pickImage = async () => {
-    // Ask for permission
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission denied', 'We need access to your photos!');
+    if (status !== "granted") {
+      Alert.alert("Permission denied", "We need access to your photos!");
       return;
     }
-    
-    // Launch picker
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       allowsEditing: true,
     });
-
     if (!result.canceled) {
-      setImage(result.assets[0].uri); // Store image URI
+      setImage(result.assets[0].uri);
     }
   };
-  useLayoutEffect(() => {
-    navigation.setOptions({ title: "Magsasaka Register Page" });
-  }, [navigation]);
+
+  const isFormValid = name && price && amount && description && image;
+
+  const handleNext = () => {
+    setTouched(true); // show validation borders
+    if (!isFormValid) return; // block navigation if invalid
+
+    const data = { name, price, amount, description, image };
+    router.push({ pathname: "/sellpage3", params: data });
+  };
 
   return (
     <View style={styles.container}>
-      {/* Background Shape */}
-      <View style={styles.whiteBackground} />
-      <View style={styles.backgroundShape} />
-      {/* Foreground Content */}
-      <View style={styles.top}>
-        <Text style={styles.header}>Magbenta ng Tanim</Text>
-        <Text style={styles.subtitle}>Punan ang mga sumusunod na detalye</Text>
-      </View>
-      <View style={styles.content}>
-        <Text style={styles.label}>Pangalan ng Produkto</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="(hal. Bigas, Mais, Talong)"
-          value={name}
-          onChangeText={setName}
-          multiline
-        />
-        <Text style={styles.label}>Presyo ng Produkto (Per Kilo)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="(hal. P20, P30, P40)"
-          value={price}
-          onChangeText={setPrice}
-          multiline
-        />
-        <Text style={styles.label}>Dami ng Produkto (Kilo)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="(hal. 10kg, 20kg, 30kg)"
-          value={amount}
-          onChangeText={setAmount}
-          multiline
-        />
-        <Text style={styles.label}>Imahe ng Produkto</Text>
-        <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-          <Text style={styles.uploadButtonText}>Pindutin Upang Makapili</Text>
-        </TouchableOpacity>
+      {/* Header */}
+      <View style={styles.textSection}>
+        <Pressable style={styles.backPosition} onPress={() => router.back()}>
+          <Image
+            style={styles.backIcon}
+            source={require("../assets/STARTer/back-icon.png")}
+          />
+        </Pressable>
 
-        <Text style={styles.label}>Deskripsyon ng Produkto (Kilo)</Text>
-        <TextInput
-          style={styles.inputDesc}
-          placeholder="Ilagay ang detalyadong impormasyon tungkol sa produkto"
-          value={description}
-          onChangeText={setDescription}
-          multiline
-        />
-        <View style={styles.nav}>
-          <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
-            <Image
-              source={require("../assets/images/Back To.png")}
-              style={styles.imageButton2}
+        <View style={styles.headerTextSection}>
+          <Text style={styles.mainText}>Magbenta ng Tanim</Text>
+          <Text style={styles.subText}>Pakilagay ang mga detalye</Text>
+        </View>
+      </View>
+
+      {/* Green Form Container */}
+      <LinearGradient
+        colors={[
+          "#10AF7C",
+          "#28B47B",
+          "#5ABE7A",
+          "#86C778",
+          "rgba(134,199,120,0.87)",
+        ]}
+        style={styles.greenContainer}
+      >
+        <View style={styles.scrollViewContainer}>
+          <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={true}
+          >
+            {/* Name */}
+            <Text style={[styles.label, touched && !name && { color: "red" }]}>
+              Pangalan ng Produkto
+            </Text>
+            <TextInput
+              style={[
+                styles.input,
+                touched && !name && { borderColor: "red", borderWidth: 2 },
+              ]}
+              placeholder="(hal. Bigas, Mais, Talong)"
+              value={name}
+              onChangeText={setName}
             />
-          </TouchableOpacity>
-          <Text style={styles.navText2}>BUMALIK</Text>
-          <Text style={styles.navText}>SUNOD</Text>
-          <TouchableOpacity onPress={handleNext} activeOpacity={0.7}>
-            <Image
-              source={require("../assets/images/Next Page.png")}
-              style={styles.imageButton}
+
+            {/* Price */}
+            <Text style={[styles.label, touched && !price && { color: "red" }]}>
+              Presyo ng Produkto (Per Kilo)
+            </Text>
+            <TextInput
+              style={[
+                styles.input,
+                touched && !price && { borderColor: "red", borderWidth: 2 },
+              ]}
+              placeholder="(hal. P20, P30, P40)"
+              value={price}
+              onChangeText={setPrice}
             />
-          </TouchableOpacity>
+
+            {/* Amount */}
+            <Text style={[styles.label, touched && !amount && { color: "red" }]}>
+              Dami ng Produkto (Kilo)
+            </Text>
+            <TextInput
+              style={[
+                styles.input,
+                touched && !amount && { borderColor: "red", borderWidth: 2 },
+              ]}
+              placeholder="(hal. 10kg, 20kg, 30kg)"
+              value={amount}
+              onChangeText={setAmount}
+            />
+
+            {/* Image Upload */}
+            <UploadField
+              label="Imahe ng Produkto"
+              image={image}
+              onPick={pickImage}
+              invalid={touched && !image}
+            />
+
+            {/* Description */}
+            <Text
+              style={[styles.label, touched && !description && { color: "red" }]}
+            >
+              Deskripsyon ng Produkto
+            </Text>
+            <TextInput
+              style={[
+                styles.inputDesc,
+                touched && !description && { borderColor: "red", borderWidth: 2 },
+              ]}
+              placeholder="Ilagay ang detalyadong impormasyon tungkol sa produkto"
+              value={description}
+              onChangeText={setDescription}
+              multiline
+            />
+          </KeyboardAwareScrollView>
+        </View>
+        
+      </LinearGradient>
+
+      {/* Bottom Buttons */}
+      <View style={styles.buttons}>
+        <View>
+          <Pressable
+            style={styles.buttonWithText}
+            onPress={handleNext}
+          >
+            <Text
+              style={styles.buttonText}
+            >
+              SUNOD
+            </Text>
+            <Image
+              source={require("../assets/STARTer/Farmer Verification/next-page.png")}
+              style={styles.buttonIcon}
+            />
+          </Pressable>
         </View>
       </View>
     </View>
   );
 }
 
+// ----- Styles -----
+const MAX_WIDTH = 338;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
+    backgroundColor: "#E6F5EC",
+    //alignItems: "center",
   },
-  backgroundShape: {
-    position: 'absolute',
-    width: 450,
-    height: 830,
-    backgroundColor: '#10AF7C',
-    borderRadius: 70, // circle
-    bottom: -100,
-    zIndex: -1, // Send behind other components
-    left: -20
-  },
-  top: {
-    flex: 1
-    ,
-  },
-  header: {
-    fontSize: 30,
-    color: 'black',
-    fontFamily: 'Roboto-Bold',
-    top: 60,
-    left: 40
-  },
-  subtitle: {
-    fontSize: 15,
-    color: 'black',
-    fontFamily: 'Roboto-Regular',
-    top: 59,
-    left: 40
-  },
-  content: {
+  greenContainer: {
+    top: "4%",
     flex: 5,
-    padding: 20,
+    width: width * 1.16, 
+    borderTopLeftRadius: 80,
+    borderTopRightRadius: 80,
+    shadowColor: "#000",
+    shadowOpacity: 0.51,
+    shadowRadius: 8.7,
+    shadowOffset: { width: 17, height: 4 },
+    elevation: 4,
+    zIndex: 2,
+    alignSelf: "center",
   },
+  scrollViewContainer: {
+    top: "4%",
+    height: height * 0.652,
+    width: MAX_WIDTH,
+    alignSelf: "center",
+    
+  },
+
+  // ==== Header & Back Button ====
+  textSection: {
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+  },
+  headerTextSection: {
+    position: "relative",
+    top: height * 0.04,
+  },
+  mainText: {
+    textAlign: "center",
+    fontSize: RFValue(27),
+    fontFamily: "Roboto-Bold",
+  },
+  subText: {
+    textAlign: "center",
+    fontSize: RFValue(14),
+    width: width * 0.9, // same as FarmerVerificationScreen
+  },
+
+
+  backPosition: {
+    position: "absolute",
+    width: height * 0.03,
+    height: height * 0.03,
+    zIndex: 1,
+    left: width * 0.04,
+    top: height * 0.04,
+  },
+  backIcon: {
+    width: "100%",
+    height: "100%",
+  },
+  
+
+  // ==== Form Inputs ====
   label: {
-    fontSize: 20,
-    marginBottom: 8,
-    color: 'white',
-    fontFamily: 'Roboto-Regular',
-    left: 20,
+    fontSize: RFValue(13),
+    fontFamily: "Roboto-Medium",
+    marginBottom: 10,
+    color: "#FFF",
   },
   input: {
-    height: 50,
-    width: '85%',
-    padding: 10,
-    borderRadius: 10,
-    marginLeft: 20,
-    backgroundColor: '#FFFDEB',
-    textAlignVertical: 'top',
-    fontFamily: 'Roboto-Regular',
-    fontSize: 20,
-    marginBottom: 20
-  },
-  imagePreview: {
-    width: '100%',
-    height: 200,
-    marginTop: 20,
-    borderRadius: 10,
-    resizeMode: 'cover',
-  },
-  uploadButton: {
-    backgroundColor: '#FFFDEB',
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 10,
-    alignItems: 'center',
-    width: '85%',
-    marginLeft: 20,
-    marginBottom: 20,
-  },
-  uploadButtonText: {
-    color: 'black',
-    fontSize: 20,
-    fontFamily: 'Roboto-Regular',
+    backgroundColor: "#FFFDEB",
+    padding: 12,
+    borderRadius: 12,
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+    marginBottom: 12,
+    width: MAX_WIDTH,
   },
   inputDesc: {
-    height: 150,
-    width: '85%',
-    padding: 10,
+    backgroundColor: "#FFFDEB",
+    padding: 12,
+    borderRadius: 12,
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+    height: 120,
+    textAlignVertical: "top",
+    marginBottom: 20,
+    width: MAX_WIDTH,
+  },
+  dropArea: {
+    height: 120,
+    width: MAX_WIDTH,
     borderRadius: 10,
-    marginLeft: 20,
-    backgroundColor: '#FFFDEB',
-    textAlignVertical: 'top',
-    fontFamily: 'Roboto-Regular',
-    fontSize: 20,
-    marginBottom: 20
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFDEB",
+    elevation: 4,
+    marginBottom: 12,
   },
-  nav: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginTop: 20,
-    marginRight: 20,
+  uploadText: {
+    color: "#8F8E8E",
+    fontSize: RFValue(12),
+    fontFamily: "Roboto-Regular",
   },
-  imageButton: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
+
+  // ==== Bottom Buttons ====
+  buttons: {
+    position: "absolute",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    width: width * 0.8,
+    height: 47,
+    bottom: "2%",
+    alignSelf: "center",
+    zIndex: 3,
   },
-  imageButton2: {
-    width: 30,
-    height: 30,
-    marginRight: 5,
+  buttonWithText: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
   },
-  navText: {
-    fontSize: 20,
-    color: 'white',
-    fontFamily: 'Roboto-Bold',
-    marginRight: 5,
+  buttonIcon: {
+    width: 29,
+    height: 29,
+    resizeMode: "contain",
   },
-  navText2: {
-    fontSize: 20,
-    color: 'white',
-    fontFamily: 'Roboto-Bold',
-    marginRight: 105,
+  buttonText: {
+    color: "white",
+    fontSize: RFValue(15),
+    fontFamily: "Roboto-Bold",
   },
-  whiteBackground: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'white', // Solid white background
-    zIndex: -2, // Behind everything
-  },
+  leftButton: { flex: 1, alignItems: "flex-start" },
+  rightButton: { flex: 1, alignItems: "flex-end" },
 });
