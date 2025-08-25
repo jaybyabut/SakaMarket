@@ -38,6 +38,9 @@ export default function FarmerVerificationScreen() {
   };
 
   const handleSubmit = async () => {
+    console.log("Got params:", params);
+    console.log("user_id:", params.user_id); // should log "109"
+
     const missing = [];
     if (!selfie) missing.push('selfie');
     if (!govID) missing.push('govID');
@@ -51,8 +54,8 @@ export default function FarmerVerificationScreen() {
     formData.append('last_name', params.last_name);
     formData.append('address', params.address);
     formData.append('phone', params.phone);
-    formData.append('code', params.code);
     formData.append('pin', params.pin);
+    formData.append('user_id', params.user_id);
     formData.append('role', 'farmer');
 
     formData.append('selfie', {
@@ -70,6 +73,11 @@ export default function FarmerVerificationScreen() {
       name: 'farm_doc.jpg',
       type: 'image/jpeg',
     });
+
+console.log("Submitting FormData:");
+for (let pair of formData.entries()) {
+  console.log(pair[0] + ": " + pair[1]);
+}
 
 try {
   const response = await fetch('http://10.0.2.2/database/farmerRegister.php', {

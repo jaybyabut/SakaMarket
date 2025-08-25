@@ -1,6 +1,6 @@
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient'; // Gradient background styling
+import { useRouter } from 'expo-router'; // Navigation between screens
+import { useState } from 'react'; // React hook for state management
 import {
   Dimensions,
   Image,
@@ -13,22 +13,38 @@ import { RFValue } from 'react-native-responsive-fontsize';
 const { width, height } = Dimensions.get('window');
 
 
+//Farmer registration page
 export default function Magsasakaregister() {
   const router = useRouter();
 
+  //INPUT FIELD STATES
+  //State variables to store user's personal details (empty initially)
+  // First name, Middle name, Last Name
+  // Address
+  // Phone number 
+  // Pin, Verify pin
   const [nameFirst, setNameFirst] = useState('');
   const [nameMiddle, setNameMiddle] = useState('');
   const [nameLast, setNameLast] = useState('');
   const [address, setAddress] = useState('');
   const [number, setNumber] = useState('');
-  const [verify, setVerify] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  //VALIDATION AND STATUS STATES
   const [error, setError] = useState('');
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [success, setSuccess] = useState('');
-  const role = 'farmer';
+  const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
+  //OTP (One-Time Password) STATES
+  const [otpMessage, setOtpMessage] = useState(""); //feedback from backend (otpRequest.php)
+  const [otpSuccess, setOtpSuccess] = useState(false);
+  const [userId, setUserId] = useState<number | null>(null);
+  const [verify, setVerify] = useState(""); // OTP input
+
+  //Make sure all fields are filled up and 
+  //OTP is verified
   const isFormComplete =
     nameFirst &&
     nameMiddle &&
@@ -37,36 +53,43 @@ export default function Magsasakaregister() {
     number &&
     verify &&
     password &&
-    confirmPassword;
+    confirmPassword &&
+    otpSuccess; 
 
-  const [invalidFields, setInvalidFields] = useState<string[]>([]);
-
+  // Updated validation
   const validateFields = () => {
     const errors: string[] = [];
+    const invalids: string[] = [];
 
-    if (!nameFirst || !nameMiddle || !nameLast) {
-      errors.push('Pakilagay ang buong pangalan.');
-    }
-
-    if (!address) {
-      errors.push('Pakilagay ang address.');
-    }
+    if (!nameFirst) invalids.push("nameFirst");
+    if (!nameMiddle) invalids.push("nameMiddle");
+    if (!nameLast) invalids.push("nameLast");
+    if (!address) invalids.push("address");
 
     if (!number || number.length < 11) {
-      errors.push('Di-wastong numero ng telepono.');
+      errors.push("Di-wastong numero ng telepono.");
+      invalids.push("number");
     }
 
     if (!verify || verify.length !== 6) {
-      errors.push('Di-wastong verification code.');
+      errors.push("Di-wastong verification code.");
+      invalids.push("verify");
     }
 
     if (!password || !confirmPassword) {
-      errors.push('Parehong PIN ay kinakailangan.');
+      errors.push("Parehong PIN ay kinakailangan.");
+      invalids.push("password");
     } else if (password !== confirmPassword) {
-      errors.push('Hindi magkatugma ang PIN.');
+      errors.push("Hindi magkatugma ang PIN.");
+      invalids.push("password");
+    } else if (!/^\d{4,6}$/.test(password)) {
+      errors.push("Ang PIN ay dapat 4 hanggang 6 na numero.");
+      invalids.push("password");
     }
 
     setErrorMessages(errors);
+    setInvalidFields(invalids);
+
     return errors.length === 0;
   };
 
@@ -87,24 +110,85 @@ export default function Magsasakaregister() {
     elevation: 4,
   });
 
+  // Request OTP
+  const requestOtp = async () => {
+    try {
+      const response = await fetch("http://10.0.2.2/database/otpRequest.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: number,
+          pin: password,
+        }),
+      });
+      const data = await response.json();
+      console.log("OTP Request Response:", data);
 
-const handleSubmit = () => {
-  if (!validateFields()) return;
+      if (data.success) {
+        setUserId(data.user_id); // save the user_id for verification
+        alert(`OTP sent! (DEV: ${data.otp})`);
+      } else {
+        alert("Error requesting OTP: " + data.message);
+      }
+    } catch (error) {
+      console.error("Request error:", error);
+      alert("Failed to request OTP");
+    }
+  };
 
-  router.push({
-    pathname: '/farmer-verification',
-    params: {
-      first_name: nameFirst,
-      middle_name: nameMiddle,
-      last_name: nameLast,
-      address,
-      phone: number,
-      code: verify,
-      pin: password,
-    },
-  });
-};
+  // Verify OTP
+  const handleVerifyOtp = async () => {
+    if (!userId) {
+      alert("Missing user ID. Please request OTP first.");
+      return;
+    }
+    
+    try {
+      const response = await fetch("http://10.0.2.2/database/otpVerify.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: userId,
+          otp: verify, // OTP entered by user
+        }),
+      });
 
+      const data = await response.json();
+      console.log("OTP Verify Response:", data);
+      console.log("OTP Request JSON:", data);
+      console.log("Extracted user_id:", data.user_id);
+
+      if (data.success) {
+        setOtpSuccess(true);      // ✅ allow NEXT button
+        setOtpMessage("OTP verified successfully!");
+        alert("OTP verified! Phone number saved.");
+      } else {
+        setOtpSuccess(false);
+        setOtpMessage("Verification failed: " + data.message);
+      }
+
+    } catch (error) {
+      console.error("Verify error:", error);
+      alert("Failed to verify OTP");
+    }
+  };
+
+  const handleSubmit = () => {
+    if (!validateFields()) return;
+
+    router.push({
+      pathname: '/farmer-verification',
+      params: {
+        first_name: nameFirst,
+        middle_name: nameMiddle,
+        last_name: nameLast,
+        address,
+        phone: number,
+        user_id: String(userId),
+        pin: password,
+      },
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -136,13 +220,13 @@ const handleSubmit = () => {
                 onChangeText={setNameFirst}
               />
               <TextInput
-                style={inputStyle('default')}
+                style={inputStyle('default', invalidFields.includes('nameMiddle'))}
                 placeholder="Gitnang Pangalan (Hal. Reyes)"
                 value={nameMiddle}
                 onChangeText={setNameMiddle}
               />
               <TextInput
-                style={inputStyle('default')}
+                style={inputStyle('default', invalidFields.includes('nameLast'))}
                 placeholder="Apelyido (Hal. Dela Cruz)"
                 value={nameLast}
                 onChangeText={setNameLast}
@@ -155,25 +239,77 @@ const handleSubmit = () => {
               />
 
               <Text style={styles.label}>Contact Details</Text>
-              <TextInput style={inputStyle('number')} placeholder="Numero ng Telepono (Hal. 09123456789)" value={number} onChangeText={setNumber} keyboardType="phone-pad" />
-              <TextInput style={inputStyle('verify')} placeholder="Verification Code (Hal. 123456)" value={verify} onChangeText={setVerify} keyboardType="numeric" />
+              <TextInput
+                style={inputStyle('number', invalidFields.includes('number'))}
+                placeholder="Numero ng Telepono (Hal. 09123456789)"
+                value={number}
+                onChangeText={setNumber}
+                keyboardType="phone-pad"
+              />
+              <Pressable
+                style={{
+                  backgroundColor: "#10AF7C",
+                  paddingVertical: 10,
+                  borderRadius: 8,
+                  marginBottom: 10
+                }}
+                onPress={requestOtp}
+              >
+                <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>
+                  Get OTP
+                </Text>
+              </Pressable>
+              <View style={styles.verificationRow}>
+                <TextInput
+                  style={[inputStyle("verify", invalidFields.includes('verify')), { flex: 1 }]}
+                  placeholder="Verification Code"
+                  value={verify}
+                  onChangeText={setVerify}
+                  keyboardType="numeric"
+                />
+
+                <Pressable
+                  style={styles.verifyButton}
+                  onPress={handleVerifyOtp}
+                >
+                  <Text style={{ color: "white", fontWeight: "bold" }}>Verify</Text>
+                </Pressable>
+              </View>
+
+              {otpMessage ? (
+                <Text style={{ color: otpSuccess ? "green" : "red", marginTop: 5 }}>
+                  {otpMessage}
+                </Text>
+              ) : null}
 
               <Text style={styles.label}>PIN</Text>
-              <TextInput style={inputStyle('password')} placeholder="Gumawa ng PIN" secureTextEntry value={password} onChangeText={setPassword} />
-              <TextInput style={inputStyle('password')} placeholder="Kumpirmahin ang PIN" secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword} />
+              <TextInput
+                style={inputStyle('password', invalidFields.includes('password'))}
+                placeholder="Gumawa ng PIN"
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TextInput
+                style={inputStyle('password', invalidFields.includes('password'))}
+                placeholder="Kumpirmahin ang PIN"
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+              />
 
               <View style={styles.alertContainer}>
                 {error ? <Text style={styles.error}>{error}</Text> : null}
                 {success ? <Text style={styles.success}>{success}</Text> : null}
                 {errorMessages.length > 0 && (
-                <View>
-                  {errorMessages.map((msg, index) => (
-                    <Text key={index} style={{color: 'red', marginBottom: 3 }}>
-                      {msg}
-                    </Text>
-                  ))}
-                </View>
-              )}
+                  <View>
+                    {errorMessages.map((msg, index) => (
+                      <Text key={index} style={{ color: 'red', marginBottom: 3 }}>
+                        {msg}
+                      </Text>
+                    ))}
+                  </View>
+                )}
               </View>
           </KeyboardAwareScrollView>
           </View>
@@ -249,17 +385,18 @@ const styles = StyleSheet.create({
     
 
   },
-  inputField: {
+  content: {
     width: '100%',
     maxWidth: 338,
     alignSelf: 'center',
     elevation: 10,
   },
-  inputLabel: {
+  label: {
     fontSize: 16,
     color: 'white',
-    fontFamily: 'Roboto-Medium',
-    marginBottom: 5,
+    fontFamily: 'Roboto-Bold',
+    marginBottom: 6,
+    marginTop: 16,
   },
   buttons: {
     position: 'absolute',
@@ -336,5 +473,21 @@ const styles = StyleSheet.create({
   alertContainer: {
     marginTop: 5,
     marginBottom: 15,
+  },
+  verificationRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  verifyButton: {
+    backgroundColor: '#10AF7C',
+    height: 46,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginLeft: 10,
+    marginTop: -8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
