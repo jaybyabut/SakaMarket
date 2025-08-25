@@ -164,5 +164,139 @@ export default function Magsasakaregister() {
 
 const MAX_WIDTH = 338;
 const styles = StyleSheet.create({
-  // ... keep your original styles (unchanged) ...
+  container: {
+    flex: 1,
+    backgroundColor: "#E6F5EC",
+    //alignItems: "center",
+  },
+  greenContainer: {
+    top: "4%",
+    flex: 5,
+    width: width * 1.16, 
+    borderTopLeftRadius: 80,
+    borderTopRightRadius: 80,
+    shadowColor: "#000",
+    shadowOpacity: 0.51,
+    shadowRadius: 8.7,
+    shadowOffset: { width: 17, height: 4 },
+    elevation: 4,
+    zIndex: 2,
+    alignSelf: "center",
+  },
+  scrollViewContainer: {
+    top: "4%",
+    height: height * 0.652,
+    width: MAX_WIDTH,
+    alignSelf: "center",
+    
+  },
+
+  // ==== Header & Back Button ====
+  textSection: {
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+  },
+  headerTextSection: {
+    position: "relative",
+    top: height * 0.04,
+  },
+  mainText: {
+    textAlign: "center",
+    fontSize: RFValue(27),
+    fontFamily: "Roboto-Bold",
+  },
+  subText: {
+    textAlign: "center",
+    fontSize: RFValue(14),
+    width: width * 0.9, // same as FarmerVerificationScreen
+  },
+
+
+  backPosition: {
+    position: "absolute",
+    width: height * 0.03,
+    height: height * 0.03,
+    zIndex: 1,
+    left: width * 0.04,
+    top: height * 0.04,
+  },
+  backIcon: {
+    width: "100%",
+    height: "100%",
+  },
+  
+
+  // ==== Form Inputs ====
+  label: {
+    fontSize: RFValue(13),
+    fontFamily: "Roboto-Medium",
+    marginBottom: 10,
+    color: "#FFF",
+  },
+  input: {
+    backgroundColor: "#FFFDEB",
+    padding: 12,
+    borderRadius: 12,
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+    marginBottom: 12,
+    width: MAX_WIDTH,
+  },
+  inputDesc: {
+    backgroundColor: "#FFFDEB",
+    padding: 12,
+    borderRadius: 12,
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+    height: 120,
+    textAlignVertical: "top",
+    marginBottom: 20,
+    width: MAX_WIDTH,
+  },
+  dropArea: {
+    height: 120,
+    width: MAX_WIDTH,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFDEB",
+    elevation: 4,
+    marginBottom: 12,
+  },
+  uploadText: {
+    color: "#8F8E8E",
+    fontSize: RFValue(12),
+    fontFamily: "Roboto-Regular",
+  },
+
+  // ==== Bottom Buttons ====
+  buttons: {
+    position: "absolute",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    width: width * 0.8,
+    height: 47,
+    bottom: "2%",
+    alignSelf: "center",
+    zIndex: 3,
+  },
+  buttonWithText: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
+  buttonIcon: {
+    width: 29,
+    height: 29,
+    resizeMode: "contain",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: RFValue(15),
+    fontFamily: "Roboto-Bold",
+  },
+  leftButton: { flex: 1, alignItems: "flex-start" },
+  rightButton: { flex: 1, alignItems: "flex-end" },
 });
