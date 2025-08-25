@@ -340,7 +340,6 @@ export default function Magsasakaregister() {
       </LinearGradient>
 
       <View style={styles.buttons}>
-        
         <View>
           <Pressable
             style={styles.buttonWithText}

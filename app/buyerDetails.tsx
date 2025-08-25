@@ -221,10 +221,13 @@ export default function MamimiliRegister() {
           />
         </Pressable>
 
-        <Text style={styles.mainText}>Gumawa ng Account</Text>
-        <Text style={styles.subText}>
-          Ilagay ang iyong personal na impormasyon upang magpatuloy
-        </Text>
+
+        <View style={styles.headerTextSection}>
+          <Text style={styles.mainText}>Gumawa ng Account</Text>
+          <Text style={styles.subText}>
+            Ilagay ang iyong personal na impormasyon upang magpatuloy
+          </Text>
+        </View>
       </View>
 
       <LinearGradient
@@ -349,8 +352,10 @@ export default function MamimiliRegister() {
             </View>
           </KeyboardAwareScrollView>
         </View>
+      </LinearGradient>
 
-        <View style={styles.buttons}>
+      <View style={styles.buttons}>
+        <View>
           <Pressable
             style={styles.buttonWithText}
             onPress={handleSubmit}
@@ -367,52 +372,25 @@ export default function MamimiliRegister() {
             />
           </Pressable>
         </View>
-      </LinearGradient>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  // ---------- Layout Containers ----------
+  container: {
+    flex: 1,
+    backgroundColor: "#E6F5EC",
+  },
   scrollViewContainer: {
     top: "2%",
-    height: height * 0.70,
+    height: height * 0.667,
     width: width * 0.8,
     alignSelf: "center",
   },
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF",
-  },
-  backPosition: {
-    position: "absolute",
-    width: height * 0.03,
-    height: height * 0.03,
-    zIndex: 1,
-    left: width * 0.04,
-    top: height * 0.032,
-  },
-  backIcon: {
-    height: "100%",
-    width: "100%",
-  },
-
-  textSection: {
-    flex: 1,
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-  },
-  mainText: {
-    textAlign: "center",
-    fontSize: RFValue(25),
-    fontFamily: "Roboto-Bold",
-  },
-  subText: {
-    textAlign: "center",
-    fontSize: RFValue(17),
-    width: width * 0.8,
-  },
   greenContainer: {
+    top: "4%",
     flex: 5,
     width: width * 1.16,
     borderTopLeftRadius: 80,
@@ -431,14 +409,71 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     elevation: 10,
   },
+  textSection: {
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+  },
+  headerTextSection: {
+    position: "relative",
+    top: height * 0.04,
+  },
+  top: {
+    marginTop: 50,
+    paddingHorizontal: 30,
+  },
+
+  // ---------- Back Button ----------
+  backPosition: {
+    position: "absolute",
+    width: height * 0.03,
+    height: height * 0.03,
+    zIndex: 1,
+    left: width * 0.04,
+    top: height * 0.04,
+  },
+  backIcon: {
+    height: "100%",
+    width: "100%",
+  },
+
+  // ---------- Text ----------
+  mainText: {
+    textAlign: "center",
+    fontSize: RFValue(27),
+    fontFamily: "Roboto-Bold",
+  },
+  subText: {
+    textAlign: "center",
+    fontSize: RFValue(14),
+    width: width * 0.9,
+  },
+  subtitle: {
+    fontSize: RFValue(15),
+    color: "black",
+    fontFamily: "Roboto-Regular",
+    marginTop: 5,
+    maxWidth: "85%",
+  },
+  label: {
+    fontSize: RFValue(13),
+    color: "white",
+    fontFamily: "Roboto-Bold",
+    marginTop: 16,
+    marginBottom: 6,
+  },
+
+  // ---------- Buttons ----------
   buttons: {
     position: "absolute",
     flexDirection: "row",
     justifyContent: "flex-end",
     width: width * 0.8,
     height: 47,
-    bottom: 25,
+    bottom: "2%",
     alignSelf: "center",
+    zIndex: 3,
   },
   buttonWithText: {
     flexDirection: "row",
@@ -451,56 +486,9 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: RFValue(15),
     fontFamily: "Roboto-Bold",
     color: "white",
-  },
-  top: {
-    marginTop: 50,
-    paddingHorizontal: 30,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: "black",
-    fontFamily: "Roboto-Regular",
-    marginTop: 5,
-    maxWidth: "85%",
-  },
-  imageButton: {
-    width: 30,
-    height: 30,
-    marginBottom: 10,
-  },
-  label: {
-    fontSize: 16,
-    color: "white",
-    fontFamily: "Roboto-Bold",
-    marginBottom: 6,
-    marginTop: 16,
-  },
-  imageButton2: {
-    width: 30,
-    height: 30,
-  },
-  error: {
-    color: "red",
-    fontSize: 14,
-    marginLeft: 10,
-  },
-  success: {
-    color: "green",
-    fontSize: 14,
-    marginLeft: 10,
-  },
-  alertContainer: {
-    marginTop: 5,
-    marginBottom: 15,
-  },
-  verificationRow: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
   },
   verifyButton: {
     backgroundColor: "#10AF7C",
@@ -512,7 +500,42 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     elevation: 4,
-    fontSize: 14,
+    fontSize: RFValue(13),
     fontFamily: "Roboto-Bold",      
+  },
+
+  // ---------- Images ----------
+  imageButton: {
+    width: 30,
+    height: 30,
+    marginBottom: 10,
+  },
+  imageButton2: {
+    width: 30,
+    height: 30,
+  },
+
+  // ---------- Alerts / Validation ----------
+  error: {
+    color: "red",
+    fontSize: RFValue(12),
+    marginLeft: 10,
+  },
+  success: {
+    color: "green",
+    fontSize: RFValue(12),
+    marginLeft: 10,
+  },
+  alertContainer: {
+    marginTop: 5,
+    marginBottom: 15,
+  },
+
+  // ---------- Misc ----------
+  verificationRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
 });

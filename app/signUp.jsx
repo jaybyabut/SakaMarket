@@ -73,7 +73,7 @@ export default function SignupScreen() {
           </LinearGradient>
         </Pressable>
 
-        <Pressable style={styles.button} onPress={goToFarmer}>
+        <Pressable style={styles.button} onPress={goToBuyer}>
           <LinearGradient
             colors={[
               Colors.primaryGreen,

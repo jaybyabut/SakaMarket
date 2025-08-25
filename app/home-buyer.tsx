@@ -17,11 +17,8 @@ const logoImg: ImageSourcePropType = require("../assets/images/home-title.png");
 const homeTextImg: ImageSourcePropType = require("../assets/images/mamili-ng-gagawin.png");
 const bumiliImg: ImageSourcePropType = require("../assets/images/Bumili.png");
 const marketImg: ImageSourcePropType = require("../assets/images/Market.png");
-
 const accountImg: ImageSourcePropType = require("../assets/images/Account.png");
-
-const produktoImg: ImageSourcePropType = require("../assets/images/produkto.png");
-
+const produktoImg: ImageSourcePropType = require("../assets/images/Produkto.png");
 const logoutImg: ImageSourcePropType = require("../assets/images/open-pane.png");
 
 export default function HomeBuyer() {

@@ -41,7 +41,7 @@ export default function ConfirmationScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#E6F5EC",
   },
   contentContainer: {
     flex: 1,
