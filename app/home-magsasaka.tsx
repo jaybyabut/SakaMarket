@@ -6,23 +6,21 @@ import {
   Image,
   ImageSourcePropType,
   StyleSheet,
+  Pressable,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
+import Colors from "../constants/Colors";
 const { width, height } = Dimensions.get("window");
 
 const logoImg: ImageSourcePropType = require("../assets/images/home-title.png");
-const homeTextImg: ImageSourcePropType = require("../assets/images/mamili-ng-gagawin.png");
-const magbentaImg: ImageSourcePropType = require("../assets/images/Magbenta.png");
-const marketImg: ImageSourcePropType = require("../assets/images/Market.png");
-const settingsImg: ImageSourcePropType = require("../assets/images/Produkto.png");
 const accountImg: ImageSourcePropType = require("../assets/images/Account.png");
-
+const produktoImg: ImageSourcePropType = require("../assets/images/Produkto.png");
 const logoutImg: ImageSourcePropType = require("../assets/images/open-pane.png");
 
-export default function HomeMagsasaka() {
+export default function HomeBuyer() {
   return (
     <View style={styles.container}>
       {/* Logo at top left */}
@@ -37,34 +35,113 @@ export default function HomeMagsasaka() {
 
       <View style={styles.mamiliContainer}>
         {/* Home text banner */}
-        <Image source={homeTextImg} style={styles.homeTextImage} />
+        <Text style={styles.mainText}>Mamili ng Gagawin</Text>
       </View>
 
       {/* Button grid */}
       <View style={styles.gridContainer}>
         <View style={styles.row}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.push("/sellpage1")}
-          >
-            <Image source={magbentaImg} style={styles.buttonImg} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.push("/StatsPage")}
-          >
-            <Image source={marketImg} style={styles.buttonImg} />
-          </TouchableOpacity>
+          <View style={styles.gridItem}>
+            <Pressable style={styles.button} onPress={() => router.push("/sellpage1")}>
+              <LinearGradient
+                colors={[
+                  Colors.primaryGreen,
+                  Colors.gradientGreenStart,
+                  Colors.gradientGreenMid,
+                  Colors.gradientGreenEnd,
+                ]}
+                start={{ x: 0.2, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.gradientBackground}
+              >
+                <View style={styles.iconAndLabel}>
+                  <Image
+                    style={styles.buttonIcon}
+                    source={require("../assets/images/peso-symbol.png")}
+                    resizeMode="contain"
+                  />
+                  <Text style={styles.buttonText}>Magbenta</Text>
+                </View>
+              </LinearGradient>
+            </Pressable>
+          </View>
+          
+          <View style={styles.gridItem}>
+            <Pressable style={styles.button} onPress={() => router.push("/StatsPage")}>
+              <LinearGradient
+                colors={[
+                  Colors.primaryGreen,
+                  Colors.gradientGreenStart,
+                  Colors.gradientGreenMid,
+                  Colors.gradientGreenEnd,
+                ]}
+                start={{ x: 0.2, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.gradientBackground}
+              >
+                <View style={styles.iconAndLabel}>
+                  <Image
+                    style={styles.buttonIcon}
+                    source={require("../assets/STARTer/Sign Up/cart-icon.png")}
+                    resizeMode="contain"
+                  />
+                  <Text style={styles.buttonText}>Merkado</Text>
+                </View>
+              </LinearGradient>
+            </Pressable>
+          </View>
         </View>
+
         <View style={styles.row}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.push("/productState")}
-          >
-            <Image source={settingsImg} style={styles.buttonImg} />
-          </TouchableOpacity>
-          <Image source={accountImg} style={styles.buttonImg} />
+          <View style={styles.gridItem}>
+            <Pressable style={styles.button} onPress={() => router.push("/productState")}>
+              <LinearGradient
+                colors={[
+                  Colors.primaryGreen,
+                  Colors.gradientGreenStart,
+                  Colors.gradientGreenMid,
+                  Colors.gradientGreenEnd,
+                ]}
+                start={{ x: 0.2, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.gradientBackground}
+              >
+                <View style={styles.iconAndLabel}>
+                  <Image
+                    style={styles.produkto}
+                    source={require("../assets/images/Settings_icon.png")}
+                    resizeMode="contain"
+                  />
+                  <Text style={styles.buttonText}>Settings</Text>
+                </View>
+              </LinearGradient>
+            </Pressable>
+          </View>
+          
+          <View style={styles.gridItem}>
+            <Pressable style={styles.button}>
+              <LinearGradient
+                colors={[
+                  Colors.primaryGreen,
+                  Colors.gradientGreenStart,
+                  Colors.gradientGreenMid,
+                  Colors.gradientGreenEnd,
+                ]}
+                start={{ x: 0.2, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.gradientBackground}
+              >
+                <View style={styles.iconAndLabel}>
+                  <Image
+                    style={styles.buttonIcon}
+                    source={require("../assets/images/User.png")}
+                    resizeMode="contain"
+                  />
+                  <Text style={styles.buttonText}>Account</Text>
+                </View>
+              </LinearGradient>
+            </Pressable>
+          </View>     
         </View>
       </View>
 
@@ -89,53 +166,103 @@ export default function HomeMagsasaka() {
 }
 
 const styles = StyleSheet.create({
+  // ---------- Main Containers ----------
   container: {
     flex: 1,
     backgroundColor: "#FFF",
   },
+  gridContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: RFValue(20),
+  },
+  gridItem: {
+    margin: width * 0.015, // half the desired gap
+  },
+  row: {
+    flexDirection: "row",
+  },
+
+  iconAndLabel: {
+    paddingTop: height * 0.02,
+    paddingBottom: height * 0.01,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  // ---------- Logo Section ----------
   logoContainer: {
-    height: height * 0.13,
+    height: height * 0.12,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "red",
+    marginBottom: height * 0.01,
   },
   logoImage: {
     resizeMode: "contain",
     width: height * 0.3,
   },
   logoText: {
-    fontFamily: "Secular One", // Make sure to link this font in your project
+    fontFamily: "Secular One", // Ensure this font is linked in your project
     fontWeight: "400",
     fontSize: 25,
     lineHeight: 31,
     letterSpacing: 0.012,
     color: "#FFCA43",
   },
+
+  // ---------- Main Text ----------
   mamiliContainer: {
     height: height * 0.1,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: height * 0.03,
   },
-  homeTextImage: {
-    transform: [{ scale: width * 0.0025 }],
+  mainText: {
+    textAlign: "center",
+    fontSize: RFValue(27),
+    fontFamily: "Roboto-Bold",
   },
-  gridContainer: {
+
+  // ---------- Buttons ----------
+  button: {
+    width: height * 0.2,
+    height: height * 0.2,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 2.3,
+    elevation: 3,
+    overflow: "hidden", // ensures gradient respects borderRadius
+  },
+  gradientBackground: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    gap: height * 0.015,
   },
-  row: {
-    flexDirection: "row",
+  buttonText: {
+    fontSize: RFValue(23),
+    fontFamily: "Roboto-Bold",
+    color: "white",
+    marginTop: RFValue(5),
   },
-  buttonImg: {
-    width: width * 0.45,
-    height: width * 0.45,
+  buttonIcon: {
+    width: width * 0.28,
+    height: width * 0.28,
   },
+  produkto: {
+    marginTop: width * 0.015,
+    height: width * 0.23,
+    marginBottom: width * 0.035,
+  },
+
+  // ---------- Language Selection ----------
   languageRow: {
     flexDirection: "row",
     gap: width * 0.05,
-    paddingVertical: height * 0.01,
   },
   languageLabel: {
     left: width * 0.05,
@@ -148,8 +275,6 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   languageButton: {
-    width: width * 0.3,
-    height: height * 0.04,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#10AF7C",
@@ -158,7 +283,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8.7,
-    elevation: 2,
+    elevation: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
   },
   languageButtonText: {
     fontFamily: "Roboto",
@@ -167,6 +294,8 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     color: "#FFF",
   },
+
+  // ---------- Logout Button ----------
   logoutButton: {
     position: "absolute",
     flexDirection: "row",
@@ -189,6 +318,3 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Bold",
   },
 });
-
-// Note: For gradients, install react-native-linear-gradient and link it properly.
-// For custom fonts (Roboto, Secular One), make sure to add and link them in your project.
