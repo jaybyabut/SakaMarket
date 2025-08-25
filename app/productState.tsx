@@ -11,7 +11,7 @@ import GradientBtn from "../components/GradientBtn";
 const { width, height } = Dimensions.get('window');
 
 
-export default function Signin() {
+export default function productState() {
   const [searchLeft, setSearchLeft] = useState(0);
   const [searchText, onChangeSearchText] = useState("");
   const [products, setProducts] = useState([]);

@@ -11,8 +11,6 @@ const magbentaImg: ImageSourcePropType = require('../assets/images/Magbenta.png'
 const marketImg: ImageSourcePropType = require('../assets/images/Market.png');
 const settingsImg: ImageSourcePropType = require('../assets/images/Produkto.png');
 const accountImg: ImageSourcePropType = require('../assets/images/Account.png');
-
-
 const logoutImg: ImageSourcePropType = require('../assets/images/open-pane.png');
 
 

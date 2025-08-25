@@ -439,14 +439,6 @@ const styles = StyleSheet.create({
     width: 30, height: 30,
     marginBottom: 10,
   },
-
-  label: {
-    fontSize: 16,
-    color: 'white',
-    fontFamily: 'Roboto-Bold',
-    marginBottom: 6,
-    marginTop: 16,
-  },
   input: {
     height: 42,
     width: '90%',
