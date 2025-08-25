@@ -5,12 +5,12 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "backgroundColor": "#ffffff",
-    "icon": "./assets/STARTer/Landing Page/logo-with-name.png",
+    "icon": "./assets/STARTer/LandingPage/logo-with-name.png",
     "userInterfaceStyle": "automatic",
     "scheme": "sakamarket",
     "assetBundlePatterns": ["**/*"],
     "splash": {
-      "image": "./assets/STARTer/Landing Page/logo-with-name.png",
+      "image": "./assets/STARTer/LandingPage/logo-with-name.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,7 +19,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/STARTer/Landing Page/logo-with-name.png",
+          "image": "./assets/STARTer/LandingPage/logo-with-name.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
@@ -32,7 +32,7 @@
       "edgeToEdgeEnabled": true
     },
     "web": {
-      "favicon": "./assets/STARTer/Landing Page/logo-with-name.png",
+      "favicon": "./assets/STARTer/LandingPage/logo-with-name.png",
       "bundler": "metro",
       "output": "static"
     },

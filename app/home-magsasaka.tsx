@@ -9,13 +9,14 @@ const logoImg: ImageSourcePropType = require('../assets/images/home-title.png');
 const homeTextImg: ImageSourcePropType = require('../assets/images/mamili-ng-gagawin.png');
 const magbentaImg: ImageSourcePropType = require('../assets/images/Magbenta.png');
 const marketImg: ImageSourcePropType = require('../assets/images/Market.png');
-const settingsImg: ImageSourcePropType = require('../assets/images/Settings.png');
+const settingsImg: ImageSourcePropType = require('../assets/images/Produkto.png');
 const accountImg: ImageSourcePropType = require('../assets/images/Account.png');
-const languageImg: ImageSourcePropType = require('../assets/images/language.png');
+
+
 const logoutImg: ImageSourcePropType = require('../assets/images/open-pane.png');
 
 
-export default function HomeBuyer() {
+export default function HomeMagsasaka() {
 
   return (
     <View style={styles.container}>
@@ -45,7 +46,7 @@ export default function HomeBuyer() {
         <View style={styles.row}>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => router.push('/buy-page')}
+            onPress={() => router.push('/sellpage1')}
           >
               <Image source={magbentaImg} style={styles.buttonImg}/>
           </TouchableOpacity>
@@ -58,7 +59,12 @@ export default function HomeBuyer() {
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
-            <Image source={settingsImg} style={styles.buttonImg}/>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => router.push('/productState')}
+          >
+              <Image source={settingsImg} style={styles.buttonImg}/>
+          </TouchableOpacity>
             <Image source={accountImg} style={styles.buttonImg}/>
         </View>
       </View>

@@ -1,12 +1,11 @@
-import React from 'react';
-import { View, Image, Text } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import styles from './AppLogo.styles';
 
 export default function AppLogo() {
   return (
     <View style={styles.logoContainer}>
       <Image
-        source={require('../../assets/STARTer/Images/Landing Page/logo.png')}
+        source={require('../../assets/STARTer/Images/LandingPage/logo.png')}
         style={styles.logo}
         resizeMode="contain"
       />
