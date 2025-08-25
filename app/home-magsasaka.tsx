@@ -11,11 +11,11 @@ const magbentaImg: ImageSourcePropType = require('../assets/images/Magbenta.png'
 const marketImg: ImageSourcePropType = require('../assets/images/Market.png');
 const settingsImg: ImageSourcePropType = require('../assets/images/Produkto.png');
 const accountImg: ImageSourcePropType = require('../assets/images/Account.png');
-<<<<<<< HEAD
 
-=======
+
+
 const languageImg: ImageSourcePropType = require('../assets/images/language.png');
->>>>>>> 58693b25bf00e41b18a8f0208a98386d84b5cd87
+
 const logoutImg: ImageSourcePropType = require('../assets/images/open-pane.png');
 
 

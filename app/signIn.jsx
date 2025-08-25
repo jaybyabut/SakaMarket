@@ -89,19 +89,14 @@ export default function SignInScreen() {
             style={styles.logoImage}
             resizeMode="contain"
           />
-<<<<<<< HEAD
+
           <View style={styles.nameDiv}>
             <Image
               source={require('../assets/STARTer/LandingPage/logo-name.png')}
               resizeMode="contain"
             />
           </View>
-=======
-          <Image
-            source={require('../assets/STARTer/Landing Page/logo-name.png')}
-            resizeMode="contain"
-          />
->>>>>>> 58693b25bf00e41b18a8f0208a98386d84b5cd87
+
         </View>
 
         {/* Form */}

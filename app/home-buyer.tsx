@@ -9,17 +9,15 @@ const logoImg: ImageSourcePropType = require('../assets/images/home-title.png');
 const homeTextImg: ImageSourcePropType = require('../assets/images/mamili-ng-gagawin.png');
 const bumiliImg: ImageSourcePropType = require('../assets/images/Bumili.png');
 const marketImg: ImageSourcePropType = require('../assets/images/Market.png');
-<<<<<<< HEAD
-const settingsImg: ImageSourcePropType = require('../assets/images/Produkto.png');
+
 const accountImg: ImageSourcePropType = require('../assets/images/Account.png');
 
 
 
-=======
-const produktoImg: ImageSourcePropType = require('../assets/images/produkto.png');
-const accountImg: ImageSourcePropType = require('../assets/images/Account.png');
-const languageImg: ImageSourcePropType = require('../assets/images/language.png');
->>>>>>> 58693b25bf00e41b18a8f0208a98386d84b5cd87
+const produktoImg: ImageSourcePropType = require('../assets/images/Produkto.png');
+
+
+
 const logoutImg: ImageSourcePropType = require('../assets/images/open-pane.png');
 
 

@@ -15,16 +15,7 @@ const LandingPage = ({ navigation = { navigate: () => {} } }) => {
           style={styles.logo}
           resizeMode="contain"
         />
-<<<<<<< HEAD
-        <View style={styles.nameContainer}>
-          <Image
-            source={require('../assets/STARTer/LandingPage/logo-name.png')}
-=======
-        <Image
-            source={require('../assets/STARTer/Landing Page/logo-name.png')}
->>>>>>> 58693b25bf00e41b18a8f0208a98386d84b5cd87
-            resizeMode="contain"
-          />
+
       </View>
 
       {/* Buttons */}
