@@ -1,11 +1,10 @@
-import React from 'react';
-import { View, Image, Text, StyleSheet } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 export default function LogoHeader({ style }) {
   return (
     <View style={[styles.logoWrapper, style]}>
       <Image
-        source={require('../../assets/STARTer/Images/Landing Page/logo.png')}
+        source={require('../../assets/STARTer/Images/LandingPage/logo.png')}
         style={styles.logoImage}
         resizeMode="contain"
       />
