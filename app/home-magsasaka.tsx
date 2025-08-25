@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
 
   },
   languageButton: {
-    width: width * 0.25,
+    width: width * 0.3,
     height: height * 0.04,
     justifyContent: 'center',
     alignItems: 'center',
