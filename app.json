@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "sakamarket",
+    "slug": "sakamarket",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "backgroundColor": "#ffffff",
+    "icon": "./assets/STARTer/LandingPage/logo-with-name.png",
+    "userInterfaceStyle": "automatic",
+    "scheme": "sakamarket",
+    "assetBundlePatterns": ["**/*"],
+    "splash": {
+      "image": "./assets/STARTer/LandingPage/logo-with-name.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/STARTer/LandingPage/logo-with-name.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/STARTer/LandingPage/logo-with-name.png",
+      "bundler": "metro",
+      "output": "static"
+    },
+    "newArchEnabled": true,
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
