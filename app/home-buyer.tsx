@@ -16,8 +16,6 @@ import Colors from "../constants/Colors";
 const { width, height } = Dimensions.get("window");
 
 const logoImg: ImageSourcePropType = require("../assets/images/home-title.png");
-const accountImg: ImageSourcePropType = require("../assets/images/Account.png");
-const produktoImg: ImageSourcePropType = require("../assets/images/Produkto.png");
 const logoutImg: ImageSourcePropType = require("../assets/images/open-pane.png");
 
 export default function HomeBuyer() {

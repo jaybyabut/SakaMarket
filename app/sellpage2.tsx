@@ -33,9 +33,6 @@ type UploadFieldProps = {
   invalid?: boolean;
 };
 
-function UploadField({ label = "", image, onPick, invalid }: UploadFieldProps) {
-
-
 // ----- ButtonWithText Component -----
 function ButtonWithText({ icon, label, reverse, onPress, disabled = false }: ButtonWithTextProps) {
   return (
