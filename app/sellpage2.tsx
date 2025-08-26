@@ -1,10 +1,8 @@
+import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useLayoutEffect, useState } from "react";
-import { RFValue } from "react-native-responsive-fontsize";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   Alert,
   Dimensions,
@@ -15,11 +13,31 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { RFValue } from "react-native-responsive-fontsize";
 
 const { width, height } = Dimensions.get("window");
 
+type ButtonWithTextProps = {
+  icon: any; 
+  label: string;
+  reverse?: boolean;
+  onPress: () => void;
+  disabled?: boolean;
+};
+
+type UploadFieldProps = {
+  label?: string;
+  image: string | null;
+  onPick: () => void;
+  invalid?: boolean;
+};
+
+function UploadField({ label = "", image, onPick, invalid }: UploadFieldProps) {
+
+
 // ----- ButtonWithText Component -----
-function ButtonWithText({ icon, label, reverse, onPress, disabled = false }) {
+function ButtonWithText({ icon, label, reverse, onPress, disabled = false }: ButtonWithTextProps) {
   return (
     <Pressable
       style={[styles.buttonWithText, { opacity: disabled ? 0.5 : 1 }]}
@@ -33,7 +51,7 @@ function ButtonWithText({ icon, label, reverse, onPress, disabled = false }) {
 }
 
 // ----- UploadField Component -----
-function UploadField({ label = "", image, onPick, invalid }) {
+function UploadField({ label = "", image, onPick, invalid }: UploadFieldProps) {
   return (
     <View style={{ marginBottom: 15 }}>
       <Text style={[styles.label, invalid && { color: "red" }]}>{label}</Text>
@@ -127,9 +145,7 @@ export default function Magsasakaregister() {
         style={styles.greenContainer}
       >
         <View style={styles.scrollViewContainer}>
-          <KeyboardAwareScrollView
-            showsVerticalScrollIndicator={true}
-          >
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={true}>
             {/* Name */}
             <Text style={[styles.label, touched && !name && { color: "red" }]}>
               Pangalan ng Produkto
@@ -159,7 +175,9 @@ export default function Magsasakaregister() {
             />
 
             {/* Amount */}
-            <Text style={[styles.label, touched && !amount && { color: "red" }]}>
+            <Text
+              style={[styles.label, touched && !amount && { color: "red" }]}
+            >
               Dami ng Produkto (Kilo)
             </Text>
             <TextInput
@@ -182,14 +200,18 @@ export default function Magsasakaregister() {
 
             {/* Description */}
             <Text
-              style={[styles.label, touched && !description && { color: "red" }]}
+              style={[
+                styles.label,
+                touched && !description && { color: "red" },
+              ]}
             >
               Deskripsyon ng Produkto
             </Text>
             <TextInput
               style={[
                 styles.inputDesc,
-                touched && !description && { borderColor: "red", borderWidth: 2 },
+                touched &&
+                  !description && { borderColor: "red", borderWidth: 2 },
               ]}
               placeholder="Ilagay ang detalyadong impormasyon tungkol sa produkto"
               value={description}
@@ -198,21 +220,13 @@ export default function Magsasakaregister() {
             />
           </KeyboardAwareScrollView>
         </View>
-        
       </LinearGradient>
 
       {/* Bottom Buttons */}
       <View style={styles.buttons}>
         <View>
-          <Pressable
-            style={styles.buttonWithText}
-            onPress={handleNext}
-          >
-            <Text
-              style={styles.buttonText}
-            >
-              SUNOD
-            </Text>
+          <Pressable style={styles.buttonWithText} onPress={handleNext}>
+            <Text style={styles.buttonText}>SUNOD</Text>
             <Image
               source={require("../assets/STARTer/Farmer Verification/next-page.png")}
               style={styles.buttonIcon}
@@ -236,7 +250,7 @@ const styles = StyleSheet.create({
   greenContainer: {
     top: "4%",
     flex: 5,
-    width: width * 1.16, 
+    width: width * 1.16,
     borderTopLeftRadius: 80,
     borderTopRightRadius: 80,
     shadowColor: "#000",
@@ -252,7 +266,6 @@ const styles = StyleSheet.create({
     height: height * 0.652,
     width: MAX_WIDTH,
     alignSelf: "center",
-    
   },
 
   // ==== Header & Back Button ====
@@ -277,7 +290,6 @@ const styles = StyleSheet.create({
     width: width * 0.9, // same as FarmerVerificationScreen
   },
 
-
   backPosition: {
     position: "absolute",
     width: height * 0.03,
@@ -290,7 +302,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  
 
   // ==== Form Inputs ====
   label: {
@@ -364,4 +375,3 @@ const styles = StyleSheet.create({
   leftButton: { flex: 1, alignItems: "flex-start" },
   rightButton: { flex: 1, alignItems: "flex-end" },
 });
-

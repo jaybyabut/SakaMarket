@@ -162,23 +162,23 @@ export default function FarmerVerificationScreen() {
       </LinearGradient>
 
       <View style={styles.buttons}>
-          <View style={styles.leftButton}>
-            <ButtonWithText
-              icon={require("../assets/STARTer/Farmer Verification/back-page.png")}
-              label="NAKARAAN"
-              reverse
-              onPress={() => router.back()}
-            />
-          </View>
-          <View style={styles.rightButton}>
-            <ButtonWithText
-              icon={require("../assets/STARTer/Farmer Verification/next-page.png")}
-              label="ISUBMITE"
-              onPress={handleSubmit}
-              disabled={!selfie || !govID || !farmDoc}
-            />
-          </View>
+        <View style={styles.leftButton}>
+          <ButtonWithText
+            icon={require("../assets/STARTer/Farmer Verification/back-page.png")}
+            label="NAKARAAN"
+            reverse
+            onPress={() => router.back()}
+          />
         </View>
+        <View style={styles.rightButton}>
+          <ButtonWithText
+            icon={require("../assets/STARTer/Farmer Verification/next-page.png")}
+            label="ISUBMITE"
+            onPress={handleSubmit}
+            disabled={!selfie || !govID || !farmDoc}
+          />
+        </View>
+      </View>
     </View>
   );
 }
