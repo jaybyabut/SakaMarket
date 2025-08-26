@@ -19,7 +19,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 const { width, height } = Dimensions.get("window");
 
 type ButtonWithTextProps = {
-  icon: any; 
+  icon: any;
   label: string;
   reverse?: boolean;
   onPress: () => void;
@@ -31,6 +31,7 @@ type UploadFieldProps = {
   image: string | null;
   onPick: () => void;
   invalid?: boolean;
+  imageSize: { width: number; height: number } | null;
 };
 
 // ----- ButtonWithText Component -----
@@ -48,13 +49,15 @@ function ButtonWithText({ icon, label, reverse, onPress, disabled = false }: But
 }
 
 // ----- UploadField Component -----
-function UploadField({ label = "", image, onPick, invalid }: UploadFieldProps) {
+function UploadField({ label = "", image, onPick, invalid, imageSize }: UploadFieldProps) {
   return (
     <View>
       <Text style={[styles.label, invalid && { color: "red" }]}>{label}</Text>
       <Pressable
         style={[
           styles.dropArea,
+          { width: width * 0.8 },
+          imageSize ? { height: imageSize.height } : { minHeight: 120 },
           invalid && { borderColor: "red", borderWidth: 2 },
         ]}
         onPress={onPick}
@@ -62,6 +65,12 @@ function UploadField({ label = "", image, onPick, invalid }: UploadFieldProps) {
         {image ? (
           <Image
             source={{ uri: image }}
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: 10,
+              resizeMode: "cover",
+            }}
           />
         ) : (
           <Text style={styles.uploadText}>Pindutin Upang Makapili</Text>
@@ -77,7 +86,8 @@ export default function Magsasakaregister() {
   const [price, setPrice] = useState("");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [imageSize, setImageSize] = useState<{ width: number; height: number } | null>(null);
   const [touched, setTouched] = useState(false);
 
   const navigation = useNavigation();
@@ -95,10 +105,18 @@ export default function Magsasakaregister() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
-      allowsEditing: true,
+      allowsEditing: false, // keep natural aspect ratio
     });
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const uri = result.assets[0].uri;
+      setImage(uri);
+
+      // compute scaled height based on fixed width
+      Image.getSize(uri, (w, h) => {
+        const fixedWidth = width * 0.8;
+        const scale = fixedWidth / w;
+        setImageSize({ width: fixedWidth, height: h * scale });
+      });
     }
   };
 
@@ -141,81 +159,81 @@ export default function Magsasakaregister() {
         style={styles.greenContainer}
       >
         <View style={styles.scrollViewContainer}>
-          <KeyboardAwareScrollView 
-          showsVerticalScrollIndicator={true}>
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={true}>
             <View style={styles.uploadSection}>
-            {/* Name */}
-            <Text style={[styles.label, touched && !name && { color: "red" }]}>
-              Pangalan ng Produkto
-            </Text>
-            <TextInput
-              style={[
-                styles.input,
-                touched && !name && { borderColor: "red", borderWidth: 2 },
-              ]}
-              placeholder="(hal. Bigas, Mais, Talong)"
-              value={name}
-              onChangeText={setName}
-            />
+              {/* Name */}
+              <Text style={[styles.label, touched && !name && { color: "red" }]}>
+                Pangalan ng Produkto
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  touched && !name && { borderColor: "red", borderWidth: 2 },
+                ]}
+                placeholder="(hal. Bigas, Mais, Talong)"
+                value={name}
+                onChangeText={setName}
+              />
 
-            {/* Price */}
-            <Text style={[styles.label, touched && !price && { color: "red" }]}>
-              Presyo ng Produkto (Per Kilo)
-            </Text>
-            <TextInput
-              style={[
-                styles.input,
-                touched && !price && { borderColor: "red", borderWidth: 2 },
-              ]}
-              placeholder="(hal. P20, P30, P40)"
-              value={price}
-              onChangeText={setPrice}
-            />
+              {/* Price */}
+              <Text style={[styles.label, touched && !price && { color: "red" }]}>
+                Presyo ng Produkto (Per Kilo)
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  touched && !price && { borderColor: "red", borderWidth: 2 },
+                ]}
+                placeholder="(hal. P20, P30, P40)"
+                value={price}
+                onChangeText={setPrice}
+              />
 
-            {/* Amount */}
-            <Text
-              style={[styles.label, touched && !amount && { color: "red" }]}
-            >
-              Dami ng Produkto (Kilo)
-            </Text>
-            <TextInput
-              style={[
-                styles.input,
-                touched && !amount && { borderColor: "red", borderWidth: 2 },
-              ]}
-              placeholder="(hal. 10kg, 20kg, 30kg)"
-              value={amount}
-              onChangeText={setAmount}
-            />
+              {/* Amount */}
+              <Text
+                style={[styles.label, touched && !amount && { color: "red" }]}
+              >
+                Dami ng Produkto (Kilo)
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  touched && !amount && { borderColor: "red", borderWidth: 2 },
+                ]}
+                placeholder="(hal. 10kg, 20kg, 30kg)"
+                value={amount}
+                onChangeText={setAmount}
+              />
 
-            {/* Image Upload */}
-            <UploadField
-              label="Imahe ng Produkto"
-              image={image}
-              onPick={pickImage}
-              invalid={touched && !image}
-            />
+              {/* Image Upload */}
+              <UploadField
+                label="Imahe ng Produkto"
+                image={image}
+                onPick={pickImage}
+                invalid={touched && !image}
+                imageSize={imageSize}
+              />
 
-            {/* Description */}
-            <Text
-              style={[
-                styles.label,
-                touched && !description && { color: "red" },
-              ]}
-            >
-              Deskripsyon ng Produkto
-            </Text>
-            <TextInput
-              style={[
-                styles.inputDesc,
-                touched &&
-                  !description && { borderColor: "red", borderWidth: 2 },
-              ]}
-              placeholder="Ilagay ang detalyadong impormasyon tungkol sa produkto"
-              value={description}
-              onChangeText={setDescription}
-              multiline
-            />
+              {/* Description */}
+              <Text
+                style={[
+                  styles.label,
+                  touched && !description && { color: "red" },
+                ]}
+              >
+                Deskripsyon ng Produkto
+              </Text>
+              <TextInput
+                style={[
+                  styles.inputDesc,
+                  touched &&
+                    !description && { borderColor: "red", borderWidth: 2 },
+                ]}
+                placeholder="Ilagay ang detalyadong impormasyon tungkol sa produkto"
+                value={description}
+                onChangeText={setDescription}
+                multiline
+              />
             </View>
           </KeyboardAwareScrollView>
         </View>
@@ -242,7 +260,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#E6F5EC",
-    //alignItems: "center",
   },
   greenContainer: {
     top: "4%",
@@ -260,7 +277,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     top: "4%",
-    paddingBottom: height * 0.160,
+    paddingBottom: height * 0.16,
     width: 338,
     alignSelf: "center",
   },
@@ -268,7 +285,6 @@ const styles = StyleSheet.create({
     width: width * 0.8,
     alignSelf: "center",
   },
-
 
   // ==== Header & Back Button ====
   textSection: {
@@ -289,7 +305,7 @@ const styles = StyleSheet.create({
   subText: {
     textAlign: "center",
     fontSize: RFValue(14),
-    width: width * 0.9, // same as FarmerVerificationScreen
+    width: width * 0.9,
   },
 
   backPosition: {
@@ -331,7 +347,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   dropArea: {
-    height: 120,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -371,6 +386,4 @@ const styles = StyleSheet.create({
     fontSize: RFValue(15),
     fontFamily: "Roboto-Bold",
   },
-  leftButton: { flex: 1, alignItems: "flex-start" },
-  rightButton: { flex: 1, alignItems: "flex-end" },
 });

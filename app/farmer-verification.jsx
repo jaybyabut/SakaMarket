@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RFValue } from "react-native-responsive-fontsize";
+
 const { width, height } = Dimensions.get("window");
 
 export default function FarmerVerificationScreen() {
@@ -22,9 +23,14 @@ export default function FarmerVerificationScreen() {
   const [selfie, setSelfie] = useState(null);
   const [govID, setGovID] = useState(null);
   const [farmDoc, setFarmDoc] = useState(null);
+
+  const [selfieSize, setSelfieSize] = useState(null);
+  const [govIDSize, setGovIDSize] = useState(null);
+  const [farmDocSize, setFarmDocSize] = useState(null);
+
   const [invalidFields, setInvalidFields] = useState([]);
 
-  const pickImage = async (setImage) => {
+  const pickImage = async (setImage, setSize) => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) return;
@@ -35,14 +41,19 @@ export default function FarmerVerificationScreen() {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const uri = result.assets[0].uri;
+      setImage(uri);
+
+      // calculate scaled height
+      Image.getSize(uri, (w, h) => {
+        const fixedWidth = width * 0.8;
+        const scale = fixedWidth / w;
+        setSize({ width: fixedWidth, height: h * scale });
+      });
     }
   };
 
   const handleSubmit = async () => {
-    console.log("Got params:", params);
-    console.log("user_id:", params.user_id); // should log "109"
-
     const missing = [];
     if (!selfie) missing.push("selfie");
     if (!govID) missing.push("govID");
@@ -76,11 +87,6 @@ export default function FarmerVerificationScreen() {
       type: "image/jpeg",
     });
 
-    console.log("Submitting FormData:");
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
-    }
-
     try {
       const response = await fetch(
         "http://10.0.2.2/database/farmerRegister.php",
@@ -91,8 +97,6 @@ export default function FarmerVerificationScreen() {
       );
 
       const text = await response.text();
-      console.log("Server Response:", text);
-
       let json;
       try {
         json = JSON.parse(text);
@@ -141,26 +145,30 @@ export default function FarmerVerificationScreen() {
         style={styles.greenContainer}
       >
         <View style={styles.scrollViewContainer}>
-          <KeyboardAwareScrollView 
-          showsVerticalScrollIndicator={true}
-          contentContainerStyle={{ paddingBottom: 10, alignItems: "center" }}>
+          <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={true}
+            contentContainerStyle={{ paddingBottom: 10, alignItems: "center" }}
+          >
             <View style={styles.uploadSection}>
               <UploadField
                 label="Selfie with Valid ID"
                 image={selfie}
-                onPick={() => pickImage(setSelfie)}
+                imageSize={selfieSize}
+                onPick={() => pickImage(setSelfie, setSelfieSize)}
                 invalid={invalidFields.includes("selfie")}
               />
               <UploadField
                 label="Government-Issued ID"
                 image={govID}
-                onPick={() => pickImage(setGovID)}
+                imageSize={govIDSize}
+                onPick={() => pickImage(setGovID, setGovIDSize)}
                 invalid={invalidFields.includes("govID")}
               />
               <UploadField
                 label="Farm Registration Document"
                 image={farmDoc}
-                onPick={() => pickImage(setFarmDoc)}
+                imageSize={farmDocSize}
+                onPick={() => pickImage(setFarmDoc, setFarmDocSize)}
                 invalid={invalidFields.includes("farmDoc")}
               />
             </View>
@@ -190,14 +198,15 @@ export default function FarmerVerificationScreen() {
   );
 }
 
-function UploadField({ label = "", image, onPick, invalid }) {
+function UploadField({ label = "", image, imageSize, onPick, invalid }) {
   return (
     <View style={{ marginBottom: 10 }}>
       <Text style={[styles.label, invalid && { color: "red" }]}>{label}</Text>
       <Pressable
         style={[
           {
-            height: 120,
+            minHeight: 120,
+            width: width * 0.8,
             borderRadius: 10,
             justifyContent: "center",
             alignItems: "center",
@@ -205,6 +214,7 @@ function UploadField({ label = "", image, onPick, invalid }) {
             elevation: 4,
             marginBottom: RFValue(2),
           },
+          imageSize ? { height: imageSize.height } : {},
           invalid && { borderColor: "red", borderWidth: 2 },
         ]}
         onPress={onPick}
@@ -212,7 +222,12 @@ function UploadField({ label = "", image, onPick, invalid }) {
         {image ? (
           <Image
             source={{ uri: image }}
-            style={{ width: "100%", height: "100%", borderRadius: 10 }}
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: 10,
+              resizeMode: "cover",
+            }}
           />
         ) : (
           <Text style={styles.uploadText}>Upload Image</Text>
@@ -253,17 +268,12 @@ const styles = StyleSheet.create({
     width: width * 1.16,
     borderTopLeftRadius: 80,
     borderTopRightRadius: 80,
-    shadowColor: "#000",
-    shadowOpacity: 0.51,
-    shadowRadius: 8.7,
-    shadowOffset: { width: 17, height: 4 },
     elevation: 4,
     zIndex: 2,
     alignSelf: "center",
   },
   uploadSection: {
-    top: "4%",
-    height: "fit-content",
+    marginTop: height * 0.03,
     width: width * 0.8,
     alignSelf: "center",
   },
@@ -305,22 +315,11 @@ const styles = StyleSheet.create({
   },
 
   // ==== Upload Area ====
-  labelAndUpload: {
-    marginBottom: 10,
-  },
   label: {
     fontSize: 14,
     fontFamily: "Roboto-Medium",
     marginBottom: 10,
     color: "#FFF",
-  },
-  dropArea: {
-    height: height * 0.12,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFFDEB",
-    elevation: 4,
   },
   uploadText: {
     color: "#8F8E8E",
