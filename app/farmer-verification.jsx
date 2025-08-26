@@ -11,6 +11,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RFValue } from "react-native-responsive-fontsize";
 const { width, height } = Dimensions.get("window");
 
@@ -139,25 +140,31 @@ export default function FarmerVerificationScreen() {
         ]}
         style={styles.greenContainer}
       >
-        <View style={styles.uploadSection}>
-          <UploadField
-            label="Selfie with Valid ID"
-            image={selfie}
-            onPick={() => pickImage(setSelfie)}
-            invalid={invalidFields.includes("selfie")}
-          />
-          <UploadField
-            label="Government-Issued ID"
-            image={govID}
-            onPick={() => pickImage(setGovID)}
-            invalid={invalidFields.includes("govID")}
-          />
-          <UploadField
-            label="Farm Registration Document"
-            image={farmDoc}
-            onPick={() => pickImage(setFarmDoc)}
-            invalid={invalidFields.includes("farmDoc")}
-          />
+        <View style={styles.scrollViewContainer}>
+          <KeyboardAwareScrollView 
+          showsVerticalScrollIndicator={true}
+          contentContainerStyle={{ paddingBottom: 10, alignItems: "center" }}>
+            <View style={styles.uploadSection}>
+              <UploadField
+                label="Selfie with Valid ID"
+                image={selfie}
+                onPick={() => pickImage(setSelfie)}
+                invalid={invalidFields.includes("selfie")}
+              />
+              <UploadField
+                label="Government-Issued ID"
+                image={govID}
+                onPick={() => pickImage(setGovID)}
+                invalid={invalidFields.includes("govID")}
+              />
+              <UploadField
+                label="Farm Registration Document"
+                image={farmDoc}
+                onPick={() => pickImage(setFarmDoc)}
+                invalid={invalidFields.includes("farmDoc")}
+              />
+            </View>
+          </KeyboardAwareScrollView>
         </View>
       </LinearGradient>
 
@@ -234,6 +241,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#E6F5EC",
   },
+  scrollViewContainer: {
+    top: "2%",
+    paddingBottom: height * 0.145,
+    width: width * 0.8,
+    alignSelf: "center",
+  },
   greenContainer: {
     top: "4%",
     flex: 5,
@@ -250,7 +263,7 @@ const styles = StyleSheet.create({
   },
   uploadSection: {
     top: "4%",
-    height: height * 0.59,
+    height: "fit-content",
     width: width * 0.8,
     alignSelf: "center",
   },

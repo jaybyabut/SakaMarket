@@ -102,9 +102,12 @@ export default function MamimiliRegister() {
     backgroundColor: "#FFFDEB",
     borderRadius: 8,
     paddingHorizontal: 12,
+    paddingVertical: 0, // fix vertical centering
     fontSize: 14,
     fontFamily: "Roboto-Regular",
+    includeFontPadding: false, // Android fix
     marginBottom: 10,
+    textAlignVertical: "center",
     borderWidth: 1,
     borderColor: invalid ? "red" : "#ccc",
     elevation: 4,
@@ -385,7 +388,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     top: "2%",
-    height: height * 0.667,
+    paddingBottom: height * 0.145,
     width: width * 0.8,
     alignSelf: "center",
   },

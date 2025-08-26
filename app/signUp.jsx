@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     fontSize: RFValue(25),
     fontFamily: "Roboto-Bold",
     color: "white",
-    marginTop: RFValue(5),
+    alignSelf: "center",
   },
 
   // ==== Buttons ====
@@ -171,8 +171,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   iconAndLabel: {
-    paddingTop: height * 0.02,
-    paddingBottom: height * 0.01,
+    paddingTop: height * 0.022,
+    paddingBottom: height * 0.02,
   },
 
   // ==== Icons ====

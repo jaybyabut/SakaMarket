@@ -1,6 +1,6 @@
-import { LinearGradient } from "expo-linear-gradient"; // Gradient background styling
-import { useRouter } from "expo-router"; // Navigation between screens
-import { useState } from "react"; // React hook for state management
+import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
   Dimensions,
   Image,
@@ -13,18 +13,12 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RFValue } from "react-native-responsive-fontsize";
+
 const { width, height } = Dimensions.get("window");
 
-//Farmer registration page
 export default function Magsasakaregister() {
   const router = useRouter();
 
-  //INPUT FIELD STATES
-  //State variables to store user's personal details (empty initially)
-  // First name, Middle name, Last Name
-  // Address
-  // Phone number
-  // Pin, Verify pin
   const [nameFirst, setNameFirst] = useState("");
   const [nameMiddle, setNameMiddle] = useState("");
   const [nameLast, setNameLast] = useState("");
@@ -32,21 +26,13 @@ export default function Magsasakaregister() {
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  //VALIDATION AND STATUS STATES
-  const [error, setError] = useState("");
+  const [verify, setVerify] = useState("");
+  const [userId, setUserId] = useState<number | null>(null);
+  const [otpMessage, setOtpMessage] = useState("");
+  const [otpSuccess, setOtpSuccess] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
-  const [success, setSuccess] = useState("");
   const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
-  //OTP (One-Time Password) STATES
-  const [otpMessage, setOtpMessage] = useState(""); //feedback from backend (otpRequest.php)
-  const [otpSuccess, setOtpSuccess] = useState(false);
-  const [userId, setUserId] = useState<number | null>(null);
-  const [verify, setVerify] = useState(""); // OTP input
-
-  //Make sure all fields are filled up and
-  //OTP is verified
   const isFormComplete =
     nameFirst &&
     nameMiddle &&
@@ -58,7 +44,6 @@ export default function Magsasakaregister() {
     confirmPassword &&
     otpSuccess;
 
-  // Updated validation
   const validateFields = () => {
     const errors: string[] = [];
     const invalids: string[] = [];
@@ -67,17 +52,14 @@ export default function Magsasakaregister() {
     if (!nameMiddle) invalids.push("nameMiddle");
     if (!nameLast) invalids.push("nameLast");
     if (!address) invalids.push("address");
-
     if (!number || number.length < 11) {
       errors.push("Di-wastong numero ng telepono.");
       invalids.push("number");
     }
-
     if (!verify || verify.length !== 6) {
       errors.push("Di-wastong verification code.");
       invalids.push("verify");
     }
-
     if (!password || !confirmPassword) {
       errors.push("Parehong PIN ay kinakailangan.");
       invalids.push("password");
@@ -104,64 +86,48 @@ export default function Magsasakaregister() {
     backgroundColor: "#FFFDEB",
     borderRadius: 8,
     paddingHorizontal: 12,
-    fontSize: RFValue(12),
+    paddingVertical: 0, // fix vertical centering
+    fontSize: 14,
     fontFamily: "Roboto-Regular",
+    includeFontPadding: false, // Android fix
     marginBottom: 10,
+    textAlignVertical: "center",
     borderWidth: 1,
     borderColor: invalid ? "red" : "#ccc",
     elevation: 4,
   });
 
-  // Request OTP
   const requestOtp = async () => {
     try {
       const response = await fetch("http://10.0.2.2/database/otpRequest.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone: number,
-          pin: password,
-        }),
+        body: JSON.stringify({ phone: number, pin: password }),
       });
       const data = await response.json();
-      console.log("OTP Request Response:", data);
-
       if (data.success) {
-        setUserId(data.user_id); // save the user_id for verification
+        setUserId(data.user_id);
         alert(`OTP sent! (DEV: ${data.otp})`);
       } else {
         alert("Error requesting OTP: " + data.message);
       }
     } catch (error) {
-      console.error("Request error:", error);
+      console.error(error);
       alert("Failed to request OTP");
     }
   };
 
-  // Verify OTP
   const handleVerifyOtp = async () => {
-    if (!userId) {
-      alert("Missing user ID. Please request OTP first.");
-      return;
-    }
-
+    if (!userId) return alert("Missing user ID. Please request OTP first.");
     try {
       const response = await fetch("http://10.0.2.2/database/otpVerify.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: userId,
-          otp: verify, // OTP entered by user
-        }),
+        body: JSON.stringify({ user_id: userId, otp: verify }),
       });
-
       const data = await response.json();
-      console.log("OTP Verify Response:", data);
-      console.log("OTP Request JSON:", data);
-      console.log("Extracted user_id:", data.user_id);
-
       if (data.success) {
-        setOtpSuccess(true); // allow SUNOD button
+        setOtpSuccess(true);
         setOtpMessage("OTP verified successfully!");
         alert("OTP verified! Phone number saved.");
       } else {
@@ -169,14 +135,13 @@ export default function Magsasakaregister() {
         setOtpMessage("Verification failed: " + data.message);
       }
     } catch (error) {
-      console.error("Verify error:", error);
+      console.error(error);
       alert("Failed to verify OTP");
     }
   };
 
   const handleSubmit = () => {
     if (!validateFields()) return;
-
     router.push({
       pathname: "/farmer-verification",
       params: {
@@ -193,6 +158,7 @@ export default function Magsasakaregister() {
 
   return (
     <View style={styles.container}>
+      {/* Header */}
       <View style={styles.textSection}>
         <Pressable style={styles.backPosition} onPress={() => router.back()}>
           <Image
@@ -200,7 +166,6 @@ export default function Magsasakaregister() {
             source={require("../assets/STARTer/back-icon.png")}
           />
         </Pressable>
-
         <View style={styles.headerTextSection}>
           <Text style={styles.mainText}>Gumawa ng Account</Text>
           <Text style={styles.subText}>
@@ -209,6 +174,7 @@ export default function Magsasakaregister() {
         </View>
       </View>
 
+      {/* Main Form */}
       <LinearGradient
         colors={[
           "#10AF7C",
@@ -223,15 +189,16 @@ export default function Magsasakaregister() {
           <KeyboardAwareScrollView showsVerticalScrollIndicator={true}>
             <Text style={styles.label}>Personal na Detalye</Text>
             <TextInput
-              style={
-                inputStyle("default", invalidFields.includes("nameFirst"))}
+              style={inputStyle("default", invalidFields.includes("nameFirst"))}
               placeholder="Pangalan (Hal. Juan)"
               value={nameFirst}
               onChangeText={setNameFirst}
             />
             <TextInput
-              style={
-                inputStyle("default", invalidFields.includes("nameMiddle"))}
+              style={inputStyle(
+                "default",
+                invalidFields.includes("nameMiddle")
+              )}
               placeholder="Gitnang Pangalan (Hal. Reyes)"
               value={nameMiddle}
               onChangeText={setNameMiddle}
@@ -257,44 +224,25 @@ export default function Magsasakaregister() {
               onChangeText={setNumber}
               keyboardType="phone-pad"
             />
-            <Pressable
-              style={{
-                backgroundColor: "#10AF7C",
-                paddingVertical: 10,
-                height: 45,
-                borderRadius: 8,
-                marginBottom: 10,
-                elevation: 4,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={requestOtp}
-            >
-              <Text
-                style={{
-                  color: "white",
-                  textAlign: "center",
-                  fontSize: 14,
-                  fontFamily: "Roboto-Bold",      
-                }}
-              >
-                Get OTP
-              </Text>
+            <Pressable style={styles.otpButton} onPress={requestOtp}>
+              <Text style={styles.otpButtonText}>Get OTP</Text>
             </Pressable>
+
             <View style={styles.verificationRow}>
               <TextInput
-                style={[inputStyle("verify", invalidFields.includes('verify')), { flex: 1 }]}
+                style={[
+                  inputStyle("verify", invalidFields.includes("verify")),
+                  { flex: 1 },
+                ]}
                 placeholder="Verification Code"
                 value={verify}
                 onChangeText={setVerify}
                 keyboardType="numeric"
               />
-
-              <Pressable
-                style={styles.verifyButton}
-                onPress={handleVerifyOtp}
-              >
-                <Text style={{ color: "white", fontWeight: "bold"}}>Verify</Text>
+              <Pressable style={styles.verifyButton} onPress={handleVerifyOtp}>
+                <Text style={{ color: "white", fontWeight: "bold" }}>
+                  Verify
+                </Text>
               </Pressable>
             </View>
 
@@ -322,55 +270,46 @@ export default function Magsasakaregister() {
               onChangeText={setConfirmPassword}
             />
 
+            {/* Error Messages */}
             <View style={styles.alertContainer}>
-              {error ? <Text style={styles.error}>{error}</Text> : null}
-              {success ? <Text style={styles.success}>{success}</Text> : null}
-              {errorMessages.length > 0 && (
-                <View>
-                  {errorMessages.map((msg, index) => (
-                    <Text key={index} style={{ color: "red", marginBottom: 3 }}>
-                      {msg}
-                    </Text>
-                  ))}
-                </View>
-              )}
+              {errorMessages.length > 0 &&
+                errorMessages.map((msg, i) => (
+                  <Text key={i} style={{ color: "red", marginBottom: 3 }}>
+                    {msg}
+                  </Text>
+                ))}
             </View>
           </KeyboardAwareScrollView>
         </View>
       </LinearGradient>
 
+      {/* Submit Button */}
       <View style={styles.buttons}>
-        <View>
-          <Pressable
-            style={styles.buttonWithText}
-            onPress={handleSubmit}
-            disabled={!isFormComplete}
+        <Pressable
+          style={styles.buttonWithText}
+          onPress={handleSubmit}
+          disabled={!isFormComplete}
+        >
+          <Text
+            style={[styles.buttonText, { opacity: isFormComplete ? 1 : 0.5 }]}
           >
-            <Text
-              style={[styles.buttonText, { opacity: isFormComplete ? 1 : 0.5 }]}
-            >
-              SUNOD
-            </Text>
-            <Image
-              source={require("../assets/STARTer/Farmer Verification/next-page.png")}
-              style={styles.buttonIcon}
-            />
-          </Pressable>
-        </View>
+            SUNOD
+          </Text>
+          <Image
+            source={require("../assets/STARTer/Farmer Verification/next-page.png")}
+            style={styles.buttonIcon}
+          />
+        </Pressable>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  // ==== Containers ====
-  container: {
-    flex: 1,
-    backgroundColor: "#E6F5EC",
-  },
+  container: { flex: 1, backgroundColor: "#E6F5EC" },
   scrollViewContainer: {
     top: "2%",
-    height: height * 0.667,
+    paddingBottom: height * 0.145,
     width: width * 0.8,
     alignSelf: "center",
   },
@@ -388,14 +327,21 @@ const styles = StyleSheet.create({
     zIndex: 2,
     alignSelf: "center",
   },
-  content: {
-    width: "100%",
-    maxWidth: 338,
-    alignSelf: "center",
-    elevation: 10,
+  textSection: { flex: 1, justifyContent: "center", alignItems: "center" },
+  headerTextSection: { position: "relative", top: height * 0.04 },
+  mainText: {
+    textAlign: "center",
+    fontSize: RFValue(27),
+    fontFamily: "Roboto-Bold",
   },
-
-  // ==== Back Button ====
+  subText: { textAlign: "center", fontSize: RFValue(14), width: width * 0.9 },
+  label: {
+    fontSize: 14,
+    color: "white",
+    fontFamily: "Roboto-Bold",
+    marginTop: 16,
+    marginBottom: 6,
+  },
   backPosition: {
     position: "absolute",
     width: height * 0.03,
@@ -404,41 +350,7 @@ const styles = StyleSheet.create({
     left: width * 0.04,
     top: height * 0.04,
   },
-  backIcon: {
-    width: "100%",
-    height: "100%",
-  },
-
-  // ==== Header Text ====
-  textSection: {
-    flex: 1,
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-  },
-  headerTextSection: {
-    position: "relative",
-    top: height * 0.04,
-  },
-  mainText: {
-    textAlign: "center",
-    fontSize: RFValue(27),
-    fontFamily: "Roboto-Bold",
-  },
-  subText: {
-    textAlign: "center",
-    fontSize: RFValue(14),
-    width: width * 0.9,
-  },
-  subtitle: {
-    fontSize: RFValue(15),
-    color: "black",
-    fontFamily: "Roboto-Regular",
-    marginTop: 5,
-    maxWidth: "85%",
-  },
-
-  // ==== Buttons ====
+  backIcon: { width: "100%", height: "100%" },
   buttons: {
     position: "absolute",
     flexDirection: "row",
@@ -449,16 +361,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     zIndex: 3,
   },
-  buttonWithText: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-  },
-  buttonIcon: {
-    width: 29,
-    height: 29,
-    resizeMode: "contain",
-  },
+  buttonWithText: { flexDirection: "row", alignItems: "center", gap: 5 },
+  buttonIcon: { width: 29, height: 29, resizeMode: "contain" },
   buttonText: {
     fontSize: RFValue(15),
     fontFamily: "Roboto-Bold",
@@ -470,53 +374,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 8,
     marginLeft: 10,
-    marginTop: -10,
     justifyContent: "center",
     alignItems: "center",
     elevation: 4,
     fontSize: RFValue(13),
     fontFamily: "Roboto-Bold",
   },
-
-  // ==== Icon + Label ====
-  label: {
-    fontSize: RFValue(13),
-    color: "white",
-    fontFamily: "Roboto-Bold",
-    marginTop: 16,
-    marginBottom: 6,
-  },
-  iconAndLabel: {
-    flexDirection: "column",
+  otpButton: {
+    backgroundColor: "#10AF7C",
+    height: 45,
+    borderRadius: 8,
+    marginBottom: 10,
+    justifyContent: "center",
     alignItems: "center",
-    gap: height * 0.015, 
+    elevation: 4,
   },
-
-  // ==== Alerts / Validation ====
-  alertContainer: {
-    marginTop: 5,
-    marginBottom: 15,
+  otpButtonText: {
+    color: "white",
+    fontSize: RFValue(14),
+    fontFamily: "Roboto-Bold",
   },
-  error: {
-    color: "red",
-    fontSize: RFValue(12),
-    marginLeft: 10,
-  },
-  success: {
-    color: "green",
-    fontSize: RFValue(12),
-    marginLeft: 10,
-  },
-
-  // ==== Misc ====
-  top: {
-    marginTop: 50,
-    paddingHorizontal: 30,
-  },
+  alertContainer: { marginTop: 5, marginBottom: 15 },
   verificationRow: {
-    display: "flex",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    flexDirection: "row",
   },
 });

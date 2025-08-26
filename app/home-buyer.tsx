@@ -13,15 +13,21 @@ import {
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import Colors from "../constants/Colors";
+
 const { width, height } = Dimensions.get("window");
 
 const logoImg: ImageSourcePropType = require("../assets/images/home-title.png");
 const logoutImg: ImageSourcePropType = require("../assets/images/open-pane.png");
 
 export default function HomeBuyer() {
+  // Dynamic sizing for buttons
+  const buttonSize = Math.min(height * 0.2, width * 0.42);
+  const iconSize = buttonSize * 0.6;
+  const fontSize = buttonSize * 0.17;
+
   return (
     <View style={styles.container}>
-      {/* Logo at top left */}
+      {/* Logo at top */}
       <LinearGradient
         colors={["#10AF7C", "#86C778"]}
         start={{ x: 0, y: 0 }}
@@ -31,8 +37,8 @@ export default function HomeBuyer() {
         <Image source={logoImg} style={styles.logoImage} />
       </LinearGradient>
 
+      {/* Home text banner */}
       <View style={styles.mamiliContainer}>
-        {/* Home text banner */}
         <Text style={styles.mainText}>Mamili ng Gagawin</Text>
       </View>
 
@@ -40,7 +46,10 @@ export default function HomeBuyer() {
       <View style={styles.gridContainer}>
         <View style={styles.row}>
           <View style={styles.gridItem}>
-            <Pressable style={styles.button} onPress={() => router.push("/buy-page")}>
+            <Pressable
+              style={[styles.button, { width: buttonSize, height: buttonSize }]}
+              onPress={() => router.push("/buy-page")}
+            >
               <LinearGradient
                 colors={[
                   Colors.primaryGreen,
@@ -54,18 +63,21 @@ export default function HomeBuyer() {
               >
                 <View style={styles.iconAndLabel}>
                   <Image
-                    style={styles.buttonIcon}
+                    style={{ width: iconSize, height: iconSize }}
                     source={require("../assets/images/Hay.png")}
                     resizeMode="contain"
                   />
-                  <Text style={styles.buttonText}>Bumili</Text>
+                  <Text style={[styles.buttonText, { fontSize }]}>Bumili</Text>
                 </View>
               </LinearGradient>
             </Pressable>
           </View>
-          
+
           <View style={styles.gridItem}>
-            <Pressable style={styles.button} onPress={() => router.push("/StatsPage")}>
+            <Pressable
+              style={[styles.button, { width: buttonSize, height: buttonSize }]}
+              onPress={() => router.push("/StatsPage")}
+            >
               <LinearGradient
                 colors={[
                   Colors.primaryGreen,
@@ -79,11 +91,11 @@ export default function HomeBuyer() {
               >
                 <View style={styles.iconAndLabel}>
                   <Image
-                    style={styles.buttonIcon}
+                    style={{ width: iconSize, height: iconSize }}
                     source={require("../assets/STARTer/Sign Up/cart-icon.png")}
                     resizeMode="contain"
                   />
-                  <Text style={styles.buttonText}>Market</Text>
+                  <Text style={[styles.buttonText, { fontSize }]}>Market</Text>
                 </View>
               </LinearGradient>
             </Pressable>
@@ -92,7 +104,9 @@ export default function HomeBuyer() {
 
         <View style={styles.row}>
           <View style={styles.gridItem}>
-            <Pressable style={styles.button}>
+            <Pressable
+              style={[styles.button, { width: buttonSize, height: buttonSize }]}
+            >
               <LinearGradient
                 colors={[
                   Colors.primaryGreen,
@@ -104,20 +118,32 @@ export default function HomeBuyer() {
                 end={{ x: 1, y: 1 }}
                 style={styles.gradientBackground}
               >
-                <View style={styles.iconAndLabel}>
+                <View
+                  style={[
+                    styles.iconAndLabel,
+                    {
+                      paddingTop: buttonSize * 0.1,
+                      paddingBottom: buttonSize * 0.05,
+                    },
+                  ]}
+                >
                   <Image
-                    style={styles.produkto}
+                    style={{ width: iconSize, height: iconSize }}
                     source={require("../assets/images/icons8-location-100(1) 1.png")}
                     resizeMode="contain"
                   />
-                  <Text style={styles.buttonText}>Produkto</Text>
+                  <Text style={[styles.buttonText, { fontSize }]}>
+                    Produkto
+                  </Text>
                 </View>
               </LinearGradient>
             </Pressable>
           </View>
-          
+
           <View style={styles.gridItem}>
-            <Pressable style={styles.button}>
+            <Pressable
+              style={[styles.button, { width: buttonSize, height: buttonSize }]}
+            >
               <LinearGradient
                 colors={[
                   Colors.primaryGreen,
@@ -131,15 +157,15 @@ export default function HomeBuyer() {
               >
                 <View style={styles.iconAndLabel}>
                   <Image
-                    style={styles.buttonIcon}
+                    style={{ width: iconSize, height: iconSize }}
                     source={require("../assets/images/User.png")}
                     resizeMode="contain"
                   />
-                  <Text style={styles.buttonText}>Account</Text>
+                  <Text style={[styles.buttonText, { fontSize }]}>Account</Text>
                 </View>
               </LinearGradient>
             </Pressable>
-          </View>     
+          </View>
         </View>
       </View>
 
@@ -164,11 +190,7 @@ export default function HomeBuyer() {
 }
 
 const styles = StyleSheet.create({
-  // ---------- Main Containers ----------
-  container: {
-    flex: 1,
-    backgroundColor: "#E6F5EC",
-  },
+  container: { flex: 1, backgroundColor: "#E6F5EC" },
   gridContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -176,21 +198,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: RFValue(20),
   },
-  gridItem: {
-    margin: width * 0.015, // half the desired gap
-  },
-  row: {
-    flexDirection: "row",
-  },
-
+  gridItem: { margin: width * 0.015 },
+  row: { flexDirection: "row" },
   iconAndLabel: {
     paddingTop: height * 0.02,
     paddingBottom: height * 0.01,
     alignItems: "center",
     justifyContent: "center",
   },
-
-  // ---------- Logo Section ----------
   logoContainer: {
     height: height * 0.12,
     alignItems: "center",
@@ -198,20 +213,7 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     marginBottom: height * 0.01,
   },
-  logoImage: {
-    resizeMode: "contain",
-    width: height * 0.3,
-  },
-  logoText: {
-    fontFamily: "Secular One", // Ensure this font is linked in your project
-    fontWeight: "400",
-    fontSize: 25,
-    lineHeight: 31,
-    letterSpacing: 0.012,
-    color: "#FFCA43",
-  },
-
-  // ---------- Main Text ----------
+  logoImage: { resizeMode: "contain", width: height * 0.3 },
   mamiliContainer: {
     height: height * 0.1,
     justifyContent: "center",
@@ -223,18 +225,14 @@ const styles = StyleSheet.create({
     fontSize: RFValue(27),
     fontFamily: "Roboto-Bold",
   },
-
-  // ---------- Buttons ----------
   button: {
-    width: height * 0.2,
-    height: height * 0.2,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 2.3,
     elevation: 3,
-    overflow: "hidden", // ensures gradient respects borderRadius
+    overflow: "hidden",
   },
   gradientBackground: {
     flex: 1,
@@ -242,26 +240,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    fontSize: RFValue(23),
     fontFamily: "Roboto-Bold",
     color: "white",
     marginTop: RFValue(5),
+    textAlign: "center",
   },
-  buttonIcon: {
-    width: width * 0.28,
-    height: width * 0.28,
-  },
-  produkto: {
-    marginTop: width * 0.015,
-    height: width * 0.23,
-    marginBottom: width * 0.035,
-  },
-
-  // ---------- Language Selection ----------
-  languageRow: {
-    flexDirection: "row",
-    gap: width * 0.05,
-  },
+  languageRow: { flexDirection: "row", gap: width * 0.05 },
   languageLabel: {
     left: width * 0.05,
     fontFamily: "Roboto",
@@ -292,8 +276,6 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     color: "#FFF",
   },
-
-  // ---------- Logout Button ----------
   logoutButton: {
     position: "absolute",
     flexDirection: "row",
@@ -306,10 +288,7 @@ const styles = StyleSheet.create({
     paddingVertical: height * 0.01,
     borderRadius: 24,
   },
-  logoutImage: {
-    width: height * 0.03,
-    height: height * 0.03,
-  },
+  logoutImage: { width: height * 0.03, height: height * 0.03 },
   logoutButtonText: {
     fontSize: RFValue(16),
     color: "white",
