@@ -2,11 +2,11 @@ import axios from 'axios';
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from 'expo-router';
 import { useEffect, useState } from "react";
-import { Dimensions, FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Dimensions, FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { SafeAreaView } from "react-native-safe-area-context";
-import BuyItem from "../components/BuyItem";
-import GradientBtn from "../components/GradientBtn";
+import ReceiveFarmer from "../components/ReceiveFarmer";
+
  
 const { width, height } = Dimensions.get('window');
 
@@ -34,12 +34,12 @@ export default function Signin() {
       >
         
         <SafeAreaView style={styles.header}>
-          <Pressable onPress={() => router.push("/home-buyer")}>
+          <Pressable onPress={() => router.push("/home-magsasaka")}>
             <Image source={require("../assets/images/Back-w.png")} style={styles.back}></Image>
           </Pressable>
           <View style={[styles.logoMiddle]}>
          <Image source={require("../assets/images/pamilihan-logo.png")} style={styles.pamilihanLogo}></Image>
-         <Text style={styles.pamilihanText}>Pamilihan</Text>
+         <Text style={styles.pamilihanText}>Mga Produkto</Text>
 
           </View>
         </SafeAreaView>
@@ -47,17 +47,25 @@ export default function Signin() {
 
 
       <View style={styles.searchSection}>
-        <View style={styles.searchBarContainer}>
-        <TextInput style={styles.searchBar}
-        onLayout={e => setSearchLeft(e.nativeEvent.layout.x)}
-        onChangeText={onChangeSearchText}
-        placeholder="Search">
 
-        </TextInput>
+      {/* Tatanggapin (Gradient Button) */}
+      <Pressable style={styles.halfButton} onPress={() => router.push('/productStateFarmerReceive')}>
+        <LinearGradient
+          colors={['#10AF7C', '#86C778']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.gradientButton}
+        >
+          <Text style={styles.gradientText}>Tatangapin</Text>
+        </LinearGradient>
+      </Pressable>
+
+      {/* Nakumpleto (Outlined Button) */}
+      <Pressable style={styles.halfButton}>
+        <View style={styles.outlinedButton}>
+          <Text style={styles.outlinedText}>Nakumpleto</Text>
         </View>
-        <View style={styles.filterContainer}>
-        <GradientBtn btnText="Filter" style={[styles.filterButton, {left: searchLeft}]}/>
-        </View>
+      </Pressable>
         
       </View>
 
@@ -65,7 +73,7 @@ export default function Signin() {
         <FlatList
          data={products}
          keyExtractor={(item, index) => item.id?.toString() || index.toString()}
-         renderItem={({ item }) => <BuyItem item={item} />}
+         renderItem={({ item }) => <ReceiveFarmer item={item} />}
          ListEmptyComponent={<Text>No products available</Text>}
          showsVerticalScrollIndicator={false}
          />
@@ -134,7 +142,8 @@ const styles = StyleSheet.create({
   },
 
   searchSection: {
-    marginVertical: 5,
+    flexDirection: 'row',
+    marginVertical: 10,
   },
 
   bodySection: {
@@ -168,5 +177,34 @@ const styles = StyleSheet.create({
     borderColor: "#D9D9D9",
     fontSize: 12,
     margin: 0,
+  },
+    halfButton: {
+    flex: 1,
+    marginHorizontal: 15,
+  },
+  gradientButton: {
+    height: 45,
+    borderRadius: 22.5, // 👈 pill shape
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  gradientText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  outlinedButton: {
+    height: 45,
+    borderRadius: 22.5, // 👈 pill shape
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#10AF7C',
+    backgroundColor: 'white',
+  },
+  outlinedText: {
+    color: '#10AF7C',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

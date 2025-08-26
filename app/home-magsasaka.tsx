@@ -61,7 +61,7 @@ export default function HomeMagsasaka() {
         <View style={styles.row}>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => router.push('/productState')}
+            onPress={() => router.push('/productStateFarmerReceive')}
           >
               <Image source={settingsImg} style={styles.buttonImg}/>
           </TouchableOpacity>
