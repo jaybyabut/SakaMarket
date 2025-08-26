@@ -1,16 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import CheckBox from "expo-checkbox";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useLayoutEffect, useState } from "react";
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useLayoutEffect } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const PRODUCTS = [
   { id: "palay", name: "Palay" },
@@ -20,220 +11,102 @@ const PRODUCTS = [
   { id: "talong", name: "Talong" },
 ];
 
-export default function Magsasakaregister() {
+export default function SellSuccess() {
   const navigation = useNavigation();
   const params = useLocalSearchParams();
-  const [isChecked, setIsChecked] = useState(false);
 
   const navBack = () => {
-    router.push("/sellpage2");
+    router.push("/sellpage1");
   };
 
   useLayoutEffect(() => {
-    navigation.setOptions({ title: "Sell page 3" });
+    navigation.setOptions({ title: "Sell page 4" });
   }, [navigation]);
 
   const product = PRODUCTS.find((p) => p.id === params.productId);
 
-  const handleConfirm = async () => {
-    if (!isChecked) {
-      Alert.alert("Paalala", "Pakisigurado na lahat ng detalye ay tama.");
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        "http://10.0.2.2/database/sellProduct.php",
-        params,
-        { headers: { "Content-Type": "application/json" } }
-      );
-      Alert.alert("Tagumpay", response.data.message || "Product stored!");
-      router.push({ pathname: "/sellpage4", params });
-    } catch (error) {
-      console.error(error);
-      Alert.alert("Error", "Hindi na-save ang produkto.");
-    }
-  };
-
   return (
-    <View style={styles.background}>
-      <View style={styles.container}>
-        <View style={styles.backgroundShape} />
+    <View style={styles.container}>
+      <Image
+        source={require("../assets/images/Checkmark.png")}
+        style={styles.logo}
+      />
+      <Text style={styles.header}>Tagumpay!</Text>
 
-        <View style={styles.top}>
-          <Text style={styles.header}>Magbenta ng Tanim</Text>
-          <Text style={styles.subtitle}>Kumpirmahin ang mga detalye</Text>
-        </View>
+      <View style={styles.box}>
+        <Text style={styles.contentHeader}>NAIBENTA NA ANG PRODUKTO</Text>
+        <Text style={styles.content}>
+          Pangalan: {product?.name || "Hindi Natukoy"}
+        </Text>
+        <Text style={styles.content}>Presyo: ₱{params.price}</Text>
+        <Text style={styles.content}>Dami: {params.amount} kilo</Text>
+        <Text style={styles.content}>
+          Deskripsyon: {params.description || "Wala"}
+        </Text>
+      </View>
 
-        <View style={styles.content}>
-          <Text style={styles.text}>Ikaw ay magbebenta ng:</Text>
-
-          <View style={styles.box}>
-            <Text style={styles.boxText}>
-              Pangalan ng Produkto: {product?.name || "Hindi Natukoy"}
-            </Text>
-            <Text style={styles.boxText}>Presyo: ₱{params.price}</Text>
-            <Text style={styles.boxText}>Dami: {params.amount} kilo</Text>
-            <Text style={styles.boxText}>
-              Deskripsyon: {params.description}
-            </Text>
-            {params.image ? (
-              <Image
-                source={{ uri: params.image as string }}
-                style={styles.previewImage}
-              />
-            ) : null}
-          </View>
-
-          <View style={styles.checkboxRow}>
-            <CheckBox
-              value={isChecked}
-              onValueChange={setIsChecked}
-              color={isChecked ? "#10AF7C" : undefined}
-              style={styles.checkbox}
-            />
-            <Text style={styles.subtitle2}>
-              Lahat ng detalye na aking inilagay ay tama
-            </Text>
-          </View>
-
-          <TouchableOpacity
-            style={styles.button}
-            activeOpacity={0.7}
-            onPress={handleConfirm}
-          >
-            <Text style={{ color: "white", fontFamily: "Roboto-Bold", fontSize: 30 }}>
-              IBENTA
-            </Text>
-          </TouchableOpacity>
-
-          <View style={styles.backRow}>
-            <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
-              <Image
-                source={require("../assets/images/backtoblack.png")}
-                style={styles.imageButton2}
-              />
-            </TouchableOpacity>
-            <Text style={styles.navText2}>BUMALIK</Text>
-          </View>
-        </View>
+      <View style={styles.backRow}>
+        <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
+          <Image
+            source={require("../assets/images/backtoblack.png")}
+            style={styles.imageButton}
+          />
+        </TouchableOpacity>
+        <Text style={styles.navText}>BUMALIK SA MAIN PAGE</Text>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: "#10AF7C",
-  },
   container: {
     flex: 1,
-    position: "relative",
-  },
-  backgroundShape: {
-    position: "absolute",
-    width: 450,
-    height: 830,
+    alignItems: "center",
     backgroundColor: "white",
-    borderRadius: 70,
-    bottom: -100,
-    zIndex: 1,
-    left: -20,
   },
-  top: {
-    flex: 1,
+  logo: {
+    width: 200,
+    height: 200,
+    marginTop: 100,
   },
   header: {
-    fontSize: 30,
-    color: "white",
-    fontFamily: "Roboto-Bold",
-    top: 50,
-    left: 40,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: "white",
-    fontFamily: "Roboto-Regular",
-    top: 49,
-    left: 40,
-  },
-  content: {
-    flex: 7,
-    padding: 20,
-    marginTop: 40,
-    zIndex: 2,
-  },
-  text: {
-    fontSize: 20,
+    fontSize: 40,
     color: "black",
     fontFamily: "Roboto-Bold",
-    marginTop: 20,
-    marginLeft: 20,
-    marginBottom: 20,
+    marginTop: 10,
   },
   box: {
+    width: "85%",
     backgroundColor: "#10AF7C",
     borderRadius: 20,
     padding: 20,
-    width: "90%",
-    alignSelf: "center",
+    marginTop: 20,
   },
-  boxText: {
-    fontSize: 18,
+  contentHeader: {
+    fontSize: 20,
     color: "white",
     fontFamily: "Roboto-Bold",
-    marginTop: 10,
+    marginBottom: 10,
   },
-  previewImage: {
-    width: "100%",
-    height: 120,
-    borderRadius: 10,
-    marginTop: 10,
-  },
-  checkboxRow: {
-    flexDirection: "row",
-    marginTop: 30,
-    alignItems: "center",
-    marginLeft: 30,
-  },
-  checkbox: {
-    width: 16,
-    height: 16,
-    marginRight: 5,
-  },
-  subtitle2: {
-    flex: 1,
-    fontSize: 15,
-    color: "black",
+  content: {
+    fontSize: 18,
+    color: "white",
     fontFamily: "Roboto-Regular",
-  },
-  button: {
-    backgroundColor: "#10AF7C",
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 10,
-    alignItems: "center",
-    width: "90%",
-    marginLeft: 20,
-    marginTop: 40,
+    marginBottom: 5,
   },
   backRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 40,
-    marginLeft: 20,
+    marginTop: 60,
   },
-  imageButton2: {
+  imageButton: {
     width: 30,
     height: 30,
-    zIndex: 2,
   },
-  navText2: {
-    fontSize: 20,
+  navText: {
+    fontSize: 18,
     color: "black",
     fontFamily: "Roboto-Bold",
     marginLeft: 5,
-    zIndex: 2,
   },
 });
