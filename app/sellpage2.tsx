@@ -2,7 +2,7 @@ import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { RFValue } from "react-native-responsive-fontsize";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
@@ -30,7 +30,13 @@ export default function Magsasakaregister() {
   const [amount, setAmount] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<string | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products] = useState<Product[]>([
+    { id: "palay", name: "Palay" },
+    { id: "sibuyas", name: "Sibuyas" },
+    { id: "kamatis", name: "Kamatis" },
+    { id: "sili", name: "Sili" },
+    { id: "talong", name: "Talong" },
+  ]);
   const [touched, setTouched] = useState<boolean>(false);
 
   const navigation = useNavigation();
@@ -38,20 +44,6 @@ export default function Magsasakaregister() {
   useLayoutEffect(() => {
     navigation.setOptions({ title: "Magsasaka Register Page" });
   }, [navigation]);
-
-  // ✅ Fetch products for selection
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("http://10.0.2.2/database/getProducts.php");
-        const data = await res.json();
-        setProducts(data || []);
-      } catch (err) {
-        console.error("Failed to fetch products", err);
-      }
-    };
-    fetchProducts();
-  }, []);
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
