@@ -42,13 +42,26 @@ export default function Magsasakaregister() {
     }
 
     try {
+      const payload = {
+        name: product?.name || "Unknown",
+        price: params.price,
+        amount: params.amount,
+        description: params.description,
+        image: params.image,
+      };
+
       const response = await axios.post(
         "http://10.0.2.2/database/sellProduct.php",
-        params,
+        payload,
         { headers: { "Content-Type": "application/json" } }
       );
-      Alert.alert("Tagumpay", response.data.message || "Product stored!");
-      router.push({ pathname: "/sellpage4", params });
+
+      if (response.data.error) {
+        Alert.alert("Error", response.data.error);
+        return;
+      }
+
+      router.push({ pathname: "/sellpage4", params: payload });
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Hindi na-save ang produkto.");
