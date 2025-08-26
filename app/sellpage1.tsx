@@ -118,6 +118,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 20,
     width: "100%",
-    transform: [{ scale: 0.8 }],
+    transform: [{ scale: 0.755 }],
   },
 });

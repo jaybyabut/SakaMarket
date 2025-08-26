@@ -50,7 +50,7 @@ function ButtonWithText({ icon, label, reverse, onPress, disabled = false }: But
 // ----- UploadField Component -----
 function UploadField({ label = "", image, onPick, invalid }: UploadFieldProps) {
   return (
-    <View style={{ marginBottom: 15 }}>
+    <View>
       <Text style={[styles.label, invalid && { color: "red" }]}>{label}</Text>
       <Pressable
         style={[
@@ -62,7 +62,6 @@ function UploadField({ label = "", image, onPick, invalid }: UploadFieldProps) {
         {image ? (
           <Image
             source={{ uri: image }}
-            style={{ width: "100%", height: "100%", borderRadius: 10 }}
           />
         ) : (
           <Text style={styles.uploadText}>Pindutin Upang Makapili</Text>
@@ -142,7 +141,9 @@ export default function Magsasakaregister() {
         style={styles.greenContainer}
       >
         <View style={styles.scrollViewContainer}>
-          <KeyboardAwareScrollView showsVerticalScrollIndicator={true}>
+          <KeyboardAwareScrollView 
+          showsVerticalScrollIndicator={true}>
+            <View style={styles.uploadSection}>
             {/* Name */}
             <Text style={[styles.label, touched && !name && { color: "red" }]}>
               Pangalan ng Produkto
@@ -215,6 +216,7 @@ export default function Magsasakaregister() {
               onChangeText={setDescription}
               multiline
             />
+            </View>
           </KeyboardAwareScrollView>
         </View>
       </LinearGradient>
@@ -236,8 +238,6 @@ export default function Magsasakaregister() {
 }
 
 // ----- Styles -----
-const MAX_WIDTH = 338;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -260,10 +260,15 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     top: "4%",
-    height: height * 0.652,
-    width: MAX_WIDTH,
+    paddingBottom: height * 0.160,
+    width: 338,
     alignSelf: "center",
   },
+  uploadSection: {
+    width: width * 0.8,
+    alignSelf: "center",
+  },
+
 
   // ==== Header & Back Button ====
   textSection: {
@@ -302,7 +307,7 @@ const styles = StyleSheet.create({
 
   // ==== Form Inputs ====
   label: {
-    fontSize: RFValue(13),
+    fontSize: 14,
     fontFamily: "Roboto-Medium",
     marginBottom: 10,
     color: "#FFF",
@@ -311,25 +316,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFDEB",
     padding: 12,
     borderRadius: 12,
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "Roboto-Regular",
     marginBottom: 12,
-    width: MAX_WIDTH,
   },
   inputDesc: {
     backgroundColor: "#FFFDEB",
     padding: 12,
     borderRadius: 12,
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "Roboto-Regular",
     height: 120,
     textAlignVertical: "top",
     marginBottom: 20,
-    width: MAX_WIDTH,
   },
   dropArea: {
     height: 120,
-    width: MAX_WIDTH,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -338,8 +340,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   uploadText: {
-    color: "#8F8E8E",
-    fontSize: RFValue(12),
+    color: "#808080",
+    fontSize: 14,
     fontFamily: "Roboto-Regular",
   },
 

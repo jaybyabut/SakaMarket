@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    fontSize: RFValue(13),
+    fontSize: 14,
     fontFamily: "Roboto-Medium",
     marginBottom: 10,
     color: "#FFF",
