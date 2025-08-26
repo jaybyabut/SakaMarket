@@ -167,6 +167,7 @@ export default function HomeFarmer() {
           <View style={styles.gridItem}>
             <Pressable
               style={[styles.button, { width: buttonSize, height: buttonSize }]}
+              onPress={() => router.push("/account-magsasaka")}
             >
               <LinearGradient
                 colors={[

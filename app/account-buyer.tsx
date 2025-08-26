@@ -185,6 +185,7 @@ const AccountBuyer: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#E6F5EC",
   },
   topGradient: {
     height: height * 0.1,
