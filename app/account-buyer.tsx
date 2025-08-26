@@ -150,7 +150,7 @@ const AccountBuyer: React.FC = () => {
         </View>
 
         <View style={styles.buyHistoryContainer}>
-          <Text style={styles.activeLabel}>MGA NAIBENTANG PRODUKTO</Text>
+          <Text style={styles.activeLabel}>MGA NABILING PRODUKTO</Text>
           {loading ? (
             <ActivityIndicator size="large" color="#2e7d32" />
           ) : transactions.length === 0 ? (

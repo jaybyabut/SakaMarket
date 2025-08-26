@@ -191,7 +191,7 @@ const AccountMagsasaka: React.FC = () => {
 
         {/* Sold Products Section */}
         <View style={styles.sellHistoryContainer}>
-          <Text style={styles.activeLabel}>MGA NABILING PRODUKTO</Text>
+          <Text style={styles.activeLabel}>MGA NAIBENTANG PRODUKTO</Text>
           {loading ? (
             <ActivityIndicator size="large" color="#2e7d32" />
           ) : transactions.length === 0 ? (
