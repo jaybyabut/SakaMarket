@@ -1,16 +1,22 @@
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import CheckBox from "expo-checkbox";
+import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useLayoutEffect, useState } from "react";
 import {
   Alert,
+  Dimensions,
   Image,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
+import { RFValue } from "react-native-responsive-fontsize";
+
+const { width, height } = Dimensions.get("window");
 
 export default function SellPage3() {
   const navigation = useNavigation();
@@ -44,23 +50,29 @@ export default function SellPage3() {
   };
 
   return (
-    <View style={styles.background}>
-      <View style={styles.container}>
+    
+      <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "rgba(134,199,120,0.87)",]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.container}>
         {/* Background Shape */}
-        <View style={styles.backgroundShape} />
+        
 
         {/* Foreground Content */}
+        <Pressable style={styles.backPosition} onPress={() => router.back()}>
+                  <Image
+                    style={styles.backIcon}
+                    source={require("../assets/images/Back-w.png")}
+                  />
+                </Pressable>
         <View style={styles.top}>
           <Text style={styles.header}>Magbenta ng Tanim</Text>
-          <Text style={styles.subtitle}>Kumpirmahin ang mga detalye</Text>
+          <Text style={styles.subtitle}>Suriin ng mabuti ang mga detalye</Text>
         </View>
-
+        <View style={styles.backgroundShape}>
         <View style={styles.content}>
           <Text style={styles.text}>Ikaw ay magbebenta ng:</Text>
 
           <View style={styles.box}>
             <Text style={styles.boxText}>
-              Pangalan ng Produkto: {params.name}
+              Pangalan: {params.name}
             </Text>
             <Text style={styles.boxText}>Presyo: ₱{params.price}</Text>
             <Text style={styles.boxText}>Dami: {params.amount} kilo</Text>
@@ -93,130 +105,111 @@ export default function SellPage3() {
               IBENTA
             </Text>
           </TouchableOpacity>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: 190,
-              marginLeft: 20,
-            }}
-          >
-            <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
-              <Image
-                source={require("../assets/images/backtoblack.png")}
-                style={styles.imageButton2}
-              />
-            </TouchableOpacity>
-            <Text style={styles.navText2}>BUMALIK</Text>
-          </View>
+          
         </View>
-      </View>
-    </View>
+        </View>
+      </LinearGradient>
+
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
+  container: {
     flex: 1,
     backgroundColor: "#10AF7C",
   },
-  container: {
-    flex: 1,
-    position: "relative",
-  },
   backgroundShape: {
-    position: "absolute",
-    width: 450,
-    height: 830,
-    backgroundColor: "white",
-    borderRadius: 70,
-    bottom: -100,
+    flex: 4,
+    backgroundColor: "#E6F5EC",
+    borderTopLeftRadius: 70,
+    borderTopRightRadius: 70,
+    width: width * 1.1,
+    alignSelf: "center",
     zIndex: 1,
-    left: -20,
   },
   top: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
-    fontSize: 30,
-    color: "white",
+    fontSize: RFValue(26),
     fontFamily: "Roboto-Bold",
-    top: 50,
-    left: 40,
+    color: '#E6F5EC',
   },
   subtitle: {
-    fontSize: 15,
-    color: "white",
+    fontSize: RFValue(14),
     fontFamily: "Roboto-Regular",
-    top: 49,
-    left: 40,
+    color: '#E6F5EC',
   },
   content: {
-    flex: 7,
-    padding: 20,
-    marginTop: 40,
-    zIndex: 2,
+    flex: 1,
+    width: width * 0.8,
+    paddingTop: height * 0.05,
+    alignSelf: 'center',
   },
   text: {
-    fontSize: 20,
-    color: "black",
-    fontFamily: "Roboto-Bold",
-    marginTop: 20,
-    marginLeft: 20,
-    marginBottom: 20,
+    fontSize: RFValue(14),
+    fontFamily: "Roboto-Regular",
+    paddingLeft: '5%',
+    marginBottom: '2%',
   },
   box: {
     backgroundColor: "#10AF7C",
-    height: 200,
-    borderRadius: 20,
-    padding: 20,
-    justifyContent: "center",
-    width: "90%",
-    alignSelf: "center",
+    width: '100%',
+    height: height * 0.3,
+    alignSelf: 'center',
+    borderRadius: 12,
+    paddingLeft: '5%',
+    justifyContent: 'space-around'
   },
   boxText: {
-    fontSize: 20,
-    color: "white",
-    fontFamily: "Roboto-Bold",
-    marginTop: 20,
+    fontSize: RFValue(18),
+    color: '#E6F5EC',
+    fontFamily: 'Roboto-Bold',
   },
   checkboxRow: {
-    flexDirection: "row",
-    marginTop: 30,
-    alignItems: "center",
-    marginLeft: 30,
+    marginTop: '10%',
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    gap: '4%',
   },
   checkbox: {
-    width: 16,
-    height: 16,
-    marginRight: 5,
+    width: width * 0.05,
+    height: width * 0.05,
   },
   subtitle2: {
-    flex: 1,
-    fontSize: 15,
-    color: "black",
-    fontFamily: "Roboto-Regular",
+   fontSize: 12,
+   fontFamily: 'Roboto-Bold'
   },
   button: {
     backgroundColor: "#10AF7C",
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 10,
-    alignItems: "center",
-    width: "90%",
-    marginLeft: 20,
-    marginTop: 70,
+    width: '75%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+    marginTop: '10%',
+    paddingVertical: '3%'
+  
+
   },
   imageButton2: {
-    width: 30,
-    height: 30,
-    zIndex: 2,
+    
   },
   navText2: {
-    fontSize: 20,
-    color: "black",
-    fontFamily: "Roboto-Bold",
-    marginRight: 105,
-    zIndex: 2,
+    
+  },
+  backPosition: {
+    position: "absolute",
+    width: height * 0.03,
+    height: height * 0.03,
+    zIndex: 1,
+    left: width * 0.04,
+    top: height * 0.04,
+  },
+  backIcon: {
+    width: "100%",
+    height: "100%",
   },
 });
