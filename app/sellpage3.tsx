@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+
   },
   header: {
     fontSize: RFValue(26),
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
     height: width * 0.05,
   },
   subtitle2: {
-   fontSize: 12,
+   fontSize: RFValue(11),
    fontFamily: 'Roboto-Bold'
   },
   button: {

@@ -40,7 +40,7 @@ const LandingPage = ({ navigation = { navigate: () => {} } }) => {
           end={{ x: 1, y: 0 }}
           style={styles.signInButton}
         >
-          <Pressable onPress={() => router.push("/product-page")}>
+          <Pressable onPress={() => router.push("/payment")}>
             <Text style={styles.signInText}>Mag-sign in sa Account</Text>
           </Pressable>
         </LinearGradient>
@@ -48,7 +48,7 @@ const LandingPage = ({ navigation = { navigate: () => {} } }) => {
         {/* Create Account Button */}
         <Pressable
           style={styles.createButton}
-          onPress={() => router.push("/sellpage2")}
+          onPress={() => router.push("/product-page")}
         >
           <Text style={styles.createText}>Gumawa ng Account</Text>
         </Pressable>
