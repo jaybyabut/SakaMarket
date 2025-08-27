@@ -81,7 +81,7 @@ function UploadField({ label = "", image, onPick, invalid, imageSize }: UploadFi
 }
 
 // ----- Main Component -----
-export default function SellPage2() {
+export default function EditDetails() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [amount, setAmount] = useState("");
@@ -142,8 +142,8 @@ export default function SellPage2() {
         </Pressable>
 
         <View style={styles.headerTextSection}>
-          <Text style={styles.mainText}>Magbenta ng Tanim</Text>
-          <Text style={styles.subText}>Pakilagay ang mga detalye</Text>
+          <Text style={styles.mainText}>Palitan ang Detalye</Text>
+          <Text style={styles.subText}>I-ibahin ang mga detalyeng nakalagay sa produkto</Text>
         </View>
       </View>
 

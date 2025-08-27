@@ -12,7 +12,7 @@ import {
   View,
 } from "react-native";
 
-export default function Magsasakaregister() {
+export default function SellPage3() {
   const navigation = useNavigation();
   const params = useLocalSearchParams();
   const [isChecked, setIsChecked] = useState(false);

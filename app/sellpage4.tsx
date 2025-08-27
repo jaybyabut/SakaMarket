@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import { useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function Magsasakaregister() {
+export default function SellPage4() {
   const navigation = useNavigation();
   const navBack = () => {
     router.push("/sellpage1");
