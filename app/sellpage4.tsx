@@ -39,7 +39,7 @@ export default function SellSuccess() {
           Pangalan: {product?.name || "Hindi Natukoy"}
         </Text>
         <Text style={styles.content}>Presyo: ₱{params.price}</Text>
-        <Text style={styles.content}>Dami: {params.amount} kilo</Text>
+        <Text style={styles.content}>Dami: {params.amount} kilo/s</Text>
         <Text style={styles.content}>
           Deskripsyon: {params.description || "Wala"}
         </Text>

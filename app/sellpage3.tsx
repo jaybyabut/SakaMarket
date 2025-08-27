@@ -86,7 +86,7 @@ export default function Magsasakaregister() {
               Pangalan ng Produkto: {product?.name || "Hindi Natukoy"}
             </Text>
             <Text style={styles.boxText}>Presyo: ₱{params.price}</Text>
-            <Text style={styles.boxText}>Dami: {params.amount} kilo</Text>
+            <Text style={styles.boxText}>Dami: {params.amount} kilo/s</Text>
             <Text style={styles.boxText}>
               Deskripsyon: {params.description}
             </Text>

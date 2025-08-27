@@ -1,7 +1,7 @@
-// SalesData.tsx
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -21,6 +21,8 @@ const filterIcon = require('../assets/images/Filter-1.png');
 
 const SalesData: React.FC = () => {
   const navigation = useNavigation();
+  const { product } = useLocalSearchParams<{ product: string }>();
+
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,6 +34,13 @@ const SalesData: React.FC = () => {
   const [filterVisible, setFilterVisible] = useState(false);
   const [filter, setFilter] = useState("week");
 
+  const filterLabels: Record<string, string> = {
+    week: "Last Week",
+    month: "Last Month",
+    "6months": "Last 6 Months",
+    lifetime: "Lifetime",
+  };
+
   const handleFilter = (range: string) => {
     setFilter(range);
     setFilterVisible(false);
@@ -39,27 +48,21 @@ const SalesData: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`${API_URL}?filter=${filter}`)
+    axios.get(`${API_URL}?filter=${filter}&product=${product}`)
       .then((response) => {
         const json = response.data;
 
         if (json.status === "success" && json.data.length > 0) {
           const data = json.data;
 
-          const labels = data.map((item: any) => {
-            if (!item.transaction_time) return '--';
-            const parts = item.transaction_time.split(' ');
-            return parts.length > 1 ? parts[1].slice(0, 5) : '--';
-          });
+          const labels = data.map((item: any) =>
+            item.transaction_time ? item.transaction_time.split(' ')[1].slice(0, 5) : '--'
+          );
 
-          const prices = data.map((item: any) => {
-            const val = Number(item.price);
-            return isNaN(val) ? 0 : val;
-          });
+          const prices = data.map((item: any) => Number(item.price) || 0);
 
-          const minLength = Math.min(labels.length, prices.length);
-          setChartLabels(minLength > 0 ? labels.slice(0, minLength) : ['--']);
-          setChartPrices(minLength > 0 ? prices.slice(0, minLength) : [0]);
+          setChartLabels(labels);
+          setChartPrices(prices);
 
           const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
           const recent = prices[prices.length - 1];
@@ -85,7 +88,7 @@ const SalesData: React.FC = () => {
         setTransactions([]);
         setLoading(false);
       });
-  }, [filter]);
+  }, [filter, product]);
 
   return (
     <View style={styles.container}>
@@ -93,22 +96,18 @@ const SalesData: React.FC = () => {
         <Text style={styles.backText}>←</Text>
       </TouchableOpacity>
 
-      <Text style={styles.title}>Palay Market Overview</Text>
-      <Text style={styles.subtitle}>Today's Price Trends</Text>
+      <Text style={styles.title}>{product} Market Overview</Text>
+      <Text style={styles.subtitle}>Today's Price Trends ({filterLabels[filter]})</Text>
 
       <View style={styles.chartCard}>
         {loading ? (
           <ActivityIndicator size="large" color="#2e7d32" />
         ) : (
           <LineChart
-            data={{
-              labels: chartLabels,
-              datasets: [{ data: chartPrices }],
-            }}
+            data={{ labels: chartLabels, datasets: [{ data: chartPrices }] }}
             width={Dimensions.get('window').width - 60}
             height={240}
             yAxisSuffix="₱"
-            yAxisInterval={1}
             chartConfig={{
               backgroundColor: '#ffffff',
               backgroundGradientFrom: '#d4f5d0',
@@ -116,12 +115,7 @@ const SalesData: React.FC = () => {
               decimalPlaces: 2,
               color: (opacity = 1) => `rgba(34, 139, 34, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              propsForDots: {
-                r: '6',
-                strokeWidth: '2',
-                stroke: '#2e7d32',
-                fill: '#66bb6a',
-              },
+              propsForDots: { r: '6', strokeWidth: '2', stroke: '#2e7d32', fill: '#66bb6a' },
             }}
             bezier
             style={styles.chartStyle}
@@ -129,11 +123,12 @@ const SalesData: React.FC = () => {
         )}
       </View>
 
-      {/* 👇 Filter button repositioned and resized */}
+      {/* Filter Button */}
       <View style={styles.filterButtonStandalone}>
         <TouchableOpacity onPress={() => setFilterVisible(true)}>
           <Image source={filterIcon} style={styles.filterIconLarge} />
         </TouchableOpacity>
+        <Text style={styles.filterText}>{filterLabels[filter]}</Text>
       </View>
 
       <View style={styles.priceCard}>
@@ -145,49 +140,35 @@ const SalesData: React.FC = () => {
         </Text>
       </View>
 
-      <Modal
-        visible={filterVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setFilterVisible(false)}
-      >
+      {/* Filter Modal */}
+      <Modal visible={filterVisible} transparent animationType="fade" onRequestClose={() => setFilterVisible(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.filterPopupContainer}>
-            <LinearGradient
-              colors={['#10AF7C', '#28B47B', '#5ABE7A', '#86C778']}
-              style={styles.filterPopupGradient}
-            >
-              <Text style={styles.filterPopupTitle}>Filter</Text>
-              <TouchableOpacity onPress={() => handleFilter('week')}>
-                <Text style={styles.filterPopupOption}>Last Week</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleFilter('month')}>
-                <Text style={styles.filterPopupOption}>Last Month</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleFilter('6months')}>
-                <Text style={styles.filterPopupOption}>Last 6 Months</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleFilter('lifetime')}>
-                <Text style={styles.filterPopupOption}>Lifetime</Text>
-              </TouchableOpacity>
+            <LinearGradient colors={['#10AF7C', '#28B47B', '#5ABE7A', '#86C778']} style={styles.filterPopupGradient}>
+              <Text style={styles.filterPopupTitle}>Select Range</Text>
+              {Object.entries(filterLabels).map(([key, label]) => (
+                <TouchableOpacity key={key} onPress={() => handleFilter(key)}>
+                  <Text style={styles.filterPopupOption}>{label}</Text>
+                </TouchableOpacity>
+              ))}
             </LinearGradient>
           </View>
           <TouchableOpacity style={styles.modalBackground} onPress={() => setFilterVisible(false)} />
         </View>
       </Modal>
 
-      <Text style={styles.activeLabel}>Mga aktibong transaksyon ng palay:</Text>
+      <Text style={styles.activeLabel}>Active Transactions for {product}:</Text>
       {loading ? (
         <ActivityIndicator size="large" color="#2e7d32" />
       ) : transactions.length === 0 ? (
-        <Text style={{ color: '#999', fontSize: 16 }}>Walang data ng transaksyon.</Text>
+        <Text style={{ color: '#999', fontSize: 16 }}>No transactions available.</Text>
       ) : (
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           {transactions.map((item, index) => (
             <View key={index} style={styles.transactionCard}>
-              <Text style={styles.orderText}>ORDER # {item.product_id}</Text>
+              <Text style={styles.orderText}>ORDER #{item.product_id}</Text>
               <Text style={styles.quantityText}>Dami: {item.amount} kilos</Text>
-              <Text style={styles.priceTag}>P{item.price} /kilo</Text>
+              <Text style={styles.priceTag}>₱{item.price} /kilo</Text>
             </View>
           ))}
         </ScrollView>
@@ -200,114 +181,39 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f8f9fa', padding: 20 },
   backButton: { width: 40, height: 40, justifyContent: 'center' },
   backText: { fontSize: 24, color: '#000' },
-  title: { fontWeight: '700', fontSize: 28, color: '#1b5e20', marginTop: 10 },
-  subtitle: { fontSize: 16, color: '#555', marginBottom: 20 },
+  title: { fontWeight: '700', fontSize: 24, color: '#1b5e20', marginTop: 10 },
+  subtitle: { fontSize: 14, color: '#555', marginBottom: 10 },
   chartCard: {
     backgroundColor: '#fff', borderRadius: 16, paddingVertical: 10, alignItems: 'center',
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2,
     shadowRadius: 6, elevation: 5, marginBottom: 10,
   },
   chartStyle: { borderRadius: 16 },
-  filterButtonStandalone: {
-    alignSelf: 'flex-start',
-    marginLeft: 10,
+  filterButtonStandalone: { flexDirection: 'row', alignItems: 'center', marginBottom: 15 },
+  filterIconLarge: { width: 40, height: 40, resizeMode: 'contain' },
+  filterText: { marginLeft: 10, fontSize: 16, fontWeight: '600', color: '#1b5e20' },
+  priceCard: {
+    backgroundColor: '#fff', borderRadius: 12, padding: 20, shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 4, elevation: 3,
     marginBottom: 20,
   },
-  filterIconLarge: {
-    width: 60,
-    height: 30,
-    resizeMode: 'contain',
-  },
-    priceCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
-    marginBottom: 20,
-  },
-  priceText: {
-    fontSize: 18,
-    color: '#333',
-    marginBottom: 5,
-  },
-  bold: {
-    fontWeight: 'bold',
-    color: '#1b5e20',
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  filterPopupContainer: {
-    width: 160,
-    height: 180,
-    backgroundColor: '#fff',
-    borderRadius: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  filterPopupGradient: {
-    width: 120,
-    height: 140,
-    borderRadius: 32,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    paddingTop: 15,
-    paddingLeft: 15,
-  },
-  filterPopupTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#fff',
-    marginBottom: 10,
-  },
-  filterPopupOption: {
-    fontSize: 16,
-    color: '#fff',
-    marginBottom: 6,
-  },
-  modalBackground: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  activeLabel: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#000',
-    marginBottom: 10,
-  },
-  scrollView: {
-    maxHeight: 300,
-  },
+  priceText: { fontSize: 18, color: '#333', marginBottom: 5 },
+  bold: { fontWeight: 'bold', color: '#1b5e20' },
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.2)', justifyContent: 'center', alignItems: 'center' },
+  filterPopupContainer: { width: 180, backgroundColor: '#fff', borderRadius: 32, overflow: 'hidden' },
+  filterPopupGradient: { padding: 15, borderRadius: 32 },
+  filterPopupTitle: { fontSize: 18, fontWeight: '600', color: '#fff', marginBottom: 10 },
+  filterPopupOption: { fontSize: 16, color: '#fff', marginBottom: 8 },
+  modalBackground: { ...StyleSheet.absoluteFillObject },
+  activeLabel: { fontSize: 16, fontWeight: '700', color: '#000', marginBottom: 10 },
+  scrollView: { maxHeight: 300 },
   transactionCard: {
-    backgroundColor: '#81c784',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    backgroundColor: '#81c784', padding: 15, borderRadius: 8, marginBottom: 10,
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
   },
-  orderText: {
-    fontSize: 14,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  quantityText: {
-    fontSize: 14,
-    color: '#fdd835',
-    fontWeight: '600',
-  },
-  priceTag: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
+  orderText: { fontSize: 14, color: '#fff', fontWeight: 'bold' },
+  quantityText: { fontSize: 14, color: '#fdd835', fontWeight: '600' },
+  priceTag: { fontSize: 16, fontWeight: 'bold', color: '#fff' },
 });
 
 export default SalesData;

@@ -98,7 +98,7 @@ export default function Magsasakaregister() {
       >
         <View style={styles.scrollViewContainer}>
           <KeyboardAwareScrollView showsVerticalScrollIndicator>
-            {/* ✅ Product Picker */}
+            {/* Product Picker */}
             <Text
               style={[
                 styles.label,
@@ -132,14 +132,14 @@ export default function Magsasakaregister() {
             <Text
               style={[styles.label, touched && !price && { color: "red" }]}
             >
-              Presyo (Per Kilo)
+              Presyo (Per Kilo in PHP)
             </Text>
             <TextInput
               style={[
                 styles.input,
                 touched && !price && { borderColor: "red", borderWidth: 2 },
               ]}
-              placeholder="(hal. P20, P30, P40)"
+              placeholder="Halimbawa: 30, 40, 50"
               value={price}
               onChangeText={setPrice}
               keyboardType="numeric"
@@ -149,14 +149,14 @@ export default function Magsasakaregister() {
             <Text
               style={[styles.label, touched && !amount && { color: "red" }]}
             >
-              Dami (Kilo)
+              Dami (Per Kilo)
             </Text>
             <TextInput
               style={[
                 styles.input,
                 touched && !amount && { borderColor: "red", borderWidth: 2 },
               ]}
-              placeholder="(hal. 10kg, 20kg)"
+              placeholder="Halimbawa: 10, 20, 30"
               value={amount}
               onChangeText={setAmount}
               keyboardType="numeric"
