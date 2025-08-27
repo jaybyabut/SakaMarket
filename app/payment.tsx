@@ -10,17 +10,16 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 import { RFValue } from "react-native-responsive-fontsize";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
 
 export default function payment() {
   const item = useLocalSearchParams();
-  console.log("Received item:", item);
+  /*console.log("Received item:", item);*/
   const [value, setValue] = React.useState("option1");
 
   const API_URL = "http://10.0.2.2/database/buyProduct.php";
@@ -59,32 +58,36 @@ export default function payment() {
   };
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Image source={require("../assets/images/Back-w.png")}></Image>
-      </TouchableOpacity>
+      
       <LinearGradient
         colors={["#10AF7C", "#86C778", "#FFFFFF"]}
         locations={[0.1, 0.2, 0.6]}
         style={{ flex: 1 }}
-        dither={true}
-      >
+        dither={true}>
+
         <View style={styles.titleAreaContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+            <Image source={require("../assets/images/Back-w.png")}></Image>
+          </TouchableOpacity>
           <Text style={styles.mainTitle}>Pagbabayad</Text>
         </View>
+
+
         <View style={styles.whiteContainer}>
-          <View style={styles.details}>
+          <View style={styles.content}>
             <Text style={styles.paraan}>Paraan ng Pagbabayad:</Text>
+
+
             <LinearGradient
               colors={["#10AF7C", "#86C778"]}
               style={styles.card}
-              dither={true}
-            >
-              <View style={{ flex: 1 }}>
+              dither={true}>
+                
+              <View>
                 <RadioButton.Group
                   onValueChange={(value) => setValue(value)}
-                  value={value}
-                >
+                  value={value}>
+
                   <RadioButton.Item
                     label="Card"
                     value="card"
@@ -123,60 +126,64 @@ export default function payment() {
                 <Text style={styles.txtTotal}>Total:</Text>
               </View>
               <View style={styles.rightContainer}>
-                <Text style={styles.txtTotalPrice}>{item.price}</Text>
+                <Text style={styles.txtTotalPrice}>P{item.price}</Text>
               </View>
             </View>
-          </View>
-          <TouchableOpacity style={styles.button} onPress={handlePayment}>
+
+            <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={handlePayment}>
             <LinearGradient
               colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "#86C778"]}
               dither={true}
-              style={{
-                flex: 1,
-                borderRadius: 20,
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "transparent",
-              }}
+              style={styles.button}
             >
-              <Text style={{ color: "#FFFFFF", fontSize: RFValue(20) }}>
+              <Text style={{ color: "#FFFFFF", fontSize: RFValue(20)}}>
                 Magbayad Na
               </Text>
             </LinearGradient>
           </TouchableOpacity>
+          </View>
+          </View>
+
+
+          
         </View>
       </LinearGradient>
-    </SafeAreaView>
+
   );
 }
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   button: {
-    position: "absolute",
-    bottom: "2%", // distance from bottom of screen
-    left: "50%",
-    transform: [{ translateX: -(width * 0.6) / 2 }],
-    width: width * 0.6,
-    height: "10%",
+    width: width * 0.8,
+    alignSelf: 'center',
+    alignItems: 'center',
+    borderRadius: 70,
+    paddingVertical: '3%'
   },
   totalLine: {
     flex: 1,
+    width: '60%',
     flexDirection: "row",
+    alignSelf: 'center',
   },
 
   txtTotalPrice: {
-    alignItems: "flex-end",
-    alignContent: "flex-end",
-    textAlign: "right",
-    fontSize: RFValue(20),
+    fontSize: RFValue(40),
     fontWeight: "700",
     top: "12%",
-    right: "30%",
+    alignSelf: 'flex-end',
+
   },
   txtTotal: {
     top: "12%",
-    left: "30%",
-    fontSize: RFValue(20),
+    fontSize: RFValue(40),
     fontWeight: "700",
   },
 
@@ -189,50 +196,47 @@ const styles = StyleSheet.create({
   },
 
   lugar: {
-    left: "15%",
-    top: "14%",
+    paddingTop: '10%',
     fontSize: RFValue(15),
+    paddingBottom: '5%',
   },
 
   input: {
-    left: "15%",
-    top: "16%",
-    borderColor: "#D9D9D9",
+    borderColor: "#adadadff",
     borderWidth: 1,
-    width: "70%",
+    width: "100%",
     borderRadius: 32,
     paddingLeft: 20,
   },
 
   card: {
-    height: "32%",
-    width: "70%",
-    left: "15%",
-    top: "10%",
+    width: "100%",
+    borderRadius: 12,
   },
 
   paraan: {
-    left: "15%",
-    top: "8%",
-    fontWeight: "700",
-    fontSize: RFValue(15),
+    fontSize: RFValue(15),  
+    paddingBottom: '5%',
   },
 
-  details: {
-    flex: 2,
+  content: {
+    flex: 1,
+    width: '70%',
+    alignSelf: 'center',
+    paddingTop: '10%',
   },
 
   conclusion: {
     position: "absolute",
     elevation: 20,
-    borderRadius: 90,
-    backgroundColor: "rgb(255, 255, 255)",
+    borderTopLeftRadius: 90,
+    borderTopRightRadius: 90,
+    backgroundColor: "#f0faf4ff",
     width: width * 1.2,
-    height: height * 0.4,
-    top: height - height / 2.2,
-    left: "50%",
-    transform: [{ translateX: -(width * 1.2) / 2 }],
-    justifyContent: "flex-start",
+    height: height * 0.2,
+    bottom: '0%',
+    alignSelf: 'center',
+    
   },
 
   mainTitle: {
@@ -248,8 +252,12 @@ const styles = StyleSheet.create({
 
   titleAreaContainer: {
     flex: 1,
+    width: '100%',
     justifyContent: "center",
     alignSelf: "center",
+    alignContent: 'center',
+    alignItems: 'center',
+    verticalAlign: 'middle',
   },
 
   gradientContainer: {
@@ -257,25 +265,43 @@ const styles = StyleSheet.create({
   },
 
   whiteContainer: {
-    height: height * 0.75,
-    width: width * 1.1,
-    backgroundColor: "rgb(255,255,255)",
+    flex: 7,
+    width: width * 1.2,
+    backgroundColor: "#E6F5EC",
     borderRadius: 90,
     alignSelf: "center",
   },
 
   backButton: {
-    position: "absolute",
-    zIndex: 2,
-    left: "5%",
-    top: "5%",
+    position: 'absolute',
+    left: '7%'
   },
 });
 
 /*
-<LinearGradient
-                        colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "#86C778"]}
-                        dither={true}
-                        style={{ height: '30%', width: '80%'}}>
-                                    <Text style={{color: '#FFFFFF', fontSize: RFValue(20)}}>BILHIN</Text>
-                        </LinearGradient> */
+<RadioButton.Group
+                  onValueChange={(value) => setValue(value)}
+                  value={value}
+                >
+                  <RadioButton.Item
+                    label="Card"
+                    value="card"
+                    labelStyle={{ color: "white" }}
+                    style={{ marginVertical: 0, marginHorizontal: 4 }}
+                    position="leading"
+                  />
+                  <RadioButton.Item
+                    label="Maya"
+                    value="maya"
+                    labelStyle={{ color: "white" }}
+                    style={{ marginVertical: 0, marginHorizontal: 4 }}
+                    position="leading"
+                  />
+                  <RadioButton.Item
+                    label="GCash"
+                    value="gcash"
+                    labelStyle={{ color: "white" }}
+                    style={{ marginVertical: 0, marginHorizontal: 4 }}
+                    position="leading"
+                  />
+                </RadioButton.Group> */

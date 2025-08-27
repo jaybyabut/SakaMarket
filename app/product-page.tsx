@@ -36,11 +36,13 @@ export default function Productpage() {
               <Image source={item.imageSrc} style={styles.productImage} />
             </View>
           )}
-          showsHorizontalScrollIndicator={false}
+          showsHorizontalScrollIndicator={true}
           horizontal={true}
           pagingEnabled={true}
           snapToAlignment="center"
           decelerationRate={"fast"}
+          removeClippedSubviews={false}
+          overScrollMode="never"
         />
       </View>
 
@@ -152,19 +154,25 @@ const styles = StyleSheet.create({
 
   carousel: {
     width: width,
+    height: height * 0.2,
     alignItems: "center",
     justifyContent: "center",
   },
 
   everythingContainer: {
     flex: 1,
+    backgroundColor: '#E6F5EC'
   },
 
   imageContainer: {
-    flex: 1.2,
-    borderRadius: 32,
+    height: height * 0.3,
     elevation: 10,
-    paddingBottom: 10,
+    backgroundColor: '#E6F5EC',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    verticalAlign: 'middle',
   },
 
   infoContainer: {
@@ -175,9 +183,9 @@ const styles = StyleSheet.create({
   },
 
   productImage: {
-    width: width * 0.99,
-    borderRadius: 32,
-    height: "100%",
+    borderRadius: 0,
     backgroundColor: "rgba(0, 0, 0, 0.24)",
+    resizeMode: 'contain',
+    maxWidth: '100%',
   },
 });
