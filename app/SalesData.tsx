@@ -1,7 +1,6 @@
-import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -12,15 +11,19 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { RFValue } from "react-native-responsive-fontsize";
 import { LineChart } from "react-native-chart-kit";
 
 const API_URL = "http://10.0.2.2/database/getTransaction.php";
 const filterIcon = require("../assets/images/Filter-1.png");
+const { width, height } = Dimensions.get("window");
 
 const SalesData: React.FC = () => {
-  const navigation = useNavigation();
+  const router = useRouter();
   const { product } = useLocalSearchParams<{ product: string }>();
 
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -95,124 +98,155 @@ const SalesData: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={styles.backText}>←</Text>
-      </TouchableOpacity>
+      <Pressable style={styles.backPosition} onPress={() => router.back()}>
+        <Image
+          style={styles.backIcon}
+          source={require("../assets/STARTer/back-icon.png")}
+        />
+      </Pressable>
 
-      <Text style={styles.title}>{product} Market Overview</Text>
-      <Text style={styles.subtitle}>
-        Today's Price Trends ({filterLabels[filter]})
-      </Text>
-
-      <View style={styles.chartCard}>
-        {loading ? (
-          <ActivityIndicator size="large" color="#2e7d32" />
-        ) : (
-          <LineChart
-            data={{ labels: chartLabels, datasets: [{ data: chartPrices }] }}
-            width={Dimensions.get("window").width - 60}
-            height={240}
-            yAxisSuffix="₱"
-            chartConfig={{
-              backgroundColor: "#ffffff",
-              backgroundGradientFrom: "#d4f5d0",
-              backgroundGradientTo: "#a5d6a7",
-              decimalPlaces: 2,
-              color: (opacity = 1) => `rgba(34, 139, 34, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              propsForDots: {
-                r: "6",
-                strokeWidth: "2",
-                stroke: "#2e7d32",
-                fill: "#66bb6a",
-              },
-            }}
-            bezier
-            style={styles.chartStyle}
-          />
-        )}
-      </View>
-
-      {/* Filter Button */}
-      <View style={styles.filterButtonStandalone}>
-        <TouchableOpacity onPress={() => setFilterVisible(true)}>
-          <Image source={filterIcon} style={styles.filterIconLarge} />
-        </TouchableOpacity>
-        <Text style={styles.filterText}>{filterLabels[filter]}</Text>
-      </View>
-
-      <View style={styles.priceCard}>
-        <Text style={styles.priceText}>
-          Average Price:{" "}
-          <Text style={styles.bold}>₱{averagePrice.toFixed(2)} /kg</Text>
-        </Text>
-        <Text style={styles.priceText}>
-          Recent Price:{" "}
-          <Text style={styles.bold}>₱{recentPrice.toFixed(2)} /kg</Text>
-        </Text>
-      </View>
-
-      {/* Filter Modal */}
-      <Modal
-        visible={filterVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setFilterVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.filterPopupContainer}>
-            <LinearGradient
-              colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]}
-              style={styles.filterPopupGradient}
-            >
-              <Text style={styles.filterPopupTitle}>Select Range</Text>
-              {Object.entries(filterLabels).map(([key, label]) => (
-                <TouchableOpacity key={key} onPress={() => handleFilter(key)}>
-                  <Text style={styles.filterPopupOption}>{label}</Text>
-                </TouchableOpacity>
-              ))}
-            </LinearGradient>
-          </View>
-          <TouchableOpacity
-            style={styles.modalBackground}
-            onPress={() => setFilterVisible(false)}
-          />
-        </View>
-      </Modal>
-
-      <Text style={styles.activeLabel}>Active Transactions for {product}:</Text>
-      {loading ? (
-        <ActivityIndicator size="large" color="#2e7d32" />
-      ) : transactions.length === 0 ? (
-        <Text style={{ color: "#999", fontSize: 16 }}>
-          No transactions available.
-        </Text>
-      ) : (
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
+      <View style={styles.scrollViewContainer}>
+        <KeyboardAwareScrollView
+          showsVerticalScrollIndicator={true}
+          contentContainerStyle={{ paddingBottom: 10 }}
         >
-          {transactions.map((item, index) => (
-            <View key={index} style={styles.transactionCard}>
-              <Text style={styles.orderText}>ORDER #{item.product_id}</Text>
-              <Text style={styles.quantityText}>Dami: {item.amount} kilos</Text>
-              <Text style={styles.priceTag}>₱{item.price} /kilo</Text>
+          <Text style={styles.title}>{product} Market Overview</Text>
+          <Text style={styles.subtitle}>
+            Today's Price Trends ({filterLabels[filter]})
+          </Text>
+
+          <View style={styles.chartCard}>
+            {loading ? (
+              <ActivityIndicator size="large" color="#2e7d32" />
+            ) : (
+              <LineChart
+                data={{
+                  labels: chartLabels,
+                  datasets: [{ data: chartPrices }],
+                }}
+                width={Dimensions.get("window").width - 60}
+                height={240}
+                yAxisSuffix="₱"
+                chartConfig={{
+                  backgroundColor: "#ffffff",
+                  backgroundGradientFrom: "#d4f5d0",
+                  backgroundGradientTo: "#a5d6a7",
+                  decimalPlaces: 2,
+                  color: (opacity = 1) => `rgba(34, 139, 34, ${opacity})`,
+                  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                  propsForDots: {
+                    r: "6",
+                    strokeWidth: "2",
+                    stroke: "#2e7d32",
+                    fill: "#66bb6a",
+                  },
+                }}
+                bezier
+                style={styles.chartStyle}
+              />
+            )}
+          </View>
+
+          {/* Filter Button */}
+          <View style={styles.filterButtonStandalone}>
+            <TouchableOpacity onPress={() => setFilterVisible(true)}>
+              <Image source={filterIcon} style={styles.filterIconLarge} />
+            </TouchableOpacity>
+            <Text style={styles.filterText}>{filterLabels[filter]}</Text>
+          </View>
+
+          <View style={styles.priceCard}>
+            <Text style={styles.priceText}>
+              Average Price:{" "}
+              <Text style={styles.bold}>₱{averagePrice.toFixed(2)} /kg</Text>
+            </Text>
+            <Text style={styles.priceText}>
+              Recent Price:{" "}
+              <Text style={styles.bold}>₱{recentPrice.toFixed(2)} /kg</Text>
+            </Text>
+          </View>
+
+          {/* Filter Modal */}
+          <Modal
+            visible={filterVisible}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setFilterVisible(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.filterPopupContainer}>
+                <LinearGradient
+                  colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778"]}
+                  style={styles.filterPopupGradient}
+                >
+                  <Text style={styles.filterPopupTitle}>Select Range</Text>
+                  {Object.entries(filterLabels).map(([key, label]) => (
+                    <TouchableOpacity
+                      key={key}
+                      onPress={() => handleFilter(key)}
+                    >
+                      <Text style={styles.filterPopupOption}>{label}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </LinearGradient>
+              </View>
+              <TouchableOpacity
+                style={styles.modalBackground}
+                onPress={() => setFilterVisible(false)}
+              />
             </View>
-          ))}
-        </ScrollView>
-      )}
+          </Modal>
+
+          <Text style={styles.activeLabel}>
+            Active Transactions for {product}:
+          </Text>
+          {loading ? (
+            <ActivityIndicator size="large" color="#2e7d32" />
+          ) : transactions.length === 0 ? (
+            <Text style={{ color: "#999", fontSize: 16 }}>
+              No transactions available.
+            </Text>
+          ) : (
+            <ScrollView
+              style={styles.scrollView}
+              showsVerticalScrollIndicator={false}
+            >
+              {transactions.map((item, index) => (
+                <View key={index} style={styles.transactionCard}>
+                  <Text style={styles.orderText}>ORDER #{item.product_id}</Text>
+                  <Text style={styles.quantityText}>
+                    Dami: {item.amount} kilos
+                  </Text>
+                  <Text style={styles.priceTag}>₱{item.price} /kilo</Text>
+                </View>
+              ))}
+            </ScrollView>
+          )}
+        </KeyboardAwareScrollView>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f8f9fa", padding: 20 },
-  backButton: { width: 40, height: 40, justifyContent: "center" },
-  backText: { fontSize: 24, color: "#000" },
-  title: { fontWeight: "700", fontSize: 24, color: "#1b5e20", marginTop: 10 },
+  scrollViewContainer: {
+    top: "4%",
+  },
+  // ==== Back Button ====
+  backPosition: {
+    position: "absolute",
+    width: height * 0.03,
+    height: height * 0.03,
+    zIndex: 1,
+    left: width * 0.04,
+    top: height * 0.04,
+  },
+  backIcon: {
+    height: "100%",
+    width: "100%",
+  },
+  title: { fontFamily: "Roboto-Bold", fontSize: RFValue(27), color: "#1b5e20", marginTop: 10 },
   subtitle: { fontSize: 14, color: "#555", marginBottom: 10 },
   chartCard: {
     backgroundColor: "#fff",

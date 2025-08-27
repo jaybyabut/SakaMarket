@@ -2,21 +2,28 @@ import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useLayoutEffect } from "react";
 import {
-  Dimensions,
   Image,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
+  Dimensions,
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
+
 const { width, height } = Dimensions.get("window");
 
-export default function Magsasakaregister() {
-  const navigation = useNavigation();
+type ButtonWithTextProps = {
+  icon: any;
+  label: string;
+  reverse?: boolean;
+  onPress: () => void;
+};
 
+export default function SellPage4() {
+  const navigation = useNavigation();
   const navBack = () => {
-    router.push("/buy-page");
+    router.push("/sellpage1");
   };
   useLayoutEffect(() => {
     navigation.setOptions({ title: "Mamimili Register Page" });
@@ -24,97 +31,111 @@ export default function Magsasakaregister() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        <Image
-          source={require("../assets/images/Checkmark.png")}
-          style={styles.logo}
-        />
-        <Text style={styles.header}>Success!</Text>
-        <View style={styles.greenBox}>
-          <View style={styles.contentBox}>
-            <Text style={styles.contentHeader}>ORDER #1</Text>
-            <View style={styles.content}>
-              <Text style={styles.contentText}>Pangalan: Palay</Text>
-              <Text style={styles.contentText}>Presyo: P20 /kilo</Text>
-              <Text style={styles.contentText}>Dami: 50kg</Text>
-            </View>
-          </View>
+      <Image
+        source={require("../assets/images/Checkmark.png")}
+        style={styles.logo}
+      />
+      <Text style={styles.header}>Success!</Text>
+      <View style={styles.box}>
+        <Text style={styles.contentHeader}>ORDER #1</Text>
+        <Text style={styles.content}>Pangalan: Palay</Text>
+        <Text style={styles.content}>Presyo: P20 /kilo</Text>
+        <Text style={styles.content}>Dami: 50kg</Text>
+      </View>
+      <View style={styles.buttons}>
+        <View style={styles.leftButton}>
+          <ButtonWithText
+            icon={require("../assets/images/BlackBackIcon.png")}
+            label="BUMALIK SA HOME PAGE"
+            reverse
+            onPress={() => router.push("/home-magsasaka")}
+          />
         </View>
       </View>
-
-      <TouchableOpacity
-        style={styles.navContainer}
-        onPress={navBack}
-        activeOpacity={0.7}
-      >
-        <Image
-          source={require("../assets/images/backtoblack.png")}
-          style={styles.imageButton}
-        />
-        <Text style={styles.navText}>BUMALIK</Text>
-      </TouchableOpacity>
     </View>
   );
 }
 
+function ButtonWithText({ icon, label, reverse, onPress }: ButtonWithTextProps) {
+  return (
+    <Pressable
+      style={[styles.buttonWithText]}
+      onPress={onPress}   // make the whole thing clickable
+    >
+      {reverse && <Image source={icon} style={styles.buttonIcon} />}
+      <Text style={styles.buttonText}>{label}</Text>
+      {!reverse && <Image source={icon} style={styles.buttonIcon} />}
+    </Pressable>
+  );
+}
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
-    backgroundColor: "#FFF",
-  },
-  contentContainer: {
-    flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    alignSelf: "center",
-    width: width * 0.8,
   },
   logo: {
-    width: width * 0.5,
-    height: width * 0.5,
+    width: width * 0.45,
+    height: width * 0.45,
+    marginTop: height * 0.12, // instead of 200
+    resizeMode: "contain",
   },
   header: {
-    fontSize: RFValue(48),
+    fontSize: RFValue(36), // was 48
     color: "black",
     fontFamily: "Roboto-Bold",
-    marginBottom: height * 0.04,
-  },
-  greenBox: {
-    backgroundColor: "#10AF7C",
-    borderRadius: 20,
-    height: height * 0.25,
-    width: width * 0.8,
-  },
-  contentBox: {
-    top: height * 0.02,
-    left: width * 0.05,
-  },
-  contentHeader: {
-    color: "white",
-    fontSize: RFValue(24),
-  },
-  content: {},
-  contentText: {
-    color: "white",
-    fontSize: RFValue(18),
     marginTop: height * 0.01,
   },
-  imageButton: {
-    width: width * 0.06,
-    height: width * 0.06,
+  box: {
+    width: width * 0.8,
+    height: height * 0.25,
+    backgroundColor: "#10AF7C",
+    borderRadius: 20,
+    padding: width * 0.05,
+    justifyContent: "center",
+    marginTop: height * 0.015,
   },
-  navText: {
+  contentHeader: {
     fontSize: RFValue(20),
-    color: "black",
+    color: "white",
     fontFamily: "Roboto-Bold",
+    marginBottom: 5,
+    top: -10,
   },
-  navContainer: {
+  content: {
+    fontSize: RFValue(18),
+    color: "white",
+    fontFamily: "Roboto-Regular",
+    marginBottom: 5,
+  },
+  buttons: {
     position: "absolute",
     flexDirection: "row",
+    justifyContent: "flex-end",
+    width: width * 0.8,
+    height: 47,
+    bottom: "2%",
+    alignSelf: "center",
+    zIndex: 3,
+  },
+  leftButton: {
+    flex: 1,
+    alignItems: "flex-start",
+  },
+  buttonWithText: {
+    flexDirection: "row",
     alignItems: "center",
-    gap: width * 0.02,
-    bottom: height * 0.02,
-    left: width * 0.11,
+    gap: 5,
+  },
+  buttonIcon: {
+    width: 29,
+    height: 29,
+    resizeMode: "contain",
+  },
+  buttonText: {
+    fontSize: RFValue(15),
+    fontFamily: "Roboto-Bold",
+    color: "black",
   },
 });
