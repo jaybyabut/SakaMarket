@@ -1,33 +1,61 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-
 const { width, height } = Dimensions.get('window');
-
 
 export default function payment() {
     const item = useLocalSearchParams();
     console.log("Received item:", item);
-    const [value, setValue] = React.useState('option1');
 
-    const API_URL = "http://10.0.2.2/database/buyProduct.php";
+    const [value, setValue] = useState('option1');
+    const [userId, setUserId] = useState(null);
+
+    const API_URL = "http://10.0.2.2/database/addToPending.php";
+
+    // Load user_id from AsyncStorage
+    useEffect(() => {
+        const loadUserId = async () => {
+            try {
+                const storedId = await AsyncStorage.getItem("user_id");
+                if (storedId) {
+                    setUserId(storedId);
+                }
+            } catch (error) {
+                console.error("Error fetching user_id:", error);
+            }
+        };
+        loadUserId();
+    }, []);
 
     const handlePayment = async () => {
-        console.log("Sending to backend:", { product_id: item.id });
-        if (!item.id) {
-            Alert.alert("Error", "No product selected.");
-            return;
-        }
         try {
+            // Fetch the full user object
+            const userData = await AsyncStorage.getItem('user');
+            const user = userData ? JSON.parse(userData) : null;
+
+            if (!user) {
+                Alert.alert("Error", "User not logged in.");
+                return;
+            }
+
+            const buyer_id = user.user_id; // extract the ID
+            const product_id = item.id;    // must be selling_table ID
+
+            if (!product_id) {
+                Alert.alert("Error", "No product selected.");
+                return;
+            }
+
             const response = await axios.post(API_URL, {
-                product_id: item.id,
-                amount: item.amount
+                product_id,
+                buyer_id
             });
 
             console.log("API Response:", response.data);
@@ -39,79 +67,77 @@ export default function payment() {
                     [{ text: "OK", onPress: () => router.push('/buy-confirmation') }]
                 );
             } else {
-                // This now shows ledger validation or any failure messages
-                Alert.alert("Ledger Warning", response.data.message || "Transaction failed due to ledger issue.");
+                Alert.alert("Error", response.data.error || "Transaction failed.");
             }
+
         } catch (error) {
             console.error(error);
             Alert.alert("Error", "Could not connect to the server.");
         }
     };
+    return (
+        <SafeAreaView style={styles.mainContainer}>
+            <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+                <Image source={require('../assets/images/Back-w.png')} />
+            </TouchableOpacity>
 
-  return (
-    <SafeAreaView style={styles.mainContainer}>
-        <TouchableOpacity style={styles.backButton} 
-        onPress={() => router.back()}>
-            <Image source={require('../assets/images/Back-w.png')}></Image>
-        </TouchableOpacity>
-        <LinearGradient
-        colors={["#10AF7C", "#86C778", "#FFFFFF"]}
-        locations={[0.1, 0.2, 0.6]}
-        style={{flex: 1}}
-        dither={true}
-        >
-            <View style={styles.titleAreaContainer}>
-                <Text style={styles.mainTitle}>Pagbabayad</Text>
-            </View>
-            <View style={styles.whiteContainer}>
-                <View style={styles.details}>
-                    <Text style={styles.paraan}>Paraan ng Pagbabayad:</Text>
-                    <LinearGradient
-                    colors={["#10AF7C", "#86C778"]}
-                    style={styles.card}
-                    dither={true}
-                    >
-
-                        <View style={{flex: 1}}>
-                            <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
-                                <RadioButton.Item label="Card" value="card" labelStyle={{color: 'white'}} style={{marginVertical: 0, marginHorizontal: 4}} position="leading"/>
-                                <RadioButton.Item label="Maya" value="maya" labelStyle={{color: 'white'}} style={{marginVertical: 0, marginHorizontal: 4}} position="leading"/>
-                                <RadioButton.Item label="GCash" value="gcash" labelStyle={{color: 'white'}} style={{marginVertical: 0, marginHorizontal: 4}} position="leading"/>
-                            </RadioButton.Group>
-                        </View>
-                    </LinearGradient>
-
-                    <Text style={styles.lugar}>Lugar ng Pagkuha:</Text>
-                    <TextInput placeholder='123 Main St, City, ZIP' style={styles.input}></TextInput>
+            <LinearGradient
+                colors={["#10AF7C", "#86C778", "#FFFFFF"]}
+                locations={[0.1, 0.2, 0.6]}
+                style={{ flex: 1 }}
+                dither={true}
+            >
+                <View style={styles.titleAreaContainer}>
+                    <Text style={styles.mainTitle}>Pagbabayad</Text>
                 </View>
 
-                <View style={styles.conclusion}>
-                    <View style={styles.totalLine}>
-                        <View style={styles.leftContainer}>
-                            <Text style={styles.txtTotal}>Total:</Text>
-                        </View>
-                        <View style={styles.rightContainer}>
-                            <Text style={styles.txtTotalPrice}>{item.price}</Text>
+                <View style={styles.whiteContainer}>
+                    <View style={styles.details}>
+                        <Text style={styles.paraan}>Paraan ng Pagbabayad:</Text>
+                        <LinearGradient
+                            colors={["#10AF7C", "#86C778"]}
+                            style={styles.card}
+                            dither={true}
+                        >
+                            <View style={{ flex: 1 }}>
+                                <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
+                                    <RadioButton.Item label="Card" value="card" labelStyle={{ color: 'white' }} position="leading"/>
+                                    <RadioButton.Item label="Maya" value="maya" labelStyle={{ color: 'white' }} position="leading"/>
+                                    <RadioButton.Item label="GCash" value="gcash" labelStyle={{ color: 'white' }} position="leading"/>
+                                </RadioButton.Group>
+                            </View>
+                        </LinearGradient>
+
+                        <Text style={styles.lugar}>Lugar ng Pagkuha:</Text>
+                        <TextInput placeholder='123 Main St, City, ZIP' style={styles.input}></TextInput>
+                    </View>
+
+                    <View style={styles.conclusion}>
+                        <View style={styles.totalLine}>
+                            <View style={styles.leftContainer}>
+                                <Text style={styles.txtTotal}>Total:</Text>
+                            </View>
+                            <View style={styles.rightContainer}>
+                                <Text style={styles.txtTotalPrice}>{item.price}</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
-                <TouchableOpacity style={styles.button} onPress={handlePayment}>
+
+                    <TouchableOpacity style={styles.button} onPress={handlePayment}>
                         <LinearGradient
-                        colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "#86C778"]}
-                        dither={true}
-                        style={{ flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent'}}>
-                    
-                                    <Text style={{color: '#FFFFFF', fontSize: RFValue(20)}}>Magbayad Na</Text>
-                                    
-                                
-                                </LinearGradient>
-                            </TouchableOpacity>
-            </View>
-        </LinearGradient>
-        
-    </SafeAreaView>
-  )
+                            colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "#86C778"]}
+                            dither={true}
+                            style={{ flex: 1, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent' }}
+                        >
+                            <Text style={{ color: '#FFFFFF', fontSize: RFValue(20) }}>Magbayad Na</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
+                </View>
+            </LinearGradient>
+        </SafeAreaView>
+    )
 }
+
 
 
 const styles = StyleSheet.create({
@@ -244,10 +270,3 @@ const styles = StyleSheet.create({
 })
 
 
-/*
-<LinearGradient
-                        colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "#86C778"]}
-                        dither={true}
-                        style={{ height: '30%', width: '80%'}}>
-                                    <Text style={{color: '#FFFFFF', fontSize: RFValue(20)}}>BILHIN</Text>
-                        </LinearGradient> */

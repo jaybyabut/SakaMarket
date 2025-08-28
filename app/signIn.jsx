@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from "@react-navigation/native";
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,7 +21,6 @@ import { RFValue } from "react-native-responsive-fontsize";
 const { width, height } = Dimensions.get('window');
 
 export default function SignInScreen() {
-
   const router = useRouter();
   const [form, setForm] = useState({ phone: '', pin: '' });
   const [error, setError] = useState('');
@@ -33,11 +33,12 @@ export default function SignInScreen() {
     useCallback(() => {
       const onBackPress = () => {
         router.push('/App');
-        return true; // handled
+        return true;
       };
 
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);}
-    ),)
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
 
   const handleSubmit = async () => {
     const { phone, pin } = form;
@@ -62,15 +63,21 @@ export default function SignInScreen() {
       });
 
       const data = response.data;
+      console.log("Login Response:", data);
 
-      if (data.error) {
-        setError(data.error);
-      } else if (data.role === 'farmer') {
-        router.push('/home-magsasaka');
-      } else if (data.role === 'buyer') {
-        router.push('/home-buyer');
+      if (data?.user) {
+        // ✅ Save user data in AsyncStorage
+        if (data.user.role?.toLowerCase() === 'farmer') {
+          router.push('/home-magsasaka');
+          await AsyncStorage.setItem('user', JSON.stringify(data.user));
+        } else if (data.user.role?.toLowerCase() === 'buyer') {
+          router.push('/home-buyer');
+          await AsyncStorage.setItem('user', JSON.stringify(data.user));
+        } else {
+          setError('Hindi matukoy ang user role. Nakuha: ' + data.user?.role);
+        }
       } else {
-        setError('Hindi matukoy ang user role.');
+        setError('Maling numero o PIN.');
       }
     } catch (e) {
       console.error(e);
@@ -81,129 +88,85 @@ export default function SignInScreen() {
   };
 
   return (
-      <View style={styles.container}>
-        {/* Logo & Name */}
-        <View style={styles.logoWrapper}>
+    <View style={styles.container}>
+      {/* Logo & Name */}
+      <View style={styles.logoWrapper}>
+        <Image
+          source={require('../assets/STARTer/LandingPage/logo.png')}
+          style={styles.logoImage}
+          resizeMode="contain"
+        />
+        <View style={styles.nameDiv}>
           <Image
-            source={require('../assets/STARTer/LandingPage/logo.png')}
-            style={styles.logoImage}
+            source={require('../assets/STARTer/LandingPage/logo-name.png')}
             resizeMode="contain"
           />
-
-          <View style={styles.nameDiv}>
-            <Image
-              source={require('../assets/STARTer/LandingPage/logo-name.png')}
-              resizeMode="contain"
-            />
-          </View>
-
-        </View>
-
-        {/* Form */}
-        <View style={styles.signInSection}>
-          <Text style={styles.signInTitle}>Sign In</Text>
-
-          <KeyboardAvoidingView 
-          style={styles.labelAndInput}
-          behavior={"height"}>
-
-
-            <View style = {styles.textAndField}>
-              <Text style={styles.label}>Phone Number</Text>
-              <TextInput
-                style={[styles.inputBar, inputErrors.phone && { borderColor: 'red' }]}
-                keyboardType="phone-pad"
-                onChangeText={(text) => setForm((prev) => ({ ...prev, phone: text }))}
-              />
-            </View>
-
-            <View style = {styles.textAndField}>
-              <Text style={styles.label}>PIN</Text>
-              <TextInput
-                style={[styles.inputBar, inputErrors.pin && { borderColor: 'red' }]}
-                secureTextEntry
-                keyboardType="numeric"
-                onChangeText={(text) => setForm((prev) => ({ ...prev, pin: text }))}
-              />
-            </View>
-
-
-          </KeyboardAvoidingView>
-
-            
-        </View>
-
-        {/* Error Text */}
-        {error ? (
-          <Text style={{ color: 'red', textAlign: 'center', marginTop: 10 }}>{error}</Text>
-        ) : null}
-
-        {/* Buttons */}
-        <View style={styles.buttons}>
-          <LinearGradient
-            colors={['#10AF7C', '#86C778']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.signInGradient}
-          >
-            <Pressable style={styles.fullButton} onPress={handleSubmit} disabled={loading}>
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.signInText}>Mag-sign in sa Account</Text>
-              )}
-            </Pressable>
-          </LinearGradient>
-
-          <Pressable onPress={() => router.push('/signUp')}>
-            <Text style={styles.noAccText}>Wala pa akong Account</Text>
-          </Pressable>
         </View>
       </View>
+
+      {/* Form */}
+      <View style={styles.signInSection}>
+        <Text style={styles.signInTitle}>Sign In</Text>
+        <KeyboardAvoidingView style={styles.labelAndInput} behavior={"height"}>
+          <View style={styles.textAndField}>
+            <Text style={styles.label}>Phone Number</Text>
+            <TextInput
+              style={[styles.inputBar, inputErrors.phone && { borderColor: 'red' }]}
+              keyboardType="phone-pad"
+              onChangeText={(text) => setForm((prev) => ({ ...prev, phone: text }))}
+            />
+          </View>
+          <View style={styles.textAndField}>
+            <Text style={styles.label}>PIN</Text>
+            <TextInput
+              style={[styles.inputBar, inputErrors.pin && { borderColor: 'red' }]}
+              secureTextEntry
+              keyboardType="numeric"
+              onChangeText={(text) => setForm((prev) => ({ ...prev, pin: text }))}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+
+      {/* Error */}
+      {error ? (
+        <Text style={{ color: 'red', textAlign: 'center', marginTop: 10 }}>{error}</Text>
+      ) : null}
+
+      {/* Buttons */}
+      <View style={styles.buttons}>
+        <LinearGradient
+          colors={['#10AF7C', '#86C778']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.signInGradient}
+        >
+          <Pressable style={styles.fullButton} onPress={handleSubmit} disabled={loading}>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.signInText}>Mag-sign in sa Account</Text>
+            )}
+          </Pressable>
+        </LinearGradient>
+
+        <Pressable onPress={() => router.push('/signUp')}>
+          <Text style={styles.noAccText}>Wala pa akong Account</Text>
+        </Pressable>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#FFF'
-  },
-  logoWrapper: {
-    flex: 0.5,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-    backgroundColor: 'transparent'
-  },
-  logoImage: {
-    width: '15%',
-    height: '100%',
-    marginRight: 10,
-  },
-  nameDiv: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-  },
-  signInSection: {
-    gap: height * 0.03,
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  signInTitle: {
-    fontSize: RFValue(40),
-    textAlign: 'center',
-    fontFamily: 'Roboto-SemiBold',
-  },
-  labelAndInput: {
-    backgroundColor: 'transparent',
-    gap: height * 0.03
-  },
-  label: {
-    fontSize: RFValue(15),
-    fontFamily: 'Roboto-Bold',
-  },
+  container: { flex: 1, alignItems: 'center', backgroundColor: '#FFF' },
+  logoWrapper: { flex: 0.5, flexDirection: 'row', alignItems: 'center' },
+  logoImage: { width: '15%', height: '100%', marginRight: 10 },
+  nameDiv: { justifyContent: 'center', alignItems: 'center', height: '100%' },
+  signInSection: { gap: height * 0.03, alignItems: 'center' },
+  signInTitle: { fontSize: RFValue(40), textAlign: 'center', fontFamily: 'Roboto-SemiBold' },
+  labelAndInput: { gap: height * 0.03 },
+  label: { fontSize: RFValue(15), fontFamily: 'Roboto-Bold' },
   inputBar: {
     width: width * 0.85,
     height: height * 0.07,
@@ -219,35 +182,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  buttons: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    gap: '6%'
-  },
-  signInGradient: {
-    height: height * 0.08,
-    paddingHorizontal: '10%',
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  fullButton: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  signInText: {
-    color: 'white',
-    fontSize: RFValue(17),
-    fontFamily: 'Roboto-Medium',
-  },
-  noAccText: {
-     fontSize: RFValue(15),
-     fontFamily: 'Roboto-Medium',
-  },
-  textAndField: {
-    gap: height * 0.01,
-  }
+  buttons: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: '6%' },
+  signInGradient: { height: height * 0.08, paddingHorizontal: '10%', borderRadius: 12, overflow: 'hidden' },
+  fullButton: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' },
+  signInText: { color: 'white', fontSize: RFValue(17), fontFamily: 'Roboto-Medium' },
+  noAccText: { fontSize: RFValue(15), fontFamily: 'Roboto-Medium' },
+  textAndField: { gap: height * 0.01 },
 });

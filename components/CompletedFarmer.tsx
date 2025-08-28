@@ -1,4 +1,3 @@
-import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
 import {
@@ -6,20 +5,20 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 type itemCardProps = {
   item: {
+    pending_id: number;
     id: number;
     image?: string;
     date: number;
     name: string;
     price: number;
     amount: number;
-    seller_name: string;     // from pending_table
-    seller_address: string;  // from pending_table
+    buyer_name: string;
+    delivery_address: string;
   };
 };
 
@@ -54,31 +53,13 @@ export default function BuyItem({ item }: itemCardProps) {
             <Text style={styles.price}>₱{item.price}</Text>
           </View>
           <Text style={styles.massText}>{item.amount}kg</Text>
-          <Text style={styles.farmerName}>{item.seller_name}</Text>
+          <Text style={styles.farmerName}>Binili ni: {item.buyer_name}</Text>
           <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
-            <Text style={styles.address}>{item.seller_address}</Text>
+            <Text style={styles.address}>{item.delivery_address}</Text>
 
-            <TouchableOpacity
-              onPress={() => {
-                router.push({
-                  pathname: "/product-page",
-                  params: { ...item },
-                }),
-                  router.push({
-                    pathname: "/payment",
-                    params: { id: item.id, price: item.price },
-                  });
-              }}
-            >
-              <LinearGradient
-                colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "#86C778"]}
-                dither={true}
-                style={styles.gradientBtn}
-              >
-                <Text style={styles.btnText}>BILHIN</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+
           </View>
+
         </View>
       </View>
     </Pressable>
@@ -150,9 +131,9 @@ const styles = StyleSheet.create({
 
   mainText: {
     fontWeight: "800",
-    fontSize: 25,
+    fontSize: 20,
     padding: 0,
-    marginTop: -5,
+    marginTop:-15,
     flex: 1,
   },
 
@@ -177,7 +158,23 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "flex-start",
     color: "#565656",
+    marginBottom: 10,
   },
 
   buttonArea: {},
+  greenBtn: {
+    height: 35,
+    width: "70%",            // 👈 full-width (relative to parent)
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#10AF7C",
+    marginLeft: 70    // 👈 centers inside parent
+  },
+
+  btnText2: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "700",         // 👈 bold text
+  },
 });

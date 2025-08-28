@@ -1,8 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React from 'react';
 import { Dimensions, Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
+
 const { width, height } = Dimensions.get('window');
 
 const logoImg: ImageSourcePropType = require('../assets/images/home-title.png');
@@ -78,10 +80,21 @@ export default function HomeMagsasaka() {
       </View>
 
       {/* Log Out button at bottom left */}
-      <TouchableOpacity style={styles.logoutButton} onPress={() => router.replace('/signIn')}>
+      <TouchableOpacity
+        style={styles.logoutButton}
+        onPress={async () => {
+          try {
+            await AsyncStorage.multiRemove(['user', 'user_id']); // Remove both keys
+            router.replace('/signIn'); // Redirect to sign in screen
+          } catch (error) {
+            console.error("Error logging out:", error);
+          }
+        }}
+      >
         <Image source={logoutImg} style={styles.logoutImage} />
         <Text style={styles.logoutButtonText}>Log Out</Text>
       </TouchableOpacity>
+
     </View>
   );
 }

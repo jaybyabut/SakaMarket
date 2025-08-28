@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Dimensions, FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ReceiveFarmer from "../components/ReceiveFarmer";
+import ReceiveBuyer from "../components/ReceiveBuyer";
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,7 +21,7 @@ export default function Signin() {
       if (!user) return;
 
       const response = await axios.get(
-        `http://10.0.2.2/database/fetchPendingFarmer.php?seller_id=${user.user_id}`
+        `http://10.0.2.2/database/fetchPending.php?buyer_id=${user.user_id}`
       );
       console.log('Products:', response.data);
 
@@ -47,7 +47,7 @@ export default function Signin() {
         dither={true}
       >
         <SafeAreaView style={styles.header}>
-          <Pressable onPress={() => router.push("/home-magsasaka")}>
+          <Pressable onPress={() => router.push("/home-buyer")}>
             <Image source={require("../assets/images/Back-w.png")} style={styles.back}></Image>
           </Pressable>
           <View style={styles.logoMiddle}>
@@ -69,7 +69,7 @@ export default function Signin() {
           </LinearGradient>
         </Pressable>
 
-        <Pressable style={styles.halfButton} onPress={() => router.push('/productStateFarmerCompleted')}>
+        <Pressable style={styles.halfButton} onPress={() => router.push('/productStateBuyerCompleted')}>
           <View style={styles.outlinedButton}>
             <Text style={styles.outlinedText}>Nakumpleto</Text>
           </View>
@@ -81,7 +81,7 @@ export default function Signin() {
           data={products}
           keyExtractor={(item, index) => item.id?.toString() || index.toString()}
           renderItem={({ item }) => (
-            <ReceiveFarmer
+            <ReceiveBuyer
               item={item}
               refreshList={fetchProducts} // ✅ pass refresh function
             />

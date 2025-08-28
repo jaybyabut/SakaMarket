@@ -68,13 +68,13 @@ export default function ReceiveBuyer({ item, refreshList }: itemCardProps) {
           </View>
 
           <Text style={styles.massText}>{item.amount}kg</Text>
-          <Text style={styles.farmerName}>Binili ni: {item.seller_name}</Text>
+          <Text style={styles.farmerName}>{item.seller_name}</Text>
           <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
             <Text style={styles.address}>{item.delivery_address}</Text>
           </View>
 
-          <TouchableOpacity style={styles.greenBtn}>
-            <Text style={styles.btnText2}>Hindi pa natatanggap</Text>
+          <TouchableOpacity onPress={approveTransaction} style={styles.greenBtn}>
+            <Text style={styles.btnText2}>Natanggap na</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -95,6 +95,6 @@ const styles = StyleSheet.create({
   massText: { fontWeight: "700", fontSize: 18, marginTop: -8 },
   farmerName: { color: "#565656" },
   address: { flex: 1, color: "#565656", marginBottom: 10 },
-  greenBtn: { height: 35, width: "85%", borderRadius: 25, justifyContent: "center", alignItems: "center", backgroundColor: "#D53E3E", marginLeft: 30 },
+  greenBtn: { height: 35, width: "70%", borderRadius: 25, justifyContent: "center", alignItems: "center", backgroundColor: "#10AF7C", marginLeft: 70 },
   btnText2: { color: "#FFFFFF", fontSize: 20, fontWeight: "700" },
 });

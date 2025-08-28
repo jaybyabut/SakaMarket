@@ -6,8 +6,19 @@ try {
     $conn = new PDO("pgsql:host=localhost;port=5432;dbname=sakamarket_db", "postgres", "2121");
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $sql = "SELECT id, name, price, amount, description
-            FROM selling_table ORDER BY id DESC";
+    // join selling_table with users to get seller info
+    $sql = "SELECT s.id, 
+                s.name, 
+                s.price, 
+                s.amount, 
+                s.description, 
+                s.image,
+                (u.first_name || ' ' || u.last_name) AS seller_name,
+                u.address AS seller_address
+            FROM selling_table s
+            JOIN users u ON s.user_id = u.user_id
+            ORDER BY s.id DESC";
+
 
     $stmt = $conn->query($sql);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);

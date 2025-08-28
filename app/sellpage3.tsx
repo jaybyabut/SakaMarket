@@ -1,10 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import CheckBox from 'expo-checkbox';
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useLayoutEffect, useState } from 'react';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
 
 export default function Magsasakaregister() {
   const navigation = useNavigation();
@@ -24,13 +24,32 @@ export default function Magsasakaregister() {
     }
 
     try {
-      const response = await axios.post( 
+      const userData = await AsyncStorage.getItem("user");
+      const user = userData ? JSON.parse(userData) : null;
+
+      if (!user) {
+        Alert.alert("Error", "User not logged in. Pakilagay ang account mo.");
+        return;
+      }
+
+      const payload = {
+        ...params,
+        user_id: user.user_id, // attach logged-in user's ID
+      };
+
+      const response = await axios.post(
         "http://10.0.2.2/database/sellProduct.php",
-        params,
+        payload,
         { headers: { "Content-Type": "application/json" } }
       );
-      Alert.alert("Tagumpay", response.data.message || "Product stored!");
-      router.push('/sellpage4'); // or another page after success
+      console.log("Backend response:", response.data);
+      if (response.data.success) {
+        Alert.alert("Tagumpay", response.data.message || "Product stored!");
+        router.push('/sellpage4');
+      } else {
+        Alert.alert("Error", response.data.error || "May problema sa server.");
+      }
+
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Hindi na-save ang produkto.");
