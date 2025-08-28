@@ -100,11 +100,11 @@ const styles = StyleSheet.create({
     color: 'rgb(255,255,255)',
     fontWeight: '700',
     fontSize: RFValue(22),
-    alignSelf: 'stretch',
     verticalAlign: 'middle',
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+    height: '100%'
   },
 
   pamilihanLogo: {
