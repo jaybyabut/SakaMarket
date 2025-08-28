@@ -58,8 +58,8 @@ export default function Productpage() {
           </View>
         </View>
 
-        <Text style={styles.additionalText}>Magsasaka: Jaren Javerto</Text>
-        <Text style={styles.additionalText}>Address: Malolos Bulacan</Text>
+        <Text style={styles.additionalText}>{item.seller_name}</Text>
+        <Text style={styles.additionalText}>Address: {item.seller_address}</Text>
 
         <Text style={styles.additionalText}>
           Description: {item.description}

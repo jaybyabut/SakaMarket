@@ -1,7 +1,7 @@
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
-import React from "react";
+import React from 'react';
 import {
   Alert,
   Dimensions,

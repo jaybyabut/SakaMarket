@@ -10,15 +10,17 @@ function getLastLedgerHash($conn) {
     return null;
 }
 
-function addToLedger($conn, $productId, $name, $price, $amount) {
+function addToLedger($conn, $productId, $name, $price, $amount, $deliveryAddress = null, $buyerId = null, $sellerId = null) {
     $previousHash = getLastLedgerHash($conn);
     $transactionTime = date('Y-m-d H:i:s');
     $dataToHash = $productId . $name . $price . $amount . $transactionTime . $previousHash;
     $currentHash = hash('sha256', $dataToHash);
 
-    $sql = "INSERT INTO ledger (product_id, name, price, amount, transaction_time, previous_hash, current_hash)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)";
-    $insertResult = pg_query_params($conn, $sql, array($productId, $name, $price, $amount, $transactionTime, $previousHash, $currentHash));
+    $sql = "INSERT INTO ledger (product_id, name, price, amount, transaction_time, previous_hash, current_hash, delivery_address, buyer_id, seller_id)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)";
+    $insertResult = pg_query_params($conn, $sql, array(
+        $productId, $name, $price, $amount, $transactionTime, $previousHash, $currentHash, $deliveryAddress, $buyerId, $sellerId
+    ));
 
     if (!$insertResult) {
         return ["success" => false, "message" => "Failed to insert into ledger."];
@@ -84,4 +86,40 @@ function validateLedger($conn) {
 
     return ["success" => true, "message" => "Ledger is intact"];
 }
+
+function approvePending($conn, $pendingId) {
+    // Get the product from pending_table
+    $sql = "SELECT * FROM pending_table WHERE pending_id = $1";
+    $result = pg_query_params($conn, $sql, array($pendingId));
+    $pending = pg_fetch_assoc($result);
+
+    if (!$pending) {
+        return ["success" => false, "message" => "Pending transaction not found"];
+    }
+
+    // Insert into ledger
+    $ledgerResult = addToLedger(
+        $conn,
+        $pending['product_id'],
+        $pending['name'],
+        $pending['price'],
+        $pending['amount'],
+        $pending['delivery_address'],
+        $pending['buyer_id'],
+        $pending['seller_id']
+    );
+
+    if (!$ledgerResult['success']) {
+        return $ledgerResult; // Stop if ledger integrity fails
+    }
+
+    // Delete from pending_table after successful ledger insert
+    $deleteResult = pg_query_params($conn, "DELETE FROM pending_table WHERE pending_id = $1", array($pendingId));
+    if (!$deleteResult) {
+        return ["success" => false, "message" => "Failed to delete from pending table."];
+    }
+
+    return ["success" => true, "message" => "Pending transaction approved and added to ledger."];
+}
+
 ?>

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
@@ -128,7 +129,7 @@ export default function HomeFarmer() {
           <View style={styles.gridItem}>
             <Pressable
               style={[styles.button, { width: buttonSize, height: buttonSize }]}
-              onPress={() => router.push("/productState")}
+              onPress={() => router.push("/productStateFarmerReceive")}
             >
               <LinearGradient
                 colors={[
@@ -211,12 +212,22 @@ export default function HomeFarmer() {
       </View>
 
       {/* Log Out */}
+
       <TouchableOpacity
         style={styles.logoutButton}
-        onPress={() => router.replace("/signIn")}
+        onPress={async () => {
+          try {
+            await AsyncStorage.multiRemove(['user', 'user_id']); // Remove both keys
+            router.replace('/signIn'); // Redirect to sign in screen
+          } catch (error) {
+            console.error("Error logging out:", error);
+          }
+        }}
       >
         <Image source={logoutImg} style={styles.logoutImage} />
+
         <Text style={styles.logoutButtonText}>Log Out</Text>
+
       </TouchableOpacity>
     </View>
   );

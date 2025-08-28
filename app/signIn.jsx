@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from "@react-navigation/native";
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -36,8 +37,9 @@ export default function SignInScreen() {
         return true; // handled
       };
 
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);}
-    ),)
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
 
   const handleSubmit = async () => {
     const { phone, pin } = form;
@@ -62,15 +64,21 @@ export default function SignInScreen() {
       });
 
       const data = response.data;
+      console.log("Login Response:", data);
 
-      if (data.error) {
-        setError(data.error);
-      } else if (data.role === 'farmer') {
-        router.push('/home-magsasaka');
-      } else if (data.role === 'buyer') {
-        router.push('/home-buyer');
+      if (data?.user) {
+        // ✅ Save user data in AsyncStorage
+        if (data.user.role?.toLowerCase() === 'farmer') {
+          router.push('/home-magsasaka');
+          await AsyncStorage.setItem('user', JSON.stringify(data.user));
+        } else if (data.user.role?.toLowerCase() === 'buyer') {
+          router.push('/home-buyer');
+          await AsyncStorage.setItem('user', JSON.stringify(data.user));
+        } else {
+          setError('Hindi matukoy ang user role. Nakuha: ' + data.user?.role);
+        }
       } else {
-        setError('Hindi matukoy ang user role.');
+        setError('Maling numero o PIN.');
       }
     } catch (e) {
       console.error(e);
@@ -79,6 +87,7 @@ export default function SignInScreen() {
       setLoading(false);
     }
   };
+
 
   return (
       <View style={styles.container}>
