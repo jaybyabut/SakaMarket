@@ -43,8 +43,7 @@ try {
             name,
             price, 
             amount, 
-            -- ✅ return ISO8601 timestamp
-            to_char(transaction_time AT TIME ZONE 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"') as transaction_time
+            to_char(transaction_time, 'YYYY-MM-DD HH24:MI:SS') as transaction_time
         FROM ledger
         $whereClause
         ORDER BY transaction_time DESC
@@ -61,11 +60,11 @@ try {
     $transactions = [];
     while ($row = pg_fetch_assoc($result)) {
         $transactions[] = [
-            "product_id"       => $row['product_id'],
-            "name"             => $row['name'],
-            "price"            => floatval($row['price']),
-            "amount"           => intval($row['amount']),
-            "transaction_time" => $row['transaction_time'] // now ISO8601
+            "product_id" => $row['product_id'],
+            "name"       => $row['name'],
+            "price"      => floatval($row['price']),
+            "amount"     => intval($row['amount']),
+            "transaction_time" => $row['transaction_time']
         ];
     }
 

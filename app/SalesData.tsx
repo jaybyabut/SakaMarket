@@ -32,7 +32,6 @@ const SalesData: React.FC = () => {
   const [chartPrices, setChartPrices] = useState<number[]>([0]);
   const [averagePrice, setAveragePrice] = useState<number>(0);
   const [recentPrice, setRecentPrice] = useState<number>(0);
-
   const [filterVisible, setFilterVisible] = useState(false);
   const [filter, setFilter] = useState("month"); // default to month
 
@@ -53,31 +52,26 @@ const SalesData: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(
-        `${API_URL}?filter=${filter}&product=${encodeURIComponent(
-          product || ""
-        )}`
-      )
+      .get(`${API_URL}?filter=${filter}&product=${encodeURIComponent(product || "")}`)
       .then((response) => {
         const json = response.data;
 
         if (json.status === "success" && json.data.length > 0) {
           const data = json.data;
 
-          const labels = data.map((item: any) => {
-            if (!item.transaction_time) return "--";
-            const date = new Date(item.transaction_time);
-            return `${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
-          });
-
+          const labels = data.map((item: any) =>
+            item.transaction_time
+              ? item.transaction_time.split(" ")[0].slice(5)
+              : "--"
+          );
 
           const prices = data.map((item: any) => Number(item.price) || 0);
 
-          setChartLabels(labels.reverse()); // oldest → newest
+          setChartLabels(labels.reverse()); // ensure oldest → newest on chart
           setChartPrices(prices.reverse());
 
           const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
-          const recent = prices[prices.length - 1]; // newest price
+          const recent = prices[0]; // newest price (since DESC order)
           setAveragePrice(avg);
           setRecentPrice(recent);
 
@@ -209,10 +203,7 @@ const SalesData: React.FC = () => {
                       <Text
                         style={[
                           styles.filterPopupOption,
-                          filter === key && {
-                            fontWeight: "bold",
-                            textDecorationLine: "underline",
-                          },
+                          filter === key && { fontWeight: "bold", textDecorationLine: "underline" },
                         ]}
                       >
                         {label}
@@ -259,9 +250,6 @@ const SalesData: React.FC = () => {
     </View>
   );
 };
-
-// ... (styles same as yours)
-
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f8f9fa", padding: 20 },
