@@ -3,25 +3,14 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-<<<<<<< HEAD
-      "@/*": [
-        "./*"
-      ]
-    }
-=======
       "@/*": ["./*"]
     },
     "types": ["react", "react-native"]
->>>>>>> andreaFinal
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-<<<<<<< HEAD
-  ]
-=======
-, "app/farmer-verification.jsx"  ]
->>>>>>> andreaFinal
+    "expo-env.d.ts", 
+    "app/farmer-verification.jsx"  ]
 }

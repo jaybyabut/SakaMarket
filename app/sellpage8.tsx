@@ -386,8 +386,4 @@ const styles = StyleSheet.create({
     fontSize: RFValue(15),
     fontFamily: "Roboto-Bold",
   },
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> andreaFinal

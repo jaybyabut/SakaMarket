@@ -2,12 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useLayoutEffect } from "react";
 import {
+  Dimensions,
   Image,
+  Pressable,
   StyleSheet,
   Text,
-  Pressable,
   View,
-  Dimensions,
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 
@@ -138,8 +138,4 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Bold",
     color: "black",
   },
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> andreaFinal

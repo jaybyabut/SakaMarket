@@ -1,8 +1,8 @@
 import { router } from "expo-router";
 import React from "react";
-import { Image, Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import ButtonWithBackground from "../components/ButtonWithBackground";
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
+import ButtonWithBackground from "../components/ButtonWithBackground";
 const { width, height } = Dimensions.get("window");
 
 export default function SellPage1() {
@@ -118,12 +118,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 20,
     width: "100%",
-<<<<<<< HEAD
-    transform: [{ scale: 0.8 }],
-  },
-});
-=======
     transform: [{ scale: 0.755 }],
   },
 });
->>>>>>> andreaFinal
