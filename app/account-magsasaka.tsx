@@ -18,7 +18,7 @@ import { LineChart } from 'react-native-chart-kit';
 import { RFValue } from "react-native-responsive-fontsize";
 const { width, height } = Dimensions.get('window');
 const API_URL = "http://10.0.2.2/database/getTransaction.php";
-const filterIcon = require('../assets/images/Filter-1.png');
+// const filterIcon = require('../assets/images/Filter-1.png');
 
 
 

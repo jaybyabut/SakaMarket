@@ -30,6 +30,11 @@ export default function Magsasakaregister() {
   const [amount, setAmount] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<string | null>(null);
+  const [touched, setTouched] = useState<boolean>(false);
+
+  const [priceError, setPriceError] = useState<string>("");
+  const [amountError, setAmountError] = useState<string>("");
+
   const [products] = useState<Product[]>([
     { id: "palay", name: "Palay" },
     { id: "sibuyas", name: "Sibuyas" },
@@ -37,7 +42,6 @@ export default function Magsasakaregister() {
     { id: "sili", name: "Sili" },
     { id: "talong", name: "Talong" },
   ]);
-  const [touched, setTouched] = useState<boolean>(false);
 
   const navigation = useNavigation();
 
@@ -52,14 +56,39 @@ export default function Magsasakaregister() {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images, // ✅ fixed
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       allowsEditing: true,
     });
     if (!result.canceled) setImage(result.assets[0].uri);
   };
 
-  const isFormValid = productId && price && amount && description && image;
+  const validatePrice = (value: string) => {
+    setPrice(value);
+    if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+      setPriceError("Pakilagay ng tamang presyo (numero lamang).");
+    } else {
+      setPriceError("");
+    }
+  };
+
+  const validateAmount = (value: string) => {
+    setAmount(value);
+    if (!/^\d+$/.test(value)) {
+      setAmountError("Pakilagay ng tamang dami (numero lamang).");
+    } else {
+      setAmountError("");
+    }
+  };
+
+  const isFormValid =
+    productId &&
+    price &&
+    amount &&
+    description &&
+    image &&
+    !priceError &&
+    !amountError;
 
   const handleNext = () => {
     setTouched(true);
@@ -87,24 +116,13 @@ export default function Magsasakaregister() {
 
       {/* Green Form Container */}
       <LinearGradient
-        colors={[
-          "#10AF7C",
-          "#28B47B",
-          "#5ABE7A",
-          "#86C778",
-          "rgba(134,199,120,0.87)",
-        ]}
+        colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "rgba(134,199,120,0.87)"]}
         style={styles.greenContainer}
       >
         <View style={styles.scrollViewContainer}>
           <KeyboardAwareScrollView showsVerticalScrollIndicator>
             {/* Product Picker */}
-            <Text
-              style={[
-                styles.label,
-                touched && !productId && { color: "red" },
-              ]}
-            >
+            <Text style={[styles.label, touched && !productId && { color: "red" }]}>
               Piliin ang Produkto
             </Text>
             <View
@@ -119,53 +137,45 @@ export default function Magsasakaregister() {
               >
                 <Picker.Item label="Pumili ng Produkto" value="" />
                 {products.map((prod) => (
-                  <Picker.Item
-                    key={prod.id}
-                    label={prod.name}
-                    value={prod.id}
-                  />
+                  <Picker.Item key={prod.id} label={prod.name} value={prod.id} />
                 ))}
               </Picker>
             </View>
 
             {/* Price */}
-            <Text
-              style={[styles.label, touched && !price && { color: "red" }]}
-            >
-              Presyo (Per Kilo in PHP)
+            <Text style={[styles.label, touched && !price && { color: "red" }]}>
+              Presyo (Per Kilo)
             </Text>
-            <TextInput
-              style={[
-                styles.input,
-                touched && !price && { borderColor: "red", borderWidth: 2 },
-              ]}
-              placeholder="Halimbawa: 30, 40, 50"
-              value={price}
-              onChangeText={setPrice}
-              keyboardType="numeric"
-            />
+            <View style={styles.inputWithUnit}>
+              <TextInput
+                style={styles.flexInput}
+                placeholder="Halimbawa: 30, 40, 50"
+                value={price}
+                onChangeText={validatePrice}
+                keyboardType="numeric"
+              />
+              <Text style={styles.unitText}>PHP</Text>
+            </View>
+            {priceError ? <Text style={styles.errorText}>{priceError}</Text> : null}
 
             {/* Amount */}
-            <Text
-              style={[styles.label, touched && !amount && { color: "red" }]}
-            >
-              Dami (Per Kilo)
+            <Text style={[styles.label, touched && !amount && { color: "red" }]}>
+              Dami
             </Text>
-            <TextInput
-              style={[
-                styles.input,
-                touched && !amount && { borderColor: "red", borderWidth: 2 },
-              ]}
-              placeholder="Halimbawa: 10, 20, 30"
-              value={amount}
-              onChangeText={setAmount}
-              keyboardType="numeric"
-            />
+            <View style={styles.inputWithUnit}>
+              <TextInput
+                style={styles.flexInput}
+                placeholder="Halimbawa: 10, 20, 30"
+                value={amount}
+                onChangeText={validateAmount}
+                keyboardType="numeric"
+              />
+              <Text style={styles.unitText}>kilograms</Text>
+            </View>
+            {amountError ? <Text style={styles.errorText}>{amountError}</Text> : null}
 
             {/* Image Upload */}
-            <Text
-              style={[styles.label, touched && !image && { color: "red" }]}
-            >
+            <Text style={[styles.label, touched && !image && { color: "red" }]}>
               Imahe ng Produkto
             </Text>
             <Pressable style={styles.dropArea} onPress={pickImage}>
@@ -180,20 +190,11 @@ export default function Magsasakaregister() {
             </Pressable>
 
             {/* Description */}
-            <Text
-              style={[
-                styles.label,
-                touched && !description && { color: "red" },
-              ]}
-            >
+            <Text style={[styles.label, touched && !description && { color: "red" }]}>
               Deskripsyon
             </Text>
             <TextInput
-              style={[
-                styles.inputDesc,
-                touched &&
-                  !description && { borderColor: "red", borderWidth: 2 },
-              ]}
+              style={[styles.inputDesc, touched && !description && { borderColor: "red", borderWidth: 2 }]}
               placeholder="Ilagay ang detalyadong impormasyon"
               value={description}
               onChangeText={setDescription}
@@ -219,10 +220,7 @@ export default function Magsasakaregister() {
 
 const MAX_WIDTH = 338;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#E6F5EC",
-  },
+  container: { flex: 1, backgroundColor: "#E6F5EC" },
   greenContainer: {
     top: "4%",
     flex: 5,
@@ -243,44 +241,19 @@ const styles = StyleSheet.create({
     width: MAX_WIDTH,
     alignSelf: "center",
   },
-  textSection: {
-    flex: 1,
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-  },
-  headerTextSection: {
-    position: "relative",
-    top: height * 0.04,
-  },
-  mainText: {
-    textAlign: "center",
-    fontSize: RFValue(27),
-    fontFamily: "Roboto-Bold",
-  },
-  subText: {
-    textAlign: "center",
-    fontSize: RFValue(14),
-    width: width * 0.9,
-  },
+  textSection: { flex: 1, justifyContent: "center", alignItems: "center" },
+  headerTextSection: { top: height * 0.04 },
+  mainText: { textAlign: "center", fontSize: RFValue(27), fontFamily: "Roboto-Bold" },
+  subText: { textAlign: "center", fontSize: RFValue(14), width: width * 0.9 },
   backPosition: {
     position: "absolute",
     width: height * 0.03,
     height: height * 0.03,
-    zIndex: 1,
     left: width * 0.04,
     top: height * 0.04,
   },
-  backIcon: {
-    width: "100%",
-    height: "100%",
-  },
-  label: {
-    fontSize: RFValue(13),
-    fontFamily: "Roboto-Medium",
-    marginBottom: 10,
-    color: "#FFF",
-  },
+  backIcon: { width: "100%", height: "100%" },
+  label: { fontSize: RFValue(13), fontFamily: "Roboto-Medium", marginBottom: 10, color: "#FFF" },
   input: {
     backgroundColor: "#FFFDEB",
     padding: 12,
@@ -290,6 +263,18 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     width: MAX_WIDTH,
   },
+  inputWithUnit: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFFDEB",
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 8,
+    width: MAX_WIDTH,
+  },
+  flexInput: { flex: 1, fontSize: 16, fontFamily: "Roboto-Regular", padding: 10 },
+  unitText: { fontSize: 14, fontFamily: "Roboto-Bold", color: "black", marginLeft: 8 },
+  errorText: { color: "red", fontSize: 12, marginBottom: 8 },
   inputDesc: {
     backgroundColor: "#FFFDEB",
     padding: 12,
@@ -311,11 +296,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     marginBottom: 12,
   },
-  uploadText: {
-    color: "#8F8E8E",
-    fontSize: RFValue(12),
-    fontFamily: "Roboto-Regular",
-  },
+  uploadText: { color: "#8F8E8E", fontSize: RFValue(12), fontFamily: "Roboto-Regular" },
   buttons: {
     position: "absolute",
     flexDirection: "row",
@@ -326,21 +307,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     zIndex: 3,
   },
-  buttonWithText: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-  },
-  buttonIcon: {
-    width: 29,
-    height: 29,
-    resizeMode: "contain",
-  },
-  buttonText: {
-    color: "white",
-    fontSize: RFValue(15),
-    fontFamily: "Roboto-Bold",
-  },
-  leftButton: { flex: 1, alignItems: "flex-start" },
-  rightButton: { flex: 1, alignItems: "flex-end" },
+  buttonWithText: { flexDirection: "row", alignItems: "center", gap: 5 },
+  buttonIcon: { width: 29, height: 29, resizeMode: "contain" },
+  buttonText: { color: "white", fontSize: RFValue(15), fontFamily: "Roboto-Bold" },
 });

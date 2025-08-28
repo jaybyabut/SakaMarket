@@ -13,9 +13,12 @@ if (!$product) {
 }
 
 $whereClause = "WHERE name ILIKE $1";
-$params = [$product];
+$params = ["%" . $product . "%"];
 
 switch ($filter) {
+    case 'today':
+        $whereClause .= " AND transaction_time::date = CURRENT_DATE";
+        break;
     case 'week':
         $whereClause .= " AND transaction_time >= NOW() - INTERVAL '7 days'";
         break;
@@ -25,9 +28,11 @@ switch ($filter) {
     case '6months':
         $whereClause .= " AND transaction_time >= NOW() - INTERVAL '6 months'";
         break;
+    case 'year':
+        $whereClause .= " AND transaction_time >= NOW() - INTERVAL '1 year'";
+        break;
     case 'lifetime':
     default:
-        // no time filter
         break;
 }
 
@@ -41,8 +46,8 @@ try {
             to_char(transaction_time, 'YYYY-MM-DD HH24:MI:SS') as transaction_time
         FROM ledger
         $whereClause
-        ORDER BY transaction_time ASC
-        LIMIT 20
+        ORDER BY transaction_time DESC
+        LIMIT 50
     ";
 
     $result = pg_query_params($conn, $query, $params);
