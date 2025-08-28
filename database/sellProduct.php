@@ -20,20 +20,39 @@ try {
         exit;
     }
 
+    // Handle image upload
+    if (!empty($data->image)) {
+        $imageData = base64_decode($data->image);
+
+        // create unique file name
+        $fileName = uniqid("img_", true) . ".jpg";
+        $filePath = __DIR__ . "/uploads/" . $fileName;
+
+        // make sure uploads dir exists
+        if (!is_dir(__DIR__ . "/uploads")) {
+            mkdir(__DIR__ . "/uploads", 0777, true);
+        }
+
+        // save file to uploads folder
+        file_put_contents($filePath, $imageData);
+
+        // full URL saved in DB
+        $imageUrl = "http://192.168.100.6/sakamarket/database/uploads/" . $fileName;
+    } else {
+        $imageUrl = null;
+    }
+
     // prepare insert
     $sql = "INSERT INTO selling_table (name, price, description, amount, image, user_id, address)
             VALUES (:name, :price, :description, :amount, :image, :user_id, :address)";
 
     $stmt = $conn->prepare($sql);
-
-    $imageData = !empty($data->image) ? base64_decode($data->image) : null;
-
     $success = $stmt->execute([
         ':name' => $data->name,
         ':price' => $data->price,
         ':description' => $data->description,
         ':amount' => $data->amount,
-        ':image' => $imageData,
+        ':image' => $imageUrl,   // ✅ FIXED: was $imagePath
         ':user_id' => $data->user_id,
         ':address' => $user['address']
     ]);

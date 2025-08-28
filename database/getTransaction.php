@@ -13,18 +13,12 @@ if (!$product) {
 }
 
 $whereClause = "WHERE name ILIKE $1";
-<<<<<<< HEAD
 $params = ["%" . $product . "%"];
 
 switch ($filter) {
     case 'today':
         $whereClause .= " AND transaction_time::date = CURRENT_DATE";
         break;
-=======
-$params = [$product];
-
-switch ($filter) {
->>>>>>> andreaFinal
     case 'week':
         $whereClause .= " AND transaction_time >= NOW() - INTERVAL '7 days'";
         break;
@@ -34,17 +28,11 @@ switch ($filter) {
     case '6months':
         $whereClause .= " AND transaction_time >= NOW() - INTERVAL '6 months'";
         break;
-<<<<<<< HEAD
     case 'year':
         $whereClause .= " AND transaction_time >= NOW() - INTERVAL '1 year'";
         break;
     case 'lifetime':
     default:
-=======
-    case 'lifetime':
-    default:
-        // no time filter
->>>>>>> andreaFinal
         break;
 }
 
@@ -55,16 +43,12 @@ try {
             name,
             price, 
             amount, 
-            to_char(transaction_time, 'YYYY-MM-DD HH24:MI:SS') as transaction_time
+            -- ✅ return ISO8601 timestamp
+            to_char(transaction_time AT TIME ZONE 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"') as transaction_time
         FROM ledger
         $whereClause
-<<<<<<< HEAD
         ORDER BY transaction_time DESC
         LIMIT 50
-=======
-        ORDER BY transaction_time ASC
-        LIMIT 20
->>>>>>> andreaFinal
     ";
 
     $result = pg_query_params($conn, $query, $params);
@@ -77,11 +61,11 @@ try {
     $transactions = [];
     while ($row = pg_fetch_assoc($result)) {
         $transactions[] = [
-            "product_id" => $row['product_id'],
-            "name"       => $row['name'],
-            "price"      => floatval($row['price']),
-            "amount"     => intval($row['amount']),
-            "transaction_time" => $row['transaction_time']
+            "product_id"       => $row['product_id'],
+            "name"             => $row['name'],
+            "price"            => floatval($row['price']),
+            "amount"           => intval($row['amount']),
+            "transaction_time" => $row['transaction_time'] // now ISO8601
         ];
     }
 

@@ -84,7 +84,7 @@ export default function HomeBuyer() {
           <View style={styles.gridItem}>
             <Pressable
               style={[styles.button, { width: buttonSize, height: buttonSize }]}
-              onPress={() => router.push("/seller-listings")}
+              onPress={() => router.push("/StatsPage")}
             >
               <LinearGradient
                 colors={[

@@ -3,22 +3,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import CheckBox from "expo-checkbox";
-import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useLayoutEffect, useState } from "react";
 import {
   Alert,
-  Dimensions,
   Image,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from "react-native";
-import { RFValue } from "react-native-responsive-fontsize";
 
-const { width, height } = Dimensions.get("window");
+const PRODUCTS = [
+  { id: "palay", name: "Palay" },
+  { id: "sibuyas", name: "Sibuyas" },
+  { id: "kamatis", name: "Kamatis" },
+  { id: "sili", name: "Sili" },
+  { id: "talong", name: "Talong" },
+];
 
 export default function SellPage3() {
   const navigation = useNavigation();
@@ -30,7 +32,7 @@ export default function SellPage3() {
   useLayoutEffect(() => {
     navigation.setOptions({ title: "Sell page 3" });
   }, [navigation]);
-
+  const product = PRODUCTS.find((p) => p.id === params.productId);
   const handleConfirm = async () => {
     if (!isChecked) {
       Alert.alert('Paalala', 'Pakisigurado na lahat ng detalye ay tama.');
@@ -48,6 +50,7 @@ export default function SellPage3() {
 
       const payload = {
         ...params,
+        name: product?.name,
         user_id: user.user_id, // attach logged-in user's ID
       };
 
@@ -56,50 +59,60 @@ export default function SellPage3() {
         payload,
         { headers: { "Content-Type": "application/json" } }
       );
+
       console.log("Backend response:", response.data);
+
       if (response.data.success) {
         Alert.alert("Tagumpay", response.data.message || "Product stored!");
-        router.push('/sellpage4');
+
+        // 👉 Pass values to next page
+        router.push({
+          pathname: "/sellpage4",
+          params: {
+            ...payload,                // includes productId, price, amount, description, image, user_id
+            insertedId: response.data.id ?? "", // if backend returns product ID
+          },
+        });
       } else {
         Alert.alert("Error", response.data.error || "May problema sa server.");
       }
-
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Hindi na-save ang produkto.");
     }
   };
 
-  return (
-    
-      <LinearGradient colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "rgba(134,199,120,0.87)",]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.container}>
-        {/* Background Shape */}
-        
 
-        {/* Foreground Content */}
-        <Pressable style={styles.backPosition} onPress={() => router.back()}>
-                  <Image
-                    style={styles.backIcon}
-                    source={require("../assets/images/Back-w.png")}
-                  />
-                </Pressable>
+  return (
+    <View style={styles.background}>
+      <View style={styles.container}>
+        <View style={styles.backgroundShape} />
+
         <View style={styles.top}>
           <Text style={styles.header}>Magbenta ng Tanim</Text>
-          <Text style={styles.subtitle}>Suriin ng mabuti ang mga detalye</Text>
+          <Text style={styles.subtitle}>Kumpirmahin ang mga detalye</Text>
         </View>
-        <View style={styles.backgroundShape}>
+
         <View style={styles.content}>
           <Text style={styles.text}>Ikaw ay magbebenta ng:</Text>
 
           <View style={styles.box}>
             <Text style={styles.boxText}>
-              Pangalan: {params.name}
+              Pangalan ng Produkto: {product?.name || "Hindi Natukoy"}
             </Text>
             <Text style={styles.boxText}>Presyo: ₱{params.price}</Text>
-            <Text style={styles.boxText}>Dami: {params.amount} kilo</Text>
+            <Text style={styles.boxText}>Dami: {params.amount} kilo/s</Text>
+            <Text style={styles.boxText}>
+              Deskripsyon: {params.description}
+            </Text>
+            {params.image ? (
+              <Image
+                source={{ uri: params.image as string }}
+                style={styles.previewImage}
+              />
+            ) : null}
           </View>
 
-          {/* Checkbox row */}
           <View style={styles.checkboxRow}>
             <CheckBox
               value={isChecked}
@@ -111,127 +124,144 @@ export default function SellPage3() {
               Lahat ng detalye na aking inilagay ay tama
             </Text>
           </View>
+
           <TouchableOpacity
             style={styles.button}
             activeOpacity={0.7}
             onPress={handleConfirm}
           >
-            <Text
-              style={{
-                color: "white",
-                fontFamily: "Roboto-Bold",
-                fontSize: 30,
-              }}
-            >
+            <Text style={{ color: "white", fontFamily: "Roboto-Bold", fontSize: 30 }}>
               IBENTA
             </Text>
           </TouchableOpacity>
-          
-        </View>
-        </View>
-      </LinearGradient>
 
+          <View style={styles.backRow}>
+            <TouchableOpacity onPress={navBack} activeOpacity={0.7}>
+              <Image
+                source={require("../assets/images/backtoblack.png")}
+                style={styles.imageButton2}
+              />
+            </TouchableOpacity>
+            <Text style={styles.navText2}>BUMALIK</Text>
+          </View>
+        </View>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
     backgroundColor: "#10AF7C",
   },
+  container: {
+    flex: 1,
+    position: "relative",
+  },
   backgroundShape: {
-    flex: 4,
-    backgroundColor: "#E6F5EC",
-    borderTopLeftRadius: 70,
-    borderTopRightRadius: 70,
-    width: width * 1.1,
-    alignSelf: "center",
+    position: "absolute",
+    width: 450,
+    height: 830,
+    backgroundColor: "white",
+    borderRadius: 70,
+    bottom: -100,
     zIndex: 1,
+    left: -20,
   },
   top: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-
   },
   header: {
-    fontSize: RFValue(26),
+    fontSize: 30,
+    color: "white",
     fontFamily: "Roboto-Bold",
-    color: '#E6F5EC',
+    top: 50,
+    left: 40,
   },
   subtitle: {
-    fontSize: RFValue(14),
+    fontSize: 15,
+    color: "white",
     fontFamily: "Roboto-Regular",
-    color: '#E6F5EC',
+    top: 49,
+    left: 40,
   },
   content: {
-    flex: 1,
-    width: width * 0.8,
-    paddingTop: height * 0.05,
-    alignSelf: 'center',
+    flex: 7,
+    padding: 20,
+    marginTop: 40,
+    zIndex: 2,
   },
   text: {
-    fontSize: RFValue(14),
-    fontFamily: "Roboto-Regular",
-    paddingLeft: '5%',
-    marginBottom: '2%',
+    fontSize: 20,
+    color: "black",
+    fontFamily: "Roboto-Bold",
+    marginTop: 20,
+    marginLeft: 20,
+    marginBottom: 20,
   },
   box: {
     backgroundColor: "#10AF7C",
-    width: '100%',
-    height: height * 0.3,
-    alignSelf: 'center',
-    borderRadius: 12,
-    paddingLeft: '5%',
-    justifyContent: 'space-around'
+    borderRadius: 20,
+    padding: 20,
+    width: "90%",
+    alignSelf: "center",
   },
   boxText: {
-    fontSize: RFValue(18),
-    color: '#E6F5EC',
-    fontFamily: 'Roboto-Bold',
+    fontSize: 18,
+    color: "white",
+    fontFamily: "Roboto-Bold",
+    marginTop: 10,
+  },
+  previewImage: {
+    width: "100%",
+    height: 120,
+    borderRadius: 10,
+    marginTop: 10,
   },
   checkboxRow: {
-    marginTop: '10%',
-    flexDirection: 'row',
-    alignContent: 'center',
-    alignItems: 'center',
-    gap: '4%',
+    flexDirection: "row",
+    marginTop: 30,
+    alignItems: "center",
+    marginLeft: 30,
   },
   checkbox: {
-    width: width * 0.05,
-    height: width * 0.05,
+    width: 16,
+    height: 16,
+    marginRight: 5,
   },
   subtitle2: {
-   fontSize: RFValue(11),
-   fontFamily: 'Roboto-Bold'
+    flex: 1,
+    fontSize: 15,
+    color: "black",
+    fontFamily: "Roboto-Regular",
   },
   button: {
     backgroundColor: "#10AF7C",
-    width: '75%',
-    alignSelf: 'center',
-    alignItems: 'center',
-    borderRadius: 12,
-    marginTop: '10%',
-    paddingVertical: '3%'
-  
-
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 10,
+    alignItems: "center",
+    width: "90%",
+    marginLeft: 20,
+    marginTop: 40,
+  },
+  backRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 40,
+    marginLeft: 20,
   },
   imageButton2: {
-    
+    width: 30,
+    height: 30,
+    zIndex: 2,
   },
   navText2: {
-    
-  },
-  backPosition: {
-    position: "absolute",
-    width: height * 0.03,
-    height: height * 0.03,
-    zIndex: 1,
-    left: width * 0.04,
-    top: height * 0.04,
-  },
-  backIcon: {
-    width: "100%",
-    height: "100%",
+    fontSize: 20,
+    color: "black",
+    fontFamily: "Roboto-Bold",
+    marginLeft: 5,
+    zIndex: 2,
   },
 });

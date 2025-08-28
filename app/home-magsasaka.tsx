@@ -153,11 +153,11 @@ export default function HomeFarmer() {
                 >
                   <Image
                     style={{ width: iconSize, height: iconSize }}
-                    source={require("../assets/images/Settings_icon.png")}
+                    source={require("../assets/images/icons8-location-100(1) 1.png")}
                     resizeMode="contain"
                   />
                   <Text style={[styles.buttonText, { fontSize }]}>
-                    Settings
+                    Produkto
                   </Text>
                 </View>
               </LinearGradient>

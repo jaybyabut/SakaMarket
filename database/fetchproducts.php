@@ -6,7 +6,9 @@ try {
     $conn = new PDO("pgsql:host=localhost;port=5432;dbname=sakamarket_db", "postgres", "2121");
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // join selling_table with users to get seller info
+    // base URL for images
+    $baseUrl = "http://192.168.100.6/sakamarket/database/uploads/";
+
     $sql = "SELECT s.id, 
                 s.name, 
                 s.price, 
@@ -19,14 +21,18 @@ try {
             JOIN users u ON s.user_id = u.user_id
             ORDER BY s.id DESC";
 
-
     $stmt = $conn->query($sql);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    if (empty($products)) {
-        echo json_encode(["debug" => "No rows found in selling_table"]);
-    } else {
+    if (!empty($products)) {
+        foreach ($products as &$p) {
+            if (!empty($p['image'])) {
+                $p['image'] = $baseUrl . $p['image']; // prepend full URL
+            }
+        }
         echo json_encode($products);
+    } else {
+        echo json_encode(["debug" => "No rows found in selling_table"]);
     }
 } catch (PDOException $e) {
     echo json_encode(["error" => $e->getMessage()]);
