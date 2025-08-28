@@ -1,7 +1,21 @@
+<<<<<<< HEAD
 import { useNavigation } from 'expo-router';
 import { Dimensions, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 const { width, height } = Dimensions.get('window');
+=======
+import { useNavigation } from "expo-router";
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { RFValue } from "react-native-responsive-fontsize";
+const { width, height } = Dimensions.get("window");
+>>>>>>> andreaFinal
 export default function ConfirmationScreen() {
   const navigation = useNavigation();
 
@@ -23,7 +37,11 @@ export default function ConfirmationScreen() {
 
       <Pressable
         style={styles.jumpToLogin}
+<<<<<<< HEAD
         onPress={() => navigation.navigate('signIn')}
+=======
+        onPress={() => navigation.navigate("signIn")}
+>>>>>>> andreaFinal
       >
         <Text style={styles.loginText}>Pumunta sa Log-in Page</Text>
       </Pressable>
@@ -34,6 +52,7 @@ export default function ConfirmationScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+<<<<<<< HEAD
     backgroundColor: '#fff',
          
   },
@@ -42,6 +61,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
+=======
+    backgroundColor: "#E6F5EC",
+  },
+  contentContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+>>>>>>> andreaFinal
     width: width * 0.8,
   },
   checkmark: {
@@ -50,6 +78,7 @@ const styles = StyleSheet.create({
   },
   success: {
     fontSize: RFValue(48),
+<<<<<<< HEAD
     fontFamily: 'Roboto-Bold',
     marginTop: 5,
     marginBottom: 5,
@@ -75,6 +104,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 
     shadowColor: '#000',
+=======
+    fontFamily: "Roboto-Bold",
+    marginTop: 5,
+    marginBottom: 5,
+    textAlign: "center",
+    width: "100%",
+  },
+  message: {
+    fontSize: RFValue(16),
+    fontFamily: "Roboto",
+    textAlign: "center",
+    height: "fit-content",
+    width: "100%",
+  },
+  jumpToLogin: {
+    position: "absolute",
+    bottom: height * 0.05,
+    alignSelf: "center",
+    backgroundColor: "#10AF7C",
+    width: width * 0.7,
+    height: height * 0.07,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+
+    shadowColor: "#000",
+>>>>>>> andreaFinal
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -82,8 +138,14 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: RFValue(15),
+<<<<<<< HEAD
     fontFamily: 'Roboto',
     textAlign: 'center',
     color: 'rgb(255,255,255)'
+=======
+    fontFamily: "Roboto",
+    textAlign: "center",
+    color: "rgb(255,255,255)",
+>>>>>>> andreaFinal
   },
 });

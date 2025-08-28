@@ -2,15 +2,15 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  Dimensions,
   Image,
+  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
-  ScrollView,
-  Pressable,
-  Dimensions,
-  TextInput,
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 

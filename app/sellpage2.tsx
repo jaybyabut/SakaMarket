@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -6,6 +7,13 @@ import { useLayoutEffect, useState } from "react";
 <<<<<<< HEAD
 import { RFValue } from "react-native-responsive-fontsize";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+=======
+import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
+import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
+import { useLayoutEffect, useState } from "react";
+>>>>>>> andreaFinal
 import {
   Alert,
   Dimensions,
@@ -16,6 +24,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+<<<<<<< HEAD
 import { Picker } from "@react-native-picker/picker";
 
 const { width, height } = Dimensions.get("window");
@@ -49,6 +58,84 @@ export default function Magsasakaregister() {
     { id: "sili", name: "Sili" },
     { id: "talong", name: "Talong" },
   ]);
+=======
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { RFValue } from "react-native-responsive-fontsize";
+
+const { width, height } = Dimensions.get("window");
+
+type ButtonWithTextProps = {
+  icon: any;
+  label: string;
+  reverse?: boolean;
+  onPress: () => void;
+  disabled?: boolean;
+};
+
+type UploadFieldProps = {
+  label?: string;
+  image: string | null;
+  onPick: () => void;
+  invalid?: boolean;
+  imageSize: { width: number; height: number } | null;
+};
+
+// ----- ButtonWithText Component -----
+function ButtonWithText({ icon, label, reverse, onPress, disabled = false }: ButtonWithTextProps) {
+  return (
+    <Pressable
+      style={[styles.buttonWithText, { opacity: disabled ? 0.5 : 1 }]}
+      onPress={!disabled ? onPress : null}
+    >
+      {reverse && <Image source={icon} style={styles.buttonIcon} />}
+      <Text style={styles.buttonText}>{label}</Text>
+      {!reverse && <Image source={icon} style={styles.buttonIcon} />}
+    </Pressable>
+  );
+}
+
+// ----- UploadField Component -----
+function UploadField({ label = "", image, onPick, invalid, imageSize }: UploadFieldProps) {
+  return (
+    <View>
+      <Text style={[styles.label, invalid && { color: "red" }]}>{label}</Text>
+      <Pressable
+        style={[
+          styles.dropArea,
+          { width: width * 0.8 },
+          imageSize ? { height: imageSize.height } : { minHeight: 120 },
+          invalid && { borderColor: "red", borderWidth: 2 },
+        ]}
+        onPress={onPick}
+      >
+        {image ? (
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: 10,
+              resizeMode: "cover",
+            }}
+          />
+        ) : (
+          <Text style={styles.uploadText}>Pindutin Upang Makapili</Text>
+        )}
+      </Pressable>
+    </View>
+  );
+}
+
+// ----- Main Component -----
+export default function SellPage2() {
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState<string | null>(null);
+  const [imageSize, setImageSize] = useState<{ width: number; height: number } | null>(null);
+  const [touched, setTouched] = useState(false);
+>>>>>>> andreaFinal
 
   const navigation = useNavigation();
 
@@ -65,6 +152,7 @@ export default function Magsasakaregister() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
+<<<<<<< HEAD
       allowsEditing: true,
     });
     if (!result.canceled) setImage(result.assets[0].uri);
@@ -102,12 +190,39 @@ export default function Magsasakaregister() {
     if (!isFormValid) return;
 
     const data = { productId, price, amount, description, image };
+=======
+      allowsEditing: false, // keep natural aspect ratio
+    });
+    if (!result.canceled) {
+      const uri = result.assets[0].uri;
+      setImage(uri);
+
+      // compute scaled height based on fixed width
+      Image.getSize(uri, (w, h) => {
+        const fixedWidth = width * 0.8;
+        const scale = fixedWidth / w;
+        setImageSize({ width: fixedWidth, height: h * scale });
+      });
+    }
+  };
+
+  const isFormValid = name && price && amount && description && image;
+
+  const handleNext = () => {
+    setTouched(true); // show validation borders
+    if (!isFormValid) return; // block navigation if invalid
+
+    const data = { name, price, amount, description, image };
+>>>>>>> andreaFinal
     router.push({ pathname: "/sellpage3", params: data });
   };
 
   return (
     <View style={styles.container}>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> andreaFinal
       {/* Header */}
       <View style={styles.textSection}>
         <Pressable style={styles.backPosition} onPress={() => router.back()}>
@@ -116,6 +231,10 @@ export default function Magsasakaregister() {
             source={require("../assets/STARTer/back-icon.png")}
           />
         </Pressable>
+<<<<<<< HEAD
+=======
+
+>>>>>>> andreaFinal
         <View style={styles.headerTextSection}>
           <Text style={styles.mainText}>Magbenta ng Tanim</Text>
           <Text style={styles.subText}>Pakilagay ang mga detalye</Text>
@@ -124,6 +243,7 @@ export default function Magsasakaregister() {
 
       {/* Green Form Container */}
       <LinearGradient
+<<<<<<< HEAD
         colors={["#10AF7C", "#28B47B", "#5ABE7A", "#86C778", "rgba(134,199,120,0.87)"]}
         style={styles.greenContainer}
       >
@@ -208,12 +328,101 @@ export default function Magsasakaregister() {
               onChangeText={setDescription}
               multiline
             />
+=======
+        colors={[
+          "#10AF7C",
+          "#28B47B",
+          "#5ABE7A",
+          "#86C778",
+          "rgba(134,199,120,0.87)",
+        ]}
+        style={styles.greenContainer}
+      >
+        <View style={styles.scrollViewContainer}>
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={true}>
+            <View style={styles.uploadSection}>
+              {/* Name */}
+              <Text style={[styles.label, touched && !name && { color: "red" }]}>
+                Pangalan ng Produkto
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  touched && !name && { borderColor: "red", borderWidth: 2 },
+                ]}
+                placeholder="(hal. Bigas, Mais, Talong)"
+                value={name}
+                onChangeText={setName}
+              />
+
+              {/* Price */}
+              <Text style={[styles.label, touched && !price && { color: "red" }]}>
+                Presyo ng Produkto (Per Kilo)
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  touched && !price && { borderColor: "red", borderWidth: 2 },
+                ]}
+                placeholder="(hal. P20, P30, P40)"
+                value={price}
+                onChangeText={setPrice}
+              />
+
+              {/* Amount */}
+              <Text
+                style={[styles.label, touched && !amount && { color: "red" }]}
+              >
+                Dami ng Produkto (Kilo)
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  touched && !amount && { borderColor: "red", borderWidth: 2 },
+                ]}
+                placeholder="(hal. 10kg, 20kg, 30kg)"
+                value={amount}
+                onChangeText={setAmount}
+              />
+
+              {/* Image Upload */}
+              <UploadField
+                label="Imahe ng Produkto"
+                image={image}
+                onPick={pickImage}
+                invalid={touched && !image}
+                imageSize={imageSize}
+              />
+
+              {/* Description */}
+              <Text
+                style={[
+                  styles.label,
+                  touched && !description && { color: "red" },
+                ]}
+              >
+                Deskripsyon ng Produkto
+              </Text>
+              <TextInput
+                style={[
+                  styles.inputDesc,
+                  touched &&
+                    !description && { borderColor: "red", borderWidth: 2 },
+                ]}
+                placeholder="Ilagay ang detalyadong impormasyon tungkol sa produkto"
+                value={description}
+                onChangeText={setDescription}
+                multiline
+              />
+            </View>
+>>>>>>> andreaFinal
           </KeyboardAwareScrollView>
         </View>
       </LinearGradient>
 
       {/* Bottom Buttons */}
       <View style={styles.buttons}>
+<<<<<<< HEAD
         <Pressable style={styles.buttonWithText} onPress={handleNext}>
           <Text style={styles.buttonText}>SUNOD</Text>
           <Image
@@ -293,14 +502,35 @@ export default function Magsasakaregister() {
       </View>
       
 >>>>>>> 653c4610c8dca1ace73d48e1c81adb0c347cb30a
+=======
+        <View>
+          <Pressable style={styles.buttonWithText} onPress={handleNext}>
+            <Text style={styles.buttonText}>SUNOD</Text>
+            <Image
+              source={require("../assets/STARTer/Farmer Verification/next-page.png")}
+              style={styles.buttonIcon}
+            />
+          </Pressable>
+        </View>
+      </View>
+>>>>>>> andreaFinal
     </View>
   );
 }
 
+<<<<<<< HEAD
 const MAX_WIDTH = 338;
 const styles = StyleSheet.create({
 <<<<<<< HEAD
   container: { flex: 1, backgroundColor: "#E6F5EC" },
+=======
+// ----- Styles -----
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#E6F5EC",
+  },
+>>>>>>> andreaFinal
   greenContainer: {
     top: "4%",
     flex: 5,
@@ -317,6 +547,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     top: "4%",
+<<<<<<< HEAD
     height: height * 0.652,
     width: MAX_WIDTH,
     alignSelf: "center",
@@ -381,10 +612,44 @@ const styles = StyleSheet.create({
   headerTextSection: { top: height * 0.04 },
   mainText: { textAlign: "center", fontSize: RFValue(27), fontFamily: "Roboto-Bold" },
   subText: { textAlign: "center", fontSize: RFValue(14), width: width * 0.9 },
+=======
+    paddingBottom: height * 0.16,
+    width: 338,
+    alignSelf: "center",
+  },
+  uploadSection: {
+    width: width * 0.8,
+    alignSelf: "center",
+  },
+
+  // ==== Header & Back Button ====
+  textSection: {
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+  },
+  headerTextSection: {
+    position: "relative",
+    top: height * 0.04,
+  },
+  mainText: {
+    textAlign: "center",
+    fontSize: RFValue(27),
+    fontFamily: "Roboto-Bold",
+  },
+  subText: {
+    textAlign: "center",
+    fontSize: RFValue(14),
+    width: width * 0.9,
+  },
+
+>>>>>>> andreaFinal
   backPosition: {
     position: "absolute",
     width: height * 0.03,
     height: height * 0.03,
+<<<<<<< HEAD
     left: width * 0.04,
     top: height * 0.04,
   },
@@ -431,15 +696,51 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 12,
     fontSize: 16,
+=======
+    zIndex: 1,
+    left: width * 0.04,
+    top: height * 0.04,
+  },
+  backIcon: {
+    width: "100%",
+    height: "100%",
+  },
+
+  // ==== Form Inputs ====
+  label: {
+    fontSize: 14,
+    fontFamily: "Roboto-Medium",
+    marginBottom: 10,
+    color: "#FFF",
+  },
+  input: {
+    backgroundColor: "#FFFDEB",
+    padding: 12,
+    borderRadius: 12,
+    fontSize: 14,
+    fontFamily: "Roboto-Regular",
+    marginBottom: 12,
+  },
+  inputDesc: {
+    backgroundColor: "#FFFDEB",
+    padding: 12,
+    borderRadius: 12,
+    fontSize: 14,
+>>>>>>> andreaFinal
     fontFamily: "Roboto-Regular",
     height: 120,
     textAlignVertical: "top",
     marginBottom: 20,
+<<<<<<< HEAD
     width: MAX_WIDTH,
   },
   dropArea: {
     height: 120,
     width: MAX_WIDTH,
+=======
+  },
+  dropArea: {
+>>>>>>> andreaFinal
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -447,7 +748,17 @@ const styles = StyleSheet.create({
     elevation: 4,
     marginBottom: 12,
   },
+<<<<<<< HEAD
   uploadText: { color: "#8F8E8E", fontSize: RFValue(12), fontFamily: "Roboto-Regular" },
+=======
+  uploadText: {
+    color: "#808080",
+    fontSize: 14,
+    fontFamily: "Roboto-Regular",
+  },
+
+  // ==== Bottom Buttons ====
+>>>>>>> andreaFinal
   buttons: {
     position: "absolute",
     flexDirection: "row",
@@ -458,6 +769,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     zIndex: 3,
   },
+<<<<<<< HEAD
   buttonWithText: { flexDirection: "row", alignItems: "center", gap: 5 },
   buttonIcon: { width: 29, height: 29, resizeMode: "contain" },
   buttonText: { color: "white", fontSize: RFValue(15), fontFamily: "Roboto-Bold" },
@@ -499,11 +811,17 @@ const styles = StyleSheet.create({
   buttonWithText: {
     flexDirection: 'row',
     alignItems: 'center',
+=======
+  buttonWithText: {
+    flexDirection: "row",
+    alignItems: "center",
+>>>>>>> andreaFinal
     gap: 5,
   },
   buttonIcon: {
     width: 29,
     height: 29,
+<<<<<<< HEAD
     resizeMode: 'contain',
   },
   buttonText: {
@@ -515,3 +833,13 @@ const styles = StyleSheet.create({
 
 >>>>>>> 653c4610c8dca1ace73d48e1c81adb0c347cb30a
 });
+=======
+    resizeMode: "contain",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: RFValue(15),
+    fontFamily: "Roboto-Bold",
+  },
+});
+>>>>>>> andreaFinal

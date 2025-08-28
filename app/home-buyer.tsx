@@ -5,8 +5,8 @@ import {
   Dimensions,
   Image,
   ImageSourcePropType,
-  StyleSheet,
   Pressable,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -14,9 +14,9 @@ import {
 import { RFValue } from "react-native-responsive-fontsize";
 import Colors from "../constants/Colors";
 
-<<<<<<< HEAD
+
 const { width, height } = Dimensions.get("window");
-=======
+
 const logoImg: ImageSourcePropType = require('../assets/images/home-title.png');
 const homeTextImg: ImageSourcePropType = require('../assets/images/mamili-ng-gagawin.png');
 const bumiliImg: ImageSourcePropType = require('../assets/images/Bumili.png');
@@ -24,10 +24,7 @@ const marketImg: ImageSourcePropType = require('../assets/images/Market.png');
 const accountImg: ImageSourcePropType = require('../assets/images/Account.png');
 const produktoImg: ImageSourcePropType = require('../assets/images/Produkto.png');
 const logoutImg: ImageSourcePropType = require('../assets/images/open-pane.png');
->>>>>>> 653c4610c8dca1ace73d48e1c81adb0c347cb30a
 
-const logoImg: ImageSourcePropType = require("../assets/images/home-title.png");
-const logoutImg: ImageSourcePropType = require("../assets/images/open-pane.png");
 
 export default function HomeBuyer() {
   // Dynamic sizing for buttons

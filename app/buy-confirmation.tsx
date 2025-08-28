@@ -138,4 +138,8 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Bold",
     color: "black",
   },
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> andreaFinal
