@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#FFF'
+    backgroundColor: '#E6F5EC'
   },
   logoWrapper: {
     flex: 0.5,
@@ -212,12 +212,12 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 8,
     paddingHorizontal: 15,
-    backgroundColor: 'white',
     shadowColor: '#9F9F9F',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 3,
+    backgroundColor: '#E6F5EC'
   },
   buttons: {
     flex: 1,

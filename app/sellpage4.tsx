@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "#E6F5EC"
   },
   logo: {
     width: width * 0.45,
