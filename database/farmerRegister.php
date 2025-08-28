@@ -3,10 +3,17 @@ require_once 'database.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
+<<<<<<< HEAD
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST");
 
 $uploadDir = __DIR__ . "/../database/uploads/";
+=======
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+
+$uploadDir = __DIR__ . "/uploads/";
+>>>>>>> andreaFinal
 
 if (!file_exists($uploadDir)) {
     mkdir($uploadDir, 0777, true);
@@ -30,7 +37,11 @@ function saveImage($fileKey, $uploadDir) {
 }
 
 // --- Validate required fields ---
+<<<<<<< HEAD
 $required = ['first_name', 'last_name', 'phone', 'pin', 'code', 'address'];
+=======
+$required = ['first_name', 'last_name', 'phone', 'pin', 'address', 'user_id'];
+>>>>>>> andreaFinal
 foreach ($required as $field) {
     if (!isset($_POST[$field]) || trim($_POST[$field]) === '') {
         http_response_code(400);
@@ -45,6 +56,7 @@ $lastName   = clean($_POST['last_name']);
 $address    = clean($_POST['address']);
 $phone      = preg_replace('/[^0-9]/', '', $_POST['phone']);
 $pinRaw     = trim($_POST['pin']);
+<<<<<<< HEAD
 $code       = trim($_POST['code']);
 
 if ($code !== '123456') {
@@ -52,6 +64,10 @@ if ($code !== '123456') {
     echo json_encode(['success' => false, 'error' => 'Invalid verification code.']);
     exit;
 }
+=======
+$userId     = (int)$_POST['user_id'];
+
+>>>>>>> andreaFinal
 if (!preg_match('/^09\d{9}$/', $phone)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'error' => 'Invalid phone number. Must start with 09 and be 11 digits.']);
@@ -77,6 +93,7 @@ if (!$selfie || !$govID || !$farmDoc) {
 
 // --- Insert into database using pg_query_params ---
 $sql = "
+<<<<<<< HEAD
     INSERT INTO users 
     (role, first_name, middle_name, last_name, address, phone, pin, selfie_path, gov_id_path, farm_doc_path)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
@@ -89,6 +106,44 @@ $result = pg_query_params($conn, $sql, $params);
 if (!$result) {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => 'Database error: ' . pg_last_error($conn)]);
+=======
+    UPDATE users
+    SET 
+        role = $1,
+        first_name = $2,
+        middle_name = $3,
+        last_name = $4,
+        address = $5,
+        pin = $6,
+        selfie_path = $7,
+        gov_id_path = $8,
+        farm_doc_path = $9
+    WHERE id = $10
+    RETURNING id
+";
+
+$params = [
+    'farmer',
+    $firstName,
+    $middleName,
+    $lastName,
+    $address,
+    $hashedPin,
+    $selfie,
+    $govID,
+    $farmDoc,
+    $userId
+];
+
+$result = pg_query_params($conn, $sql, $params);
+
+if (!$result || pg_affected_rows($result) === 0) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false, 
+        'error' => 'No user found with that user_id to update.'
+    ]);
+>>>>>>> andreaFinal
     exit;
 }
 

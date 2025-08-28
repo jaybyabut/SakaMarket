@@ -7,16 +7,16 @@ import {
   Dimensions,
   Image,
   Modal,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  Pressable,
   View,
 } from "react-native";
+import { LineChart } from "react-native-chart-kit";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RFValue } from "react-native-responsive-fontsize";
-import { LineChart } from "react-native-chart-kit";
 
 const API_URL = "http://10.0.2.2/database/getTransaction.php";
 const { width, height } = Dimensions.get("window");
