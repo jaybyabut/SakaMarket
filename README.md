@@ -5,8 +5,7 @@ SakaMarket is a mobile-friendly marketplace (React frontend, PHP backend, Postgr
 Hackathon submission notes
 - Purpose: Demonstrate a practical, farmer-first marketplace that provides tamper-evident records and transparent pricing to improve farmer incomes.
 - Team / Contributors: @QyDrei, @Heysti, @KyleMasinas, @KaceyPidazo, @jaybyabut
-- Demo credentials (development seed): farmer username: magsasaka — use only for demo/testing.
-- Deliverables: working frontend + backend, example seeded data, documentation of the append-only audit model and verification hashes, short demo video/screenshots (attach in PR or issue).
+- Deliverables: working frontend + backend, and example seeded data
 
 About
 - Many smallholder farmers in the Philippines rely on middlemen who take large cuts of profit and reduce price transparency.
